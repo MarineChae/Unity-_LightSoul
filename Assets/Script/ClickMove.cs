@@ -36,12 +36,9 @@ public class ClickMove : MonoBehaviour ,IUpdatable
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
                 navMeshAgent.SetDestination(hit.point);
-                GameObject prefab = Resources.Load("Prefeb/WayPoint") as GameObject;
-                GameObject bullet = Instantiate(prefab);
-                bullet.name = "bullet";
-                bullet.transform.position = hit.point;
-
-
+                var obj = GameManager.Instance.GetPoolingObject();
+                obj.Activate(hit.point);
+                GameManager.Instance.ReturnPoolingObject(obj);
             }
 
         }

@@ -11,6 +11,18 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
     {
         get
         {
+            if(_instance == null)
+            {
+                _instance = FindObjectOfType<T>();
+                if (_instance == null)
+                {
+                    GameObject obj = new GameObject();
+                    obj.name = typeof(T).Name + "AutoCreated";
+                    _instance = obj.AddComponent<T>();
+
+                }
+            }
+
             return _instance;
         }
 
@@ -18,6 +30,7 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         Init();
     }
     private void Init()
@@ -27,7 +40,7 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
             return;
         }
         _instance = this as T;
-        DontDestroyOnLoad(this.gameObject);
+       
     }
 
 }
