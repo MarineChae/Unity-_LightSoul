@@ -38,6 +38,7 @@ public class GameManager : SingleTon<GameManager>, IUpdatable
     public IPoolingable GetPoolingObject()
     {
         var obj = objectPool.pool.Dequeue();
+
         return obj;
     }
     public void ReturnPoolingObject(IPoolingable returnObject)
