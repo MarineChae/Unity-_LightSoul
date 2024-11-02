@@ -3,10 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class InventoryController : MonoBehaviour
 {
-    [HideInInspector]
+    [SerializeField]
     private InvectoryGrid selectedItemGrid;
     public InvectoryGrid SelectedItemGrid {
         get => selectedItemGrid; 
@@ -32,6 +33,7 @@ public class InventoryController : MonoBehaviour
     private void Awake()
     {
         inventoryHighLight = GetComponent<InventoryHighLight>();
+        inventoryHighLight.SetParent(selectedItemGrid);
     }
 
     private void Update()
@@ -67,6 +69,7 @@ public class InventoryController : MonoBehaviour
 
     }
 
+
     private void RotateItem()
     {
         if (selectedItem == null) return;
@@ -82,16 +85,20 @@ public class InventoryController : MonoBehaviour
         CreateRandomItem();
         InventoryItem item = selectedItem;
         selectedItem = null;
-        InsertItem(item);
+        if (!InsertItem(item))
+            Destroy(item.gameObject);
+
     }
 
-    private void InsertItem(InventoryItem item)
+    public bool InsertItem(InventoryItem item)
     {
         Vector2Int? posOnGrid = selectedItemGrid.FindSapceForItem(item);
 
-        if (posOnGrid == null) return;
+        if (posOnGrid == null)return false;
 
         selectedItemGrid.PlaceItem(item, posOnGrid.Value.x,posOnGrid.Value.y);
+      
+        return true;
     }
 
     private void HandleHighLight()

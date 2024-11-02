@@ -177,7 +177,7 @@ public class InvectoryGrid : MonoBehaviour
 
     internal InventoryItem GetItem(int x, int y)
     {
-        if (x < 0 || y < 0 || x > gridSizeWidth || y > gridSizeHeight) return null;
+        if (x < 0 || y < 0 || x >= gridSizeWidth || y >= gridSizeHeight) return null;
 
         return inventoryItemsSlot[x,y];
     }

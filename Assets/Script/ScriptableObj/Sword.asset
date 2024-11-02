@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d828f4b68699ad4f9aa2d172c7153f3, type: 3}
-  m_Name: Armor
+  m_Name: Sword
   m_EditorClassIdentifier: 
   width: 1
-  height: 2
-  itemIcon: {fileID: 21300000, guid: d659f7396cd57754eba78763cf986c51, type: 3}
+  height: 4
+  itemIcon: {fileID: 21300000, guid: 308020b6e9719c148a6c1eb4c6fe13c8, type: 3}
