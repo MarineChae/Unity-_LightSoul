@@ -4,6 +4,19 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+
+enum ITEMTYPE
+{
+    NONE =0,
+    WEAPON1,
+    WEAPON2,
+    BODY,
+    HEAD,
+    GLOVES,
+    BOOTS,
+}
+
+
 public class InvectoryGrid : MonoBehaviour
 {
     public const float tileWidth = 51.2f;
@@ -15,7 +28,8 @@ public class InvectoryGrid : MonoBehaviour
     private InventoryItem[,] inventoryItemsSlot;
     [SerializeField] private int gridSizeWidth;
     [SerializeField] private int gridSizeHeight;
-
+    [SerializeField] private ITEMTYPE itemSlotType;
+    internal ITEMTYPE ItemSlotType { get => itemSlotType; set => itemSlotType = value; }
 
     private void Start()
     {
@@ -44,6 +58,7 @@ public class InvectoryGrid : MonoBehaviour
 
     public bool PlaceItemWithCheck(InventoryItem item , int posX, int posY, ref InventoryItem overlapItem)
     {
+
         if (!BoundaryCheck(posX, posY, item.WIDTH, item.HEIGHT))
             return false;
 
@@ -83,7 +98,17 @@ public class InvectoryGrid : MonoBehaviour
 
         rectTransform.localPosition = position;
     }
+    public void EquipItem(InventoryItem item)
+    {
+        RectTransform rectTransform = item.GetComponent<RectTransform>();
+        rectTransform.SetParent(this.rectTransform);
+        inventoryItemsSlot[0,0] = item;
+        Vector2 position = ComputePositionGrid(item, 0, 0);
 
+        item.WIDTH = 1; item.HEIGHT = 1;
+
+        rectTransform.localPosition = new Vector3(0,0,0);
+    }
     public Vector2 ComputePositionGrid(InventoryItem item, int posX, int posY)
     {
         Vector2 position = new Vector2();
@@ -135,7 +160,7 @@ public class InvectoryGrid : MonoBehaviour
     }
     internal InventoryItem PickUpItem(int x, int y)
     {
-        if (x < 0 || y < 0) return null;
+        if (x < 0 || y < 0 || x >= gridSizeWidth || y >=gridSizeHeight ) return null;
         InventoryItem ret = inventoryItemsSlot[x, y];
 
         if (ret == null) return null;

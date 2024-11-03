@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Sword
   m_EditorClassIdentifier: 
   width: 1
-  height: 4
+  height: 1
   itemIcon: {fileID: 21300000, guid: 308020b6e9719c148a6c1eb4c6fe13c8, type: 3}
+  mesh: {fileID: 4300008, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}

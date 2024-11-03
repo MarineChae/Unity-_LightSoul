@@ -8,8 +8,16 @@ using static UnityEngine.Rendering.DebugUI;
 public class InventoryController : MonoBehaviour
 {
     [SerializeField]
+    private InvectoryGrid originSelectedItemGrid;
+    public InvectoryGrid OriginSelectedItemGrid
+    {   
+        get => originSelectedItemGrid; 
+        set => originSelectedItemGrid = value; 
+    }
+
     private InvectoryGrid selectedItemGrid;
-    public InvectoryGrid SelectedItemGrid {
+    public InvectoryGrid SelectedItemGrid 
+    {
         get => selectedItemGrid; 
         set
         {
@@ -17,38 +25,51 @@ public class InventoryController : MonoBehaviour
             inventoryHighLight.SetParent(value);
         }
     }
+    private bool isDropItem = false;
+    public bool IsDropItem { get => isDropItem; set => isDropItem = value; }
 
     InventoryItem selectedItem;
     InventoryItem overlapItem;
     RectTransform rectTransform;
 
-    [SerializeField] List<ItemData> items;
-    [SerializeField] GameObject itemPrefab;
-    [SerializeField] Transform canvasTrasform;
-
+    [SerializeField]
+    DropItem DropItem;
+    [SerializeField] 
+    List<ItemData> items;
+    [SerializeField]
+    GameObject itemPrefab;
+    [SerializeField] 
+    Transform canvasTrasform;
+    [SerializeField]
+    Canvas inventoryUI;
+    bool inventoryState = true;
     InventoryHighLight inventoryHighLight;
     InventoryItem itemToHighLight;
     Vector2Int oldPosition;
+
+
 
     private void Awake()
     {
         inventoryHighLight = GetComponent<InventoryHighLight>();
         inventoryHighLight.SetParent(selectedItemGrid);
+        SelectedItemGrid = originSelectedItemGrid;
+        StartCoroutine(InitInventory());
     }
 
     private void Update()
     {
-        DragItemIcon();
 
-        if(Input.GetKeyDown(KeyCode.Q))
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            if(selectedItem == null)
-                CreateRandomItem();
+            inventoryState = !inventoryState;
+            inventoryUI.gameObject.SetActive(inventoryState);
         }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            InsertRandomItem();
-        }
+        if (!inventoryState) return;
+        
+        DragItemIcon();
+        
         if (Input.GetKeyDown(KeyCode.R))
         {
             RotateItem();
@@ -60,7 +81,7 @@ public class InventoryController : MonoBehaviour
             return;
         }
 
-            HandleHighLight();
+        HandleHighLight();
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -178,20 +199,53 @@ public class InventoryController : MonoBehaviour
 
     private void PlaceItem(Vector2Int positionOnGrid)
     {
-        bool chk = selectedItemGrid.PlaceItemWithCheck(selectedItem, positionOnGrid.x, positionOnGrid.y ,ref overlapItem);
-        if (chk)
+        if(IsDropItem)
         {
-            selectedItem = null;
-            if (overlapItem != null)
+            var Item = Instantiate(DropItem);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
             {
-                selectedItem = overlapItem;
-                overlapItem = null;
-                rectTransform = selectedItem.GetComponent<RectTransform>();
-                rectTransform.SetAsLastSibling();
+                Item.Init(selectedItem.ItemData);
+                Item.transform.position = hit.point;
+
+                Debug.Log("DROP");
+            }
+
+            Destroy(selectedItem.gameObject);
+            selectedItem = null;
+        }
+        else
+        {
+            if(selectedItemGrid.ItemSlotType == ITEMTYPE.NONE)
+            {
+                bool chk = selectedItemGrid.PlaceItemWithCheck(selectedItem, positionOnGrid.x, positionOnGrid.y, ref overlapItem);
+                if (chk)
+                {
+                    selectedItem = null;
+                    if (overlapItem != null)
+                    {
+                        selectedItem = overlapItem;
+                        overlapItem = null;
+                        rectTransform = selectedItem.GetComponent<RectTransform>();
+                        rectTransform.SetAsLastSibling();
+                    }
+                }
+            }
+            else
+            {
+                selectedItemGrid.EquipItem(selectedItem);
+                selectedItem = null;
+                if (overlapItem != null)
+                {
+                    selectedItem = overlapItem;
+                    overlapItem = null;
+                    rectTransform = selectedItem.GetComponent<RectTransform>();
+                    rectTransform.SetAsLastSibling();
+                }
             }
         }
 
-       
     }
 
     private void ItemPickup(Vector2Int positionOnGrid)
@@ -210,5 +264,12 @@ public class InventoryController : MonoBehaviour
         {
             rectTransform.position = Input.mousePosition;
         }
+    }
+    IEnumerator InitInventory()
+    {
+        yield return new WaitForFixedUpdate();
+
+        inventoryState = false;
+        inventoryUI.gameObject.SetActive(false);
     }
 }
