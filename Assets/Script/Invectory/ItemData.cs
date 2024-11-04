@@ -8,9 +8,10 @@ public class ItemData : ScriptableObject
 
     public int width = 1;
     public int height = 1;
-
     public Sprite itemIcon;
-
     public Mesh mesh;
-     
+    [SerializeField]
+    private ITEMTYPE itemType;
+
+    internal ITEMTYPE ItemType { get => itemType; set => itemType = value; }
 }

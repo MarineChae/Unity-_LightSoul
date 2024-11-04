@@ -5,16 +5,6 @@ using Unity.VisualScripting;
 using UnityEngine;
 
 
-enum ITEMTYPE
-{
-    NONE =0,
-    WEAPON1,
-    WEAPON2,
-    BODY,
-    HEAD,
-    GLOVES,
-    BOOTS,
-}
 
 
 public class InvectoryGrid : MonoBehaviour

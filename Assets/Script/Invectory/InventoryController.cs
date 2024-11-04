@@ -5,6 +5,18 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
+enum ITEMTYPE
+{
+    NONE = 0,
+    WEAPON,
+    BODY,
+    HEAD,
+    GLOVES,
+    BOOTS,
+    END,
+}
+
+
 public class InventoryController : MonoBehaviour
 {
     [SerializeField]
@@ -25,8 +37,22 @@ public class InventoryController : MonoBehaviour
             inventoryHighLight.SetParent(value);
         }
     }
+
+    private EquipmentSlot selctedEquipmentSlot;
+    public EquipmentSlot SelctedEquipmentSlot
+    { 
+        get => selctedEquipmentSlot;
+        set
+        {
+            selctedEquipmentSlot = value;
+            //inventoryHighLight.SetParent(value);
+        }
+    }
+
+
     private bool isDropItem = false;
     public bool IsDropItem { get => isDropItem; set => isDropItem = value; }
+
 
     InventoryItem selectedItem;
     InventoryItem overlapItem;
@@ -217,7 +243,22 @@ public class InventoryController : MonoBehaviour
         }
         else
         {
-            if(selectedItemGrid.ItemSlotType == ITEMTYPE.NONE)
+            if (SelctedEquipmentSlot != null)
+            {
+                bool chk = SelctedEquipmentSlot.EquipItem(selectedItem, ref overlapItem);
+                if (chk)
+                {
+                    selectedItem = null;
+                    if (overlapItem != null)
+                    {
+                        selectedItem = overlapItem;
+                        overlapItem = null;
+                        rectTransform = selectedItem.GetComponent<RectTransform>();
+                        rectTransform.SetAsLastSibling();
+                    }
+                }
+            }
+            else if (selectedItemGrid != null)
             {
                 bool chk = selectedItemGrid.PlaceItemWithCheck(selectedItem, positionOnGrid.x, positionOnGrid.y, ref overlapItem);
                 if (chk)
@@ -232,25 +273,21 @@ public class InventoryController : MonoBehaviour
                     }
                 }
             }
-            else
-            {
-                selectedItemGrid.EquipItem(selectedItem);
-                selectedItem = null;
-                if (overlapItem != null)
-                {
-                    selectedItem = overlapItem;
-                    overlapItem = null;
-                    rectTransform = selectedItem.GetComponent<RectTransform>();
-                    rectTransform.SetAsLastSibling();
-                }
-            }
+
         }
 
     }
 
     private void ItemPickup(Vector2Int positionOnGrid)
     {
-        selectedItem = selectedItemGrid.PickUpItem(positionOnGrid.x, positionOnGrid.y);
+        if (SelctedEquipmentSlot != null)
+        {
+            selectedItem = SelctedEquipmentSlot.PickUpItem();
+        }
+        else if (selectedItemGrid != null)
+        {
+            selectedItem = selectedItemGrid.PickUpItem(positionOnGrid.x, positionOnGrid.y);
+        }
         if (selectedItem != null)
         {
             rectTransform = selectedItem.GetComponent<RectTransform>();

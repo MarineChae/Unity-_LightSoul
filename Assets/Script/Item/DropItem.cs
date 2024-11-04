@@ -25,7 +25,6 @@ public class DropItem : MonoBehaviour
         if(Physics.Raycast(ray, out hit))
         {
             inventoryController.InsertItem(inventoryItem);
-            Debug.Log("hit");
             Destroy(this.gameObject);
         }
 
