@@ -9,6 +9,7 @@ enum ITEMTYPE
 {
     NONE = 0,
     WEAPON,
+    WEAPON2,
     BODY,
     HEAD,
     GLOVES,

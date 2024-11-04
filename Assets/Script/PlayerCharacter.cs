@@ -13,6 +13,8 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
     [SerializeField]
     private Transform weaponSocket;
     [SerializeField]
+    private Transform weapon2Socket;
+    [SerializeField]
     private EquipItem equipItem;
     private EquipItem[] equipItems;
     private void OnEnable()
@@ -36,6 +38,19 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
+        Move();
+        if(itemDatas[(int)ITEMTYPE.WEAPON] == null)
+        {
+            animator.SetBool("EquipWeapon", false);
+        }
+        else
+        {
+            animator.SetBool("EquipWeapon", true);
+        }
+    }
+
+    private void Move()
+    {
         moveVector = navMeshAgent.velocity;
 
         if (moveVector != Vector3.zero)
@@ -47,30 +62,39 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
         {
             animator.SetBool("Walk", false);
         }
-
     }
+
     public void LateUpdateWork() { }
 
     public void EquipItem(ItemData itemData)
     {
-        itemDatas[(int)itemData.ItemType] = itemData;
-        if(itemData.ItemType == ITEMTYPE.WEAPON)
+        itemDatas[(int)itemData.SlotType] = itemData;
+        if(itemData.SlotType == ITEMTYPE.WEAPON )
         {
-            equipItems[(int)itemData.ItemType] = Instantiate(equipItem);
-            equipItems[(int)itemData.ItemType].Init(itemData);
-            equipItems[(int)itemData.ItemType].transform.SetParent(weaponSocket.transform);
-            equipItems[(int)itemData.ItemType].transform.localPosition = Vector3.zero;
-            equipItems[(int)itemData.ItemType].transform.localRotation = Quaternion.identity;
+            EquipWeapon(itemData, weaponSocket.transform);
         }
-
+        else if(itemData.SlotType == ITEMTYPE.WEAPON2)
+        {
+            EquipWeapon(itemData ,weapon2Socket.transform);
+        }
     }
+
+    private void EquipWeapon(ItemData itemData,Transform socketTransform)
+    {
+        equipItems[(int)itemData.SlotType] = Instantiate(equipItem);
+        equipItems[(int)itemData.SlotType].Init(itemData);
+        equipItems[(int)itemData.SlotType].transform.SetParent(socketTransform);
+        equipItems[(int)itemData.SlotType].transform.localPosition = Vector3.zero;
+        equipItems[(int)itemData.SlotType].transform.localRotation = Quaternion.identity;
+    }
+
     public void UnEquipItem(ItemData itemData)
     {
-        itemDatas[(int)itemData.ItemType] = null;
-        if (itemData.ItemType == ITEMTYPE.WEAPON)
+        itemDatas[(int)itemData.SlotType] = null;
+        if (itemData.ItemType == ITEMTYPE.WEAPON || itemData.ItemType == ITEMTYPE.WEAPON2)
         {
-            var des = equipItems[(int)itemData.ItemType];
-            equipItems[(int)itemData.ItemType] = null;
+            var des = equipItems[(int)itemData.SlotType];
+            equipItems[(int)itemData.SlotType] = null;
             Destroy(des.gameObject);
 
         }

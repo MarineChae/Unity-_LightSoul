@@ -12,6 +12,9 @@ public class ItemData : ScriptableObject
     public Mesh mesh;
     [SerializeField]
     private ITEMTYPE itemType;
-
     internal ITEMTYPE ItemType { get => itemType; set => itemType = value; }
+
+    private ITEMTYPE slotType;
+    internal ITEMTYPE SlotType { get => slotType; set => slotType = value; }
+
 }

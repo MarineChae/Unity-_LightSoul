@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d828f4b68699ad4f9aa2d172c7153f3, type: 3}
-  m_Name: Sword
+  m_Name: Shield
   m_EditorClassIdentifier: 
-  width: 1
-  height: 4
-  itemIcon: {fileID: 21300000, guid: 308020b6e9719c148a6c1eb4c6fe13c8, type: 3}
-  mesh: {fileID: 4300000, guid: 61f4e8d2a5b031a41b97ad2c616ae894, type: 3}
+  width: 2
+  height: 2
+  itemIcon: {fileID: 21300000, guid: 108ca3e7dda90d945b0914bf9259ec94, type: 3}
+  mesh: {fileID: 8164999389121847841, guid: 37f5b3731f9b44e4c813d6bb818d8474, type: 3}
   itemType: 1
