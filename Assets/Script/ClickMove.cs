@@ -24,7 +24,7 @@ public class ClickMove : MonoBehaviour ,IUpdatable
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
-
+        navMeshAgent.updateRotation = false;
     }
     public void FixedUpdateWork() { }
     public void UpdateWork()

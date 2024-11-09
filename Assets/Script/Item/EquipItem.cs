@@ -10,10 +10,20 @@ public class EquipItem : MonoBehaviour
     private ItemData itemData;
 
     private bool isInit = false;
+    private bool isWeapon = false;
+    public bool IsWeapon
+    {
+        get { return isWeapon; }
+        set { isWeapon = value; }
+    }
+    public Weapon weaponData;
+
     private void Start()
     {
         if (!isInit)
             Init(itemData);
+
+           
     }
 
     public void Init(ItemData data)
@@ -21,7 +31,11 @@ public class EquipItem : MonoBehaviour
         if (data == null) return;
         isInit = true;
         SetItemData(data);
-
+        if (IsWeapon)
+        {
+            gameObject.AddComponent<CapsuleCollider>().isTrigger = true;
+            weaponData = gameObject.AddComponent<Weapon>();
+        }
     }
     public void SetItemData(ItemData data)
     {
