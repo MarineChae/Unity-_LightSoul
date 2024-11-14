@@ -7,7 +7,7 @@ public class EquipItem : MonoBehaviour
 {
     [SerializeField]
     private Object itemPrefab;
-    private ItemData itemData;
+    private readonly ItemData itemData;
 
     private bool isInit = false;
     private bool isWeapon = false;

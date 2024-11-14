@@ -18,6 +18,7 @@ public class DropItem : MonoBehaviour
         if(!isInit)
            Init(itemData);
     }
+    
     private void OnMouseDown()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

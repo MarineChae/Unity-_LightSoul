@@ -80,10 +80,10 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
 
     private void Attack()
     {
-        if (equipWeapon[0] == null) return;
         attackDelay += Time.deltaTime;
+        if (equipWeapon[0] == null) return;
         canAttack = equipWeapon[0].attackRate < attackDelay;
-        if (Input.GetKeyDown(KeyCode.A) && canAttack)
+        if (Input.GetMouseButtonDown(1) && canAttack)
         {
             equipWeapon[0].Attack();
             animator.SetTrigger("Attack");

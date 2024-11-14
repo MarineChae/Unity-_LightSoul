@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 
 
 public class ClickMove : MonoBehaviour ,IUpdatable
@@ -29,20 +30,24 @@ public class ClickMove : MonoBehaviour ,IUpdatable
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hit))
             {
-                navMeshAgent.SetDestination(hit.point);
-                var obj = GameManager.Instance.GetPoolingObject();
-                obj.Activate(hit.point);
-                GameManager.Instance.ReturnPoolingObject(obj);
+                if (hit.collider.tag == "Walkable")
+                {
+                    navMeshAgent.SetDestination(hit.point);
+                    var obj = GameManager.Instance.GetPoolingObject();
+                    obj.Activate(hit.point);
+                    GameManager.Instance.ReturnPoolingObject(obj);
+                }
+
             }
 
         }
-
+        
     }
     public void LateUpdateWork() { }
 
