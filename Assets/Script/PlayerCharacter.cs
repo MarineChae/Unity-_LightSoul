@@ -20,16 +20,17 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
     private EquipItem[] equipItems;
     private Weapon[] equipWeapon;
     private bool isRoll=false;
+    private bool isAttack = false;
     private float attackDelay = 0.0f;
     private bool canAttack = true;
     private void OnEnable()
     {
-        UpdateManager.OnSubscribe(this, true, false, false);
+        UpdateManager.OnSubscribe(this, true, true, false);
     }
 
     private void OnDisable()
     {
-        UpdateManager.UnSubscribe(this, true, false, false);
+        UpdateManager.UnSubscribe(this, true, true, false);
     }
 
 
@@ -41,10 +42,29 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
         animator = GetComponentInChildren<Animator>();
         navMeshAgent = GetComponentInChildren<NavMeshAgent>();
     }
-    public void FixedUpdateWork() { }
-    public void UpdateWork()
+    public void FixedUpdateWork() 
     {
         Move();
+    }
+    public void UpdateWork()
+    {
+
+        if (moveVector != Vector3.zero)
+        {
+            animator.SetBool("Walk", true);
+
+        }
+        else
+        {
+            animator.SetBool("Walk", false);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            animator.SetTrigger("Roll");
+            navMeshAgent.isStopped = true;
+            navMeshAgent.velocity = Vector3.zero;
+            isRoll = true;
+        }
         if (itemDatas[(int)ITEMTYPE.WEAPON] == null)
         {
             animator.SetBool("EquipWeapon", false);
@@ -68,14 +88,15 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
             equipWeapon[0].Attack();
             animator.SetTrigger("Attack");
             attackDelay = 0.0f;
+            isAttack = true;
             navMeshAgent.isStopped = true;
             navMeshAgent.velocity = Vector3.zero;
-           
         }
     }
     public void AttackEnd()
     {
         navMeshAgent.destination = transform.position;
+        isAttack = false;
         navMeshAgent.isStopped = false;
         navMeshAgent.velocity = Vector3.zero;
     }
@@ -83,27 +104,13 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
     {
         moveVector = navMeshAgent.velocity;
 
-        if (moveVector != Vector3.zero)
-        {
-            animator.SetBool("Walk", true);
-
-        }
-        else
-        {
-            animator.SetBool("Walk", false);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            animator.SetTrigger("Roll");
-            navMeshAgent.isStopped = true;
-            navMeshAgent.velocity = Vector3.zero;
-            isRoll = true;
-        }
-        if (navMeshAgent.remainingDistance >= 1.0f && !isRoll)
+        if (navMeshAgent.remainingDistance >= 0.5f && !isRoll && !isAttack && navMeshAgent.desiredVelocity != Vector3.zero)
         {
             Vector3 direction = navMeshAgent.desiredVelocity;
             Quaternion rot = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.deltaTime * 10.0f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * 10.0f);
+
+
         }
     }
 
