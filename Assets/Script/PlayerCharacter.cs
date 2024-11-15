@@ -80,8 +80,8 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
 
     private void Attack()
     {
-        attackDelay += Time.deltaTime;
         if (equipWeapon[0] == null) return;
+        attackDelay += Time.deltaTime;
         canAttack = equipWeapon[0].attackRate < attackDelay;
         if (Input.GetMouseButtonDown(1) && canAttack)
         {

@@ -10,7 +10,8 @@ public class ClickMove : MonoBehaviour ,IUpdatable
 {
 
     private NavMeshAgent navMeshAgent;
-
+    [SerializeField]
+    LayerMask ignorMask;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -30,24 +31,27 @@ public class ClickMove : MonoBehaviour ,IUpdatable
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
-        if (Input.GetMouseButtonDown(0))
+        if(!EventSystem.current.IsPointerOverGameObject())
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hit))
+            if (Input.GetMouseButtonDown(0))
             {
-                if (hit.collider.tag == "Walkable")
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+                if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, ~ignorMask))
                 {
+
                     navMeshAgent.SetDestination(hit.point);
                     var obj = GameManager.Instance.GetPoolingObject();
                     obj.Activate(hit.point);
                     GameManager.Instance.ReturnPoolingObject(obj);
+
+
                 }
 
             }
 
         }
-        
+
     }
     public void LateUpdateWork() { }
 

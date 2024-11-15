@@ -51,6 +51,8 @@ public class EquipmentSlot : MonoBehaviour
     public InventoryItem PickUpItem()
     {
         InventoryItem ret = equippedItem;
+        if (ret == null)
+            return null;
         character.UnEquipItem(ret.ItemData);
         equippedItem = null;
         return ret;

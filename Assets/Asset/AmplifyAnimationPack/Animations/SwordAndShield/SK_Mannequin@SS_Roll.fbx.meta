@@ -505,7 +505,7 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.81632656
+      - time: 0.73153126
         functionName: RollEnd
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}

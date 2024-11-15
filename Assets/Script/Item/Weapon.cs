@@ -12,9 +12,9 @@ public class Weapon : MonoBehaviour
         tag = "Weapon";
         capsuleCollider = GetComponent<CapsuleCollider>();
         capsuleCollider.enabled = false;
-        capsuleCollider.height = 2.5f;
+        capsuleCollider.height = 1.5f;
         capsuleCollider.radius = 0.3f;
-        capsuleCollider.center = new Vector3(0, 1.0f, 0);
+        capsuleCollider.center = new Vector3(0, 0.8f, 0);
         capsuleCollider.isTrigger = true;
         capsuleCollider.providesContacts = true;
     }
@@ -28,13 +28,13 @@ public class Weapon : MonoBehaviour
 
     IEnumerator Swip()
     {
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.2f);
         capsuleCollider.enabled = true;
         Debug.Log("attackstart");
         yield return new WaitForSeconds(0.4f);
         capsuleCollider.enabled = false;
         Debug.Log("attackend");
-
+        yield return null;
     }
 
     private void OnTriggerEnter(Collider other)
