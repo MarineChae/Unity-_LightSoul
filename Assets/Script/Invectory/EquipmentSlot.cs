@@ -23,12 +23,12 @@ public class EquipmentSlot : MonoBehaviour
 
     public bool EquipItem(InventoryItem item, ref InventoryItem overlapItem)
     {
-        if ((item.ItemData.ItemType == ITEMTYPE.WEAPON || item.ItemData.ItemType == ITEMTYPE.WEAPON2))
+        if ((item.ItemData.itemType == ITEMTYPE.WEAPON || item.ItemData.itemType == ITEMTYPE.WEAPON2))
         {
             overlapItem = CheckAndEquip(item, overlapItem);
             return true;
         }
-        if (slotType != item.ItemData.ItemType) return false;
+        if (slotType != item.ItemData.itemType) return false;
         CheckAndEquip(item, overlapItem);
 
         return true;
@@ -43,7 +43,7 @@ public class EquipmentSlot : MonoBehaviour
         equippedItem = item;
         Vector2 pos = new Vector2(tileWidth / 2, -tileHeight / 2);
         rectTransform.localPosition = pos;
-        item.ItemData.SlotType = slotType;
+        item.ItemData.slotType = slotType;
         character.EquipItem(item.ItemData);
         return overlapItem;
     }

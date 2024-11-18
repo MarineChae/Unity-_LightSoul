@@ -40,7 +40,8 @@ public class EquipItem : MonoBehaviour
     public void SetItemData(ItemData data)
     {
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = data.mesh;
+        var newMesh = Resources.Load<Mesh>(data.mesh);
+        meshFilter.mesh = newMesh;
     }
 
 }

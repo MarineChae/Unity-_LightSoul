@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 
@@ -214,4 +215,19 @@ public class InvectoryGrid : MonoBehaviour
 
         return null;
     }
+
+    public void InsertRandomItem(int num)
+    {
+        var itemPrefab = Resources.Load("Item");
+        InventoryItem item = Instantiate(itemPrefab).GetComponent<InventoryItem>();
+        item.Set(DataManager.Instance.dicItemDatas[num]);
+
+        Vector2Int? posOnGrid = FindSapceForItem(item);
+
+        if (posOnGrid == null) return ;
+
+        PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
+
+    }
+
 }

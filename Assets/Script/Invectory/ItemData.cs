@@ -1,20 +1,24 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
-public class ItemData : ScriptableObject
+[Serializable]
+public class ItemData 
 {
-
+    public int id = 0;
+    public string name = "";
     public int width = 1;
     public int height = 1;
-    public Sprite itemIcon;
-    public Mesh mesh;
-    [SerializeField]
-    private ITEMTYPE itemType;
-    internal ITEMTYPE ItemType { get => itemType; set => itemType = value; }
+    public string itemIcon;
+    public string mesh;
+    public ITEMTYPE itemType;
+    public ITEMTYPE slotType;
 
-    private ITEMTYPE slotType;
-    internal ITEMTYPE SlotType { get => slotType; set => slotType = value; }
 
+}
+[Serializable]
+public class ItemDataArray
+{ 
+    public ItemData[] ItemDatas;
 }

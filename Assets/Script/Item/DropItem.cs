@@ -32,7 +32,9 @@ public class DropItem : MonoBehaviour
     }
     public void Init(ItemData data)
     {
+        if (data.id == 0) return;
         isInit = true;
+        data = DataManager.Instance.dicItemDatas[data.id];
         inventoryItem = Instantiate(itemPrefab).GetComponent<InventoryItem>();
         inventoryItem.transform.SetParent(this.transform);
         inventoryController = FindObjectOfType(typeof(InventoryController)) as InventoryController;
@@ -44,7 +46,9 @@ public class DropItem : MonoBehaviour
     {
         inventoryItem.ItemData = data;
         MeshFilter meshFilter = GetComponent<MeshFilter>();
-        meshFilter.mesh = data.mesh;
+
+        var newMesh = Resources.Load<Mesh>(data.mesh);
+        meshFilter.mesh = newMesh;
         
     }
 

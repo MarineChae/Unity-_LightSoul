@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
-enum ITEMTYPE
+public enum ITEMTYPE
 {
     NONE = 0,
     WEAPON,

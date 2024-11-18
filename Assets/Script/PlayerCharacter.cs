@@ -127,13 +127,13 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
 
     public void EquipItem(ItemData itemData)
     {
-        itemDatas[(int)itemData.SlotType] = itemData;
-        if(itemData.SlotType == ITEMTYPE.WEAPON )
+        itemDatas[(int)itemData.slotType] = itemData;
+        if(itemData.slotType == ITEMTYPE.WEAPON )
         {
             EquipWeapon(itemData, weaponSocket.transform);
             equipWeapon[0] = equipItems[(int)ITEMTYPE.WEAPON].weaponData;
         }
-        else if(itemData.SlotType == ITEMTYPE.WEAPON2)
+        else if(itemData.slotType == ITEMTYPE.WEAPON2)
         {
             EquipWeapon(itemData ,weapon2Socket.transform);
             equipWeapon[1] = equipItems[(int)ITEMTYPE.WEAPON2].weaponData;
@@ -142,23 +142,23 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
 
     private void EquipWeapon(ItemData itemData,Transform socketTransform)
     {
-        equipItems[(int)itemData.SlotType] = Instantiate(equipItem);
-        equipItems[(int)itemData.SlotType].IsWeapon = true;
-        equipItems[(int)itemData.SlotType].Init(itemData);
-        equipItems[(int)itemData.SlotType].transform.SetParent(socketTransform);
-        equipItems[(int)itemData.SlotType].transform.localPosition = Vector3.zero;
-        equipItems[(int)itemData.SlotType].transform.localRotation = Quaternion.identity;
+        equipItems[(int)itemData.slotType] = Instantiate(equipItem);
+        equipItems[(int)itemData.slotType].IsWeapon = true;
+        equipItems[(int)itemData.slotType].Init(itemData);
+        equipItems[(int)itemData.slotType].transform.SetParent(socketTransform);
+        equipItems[(int)itemData.slotType].transform.localPosition = Vector3.zero;
+        equipItems[(int)itemData.slotType].transform.localRotation = Quaternion.identity;
 
     }
 
     public void UnEquipItem(ItemData itemData)
     {
-        itemDatas[(int)itemData.SlotType] = null;
-        if (itemData.ItemType == ITEMTYPE.WEAPON || itemData.ItemType == ITEMTYPE.WEAPON2)
+        itemDatas[(int)itemData.slotType] = null;
+        if (itemData.itemType == ITEMTYPE.WEAPON || itemData.itemType == ITEMTYPE.WEAPON2)
         {
-            equipWeapon[(int)itemData.SlotType - 1] = null;
-            var des = equipItems[(int)itemData.SlotType];
-            equipItems[(int)itemData.SlotType] = null;
+            equipWeapon[(int)itemData.slotType - 1] = null;
+            var des = equipItems[(int)itemData.slotType];
+            equipItems[(int)itemData.slotType] = null;
             Destroy(des.gameObject);
 
         }

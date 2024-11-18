@@ -65,7 +65,8 @@ public class InventoryItem : MonoBehaviour
     {
         this.ItemData = itemData;
 
-        GetComponent<Image>().sprite = itemData.itemIcon;
+        var icon = Resources.Load<Sprite>(itemData.itemIcon);
+        GetComponent<Image>().sprite = icon;
 
         Vector2 size = new Vector2();
         size.x = WIDTH * InvectoryGrid.tileWidth;
