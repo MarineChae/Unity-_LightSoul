@@ -18,7 +18,7 @@ enum ITEMTYPE
 }
 
 
-public class InventoryController : MonoBehaviour
+public class InventoryController : MonoBehaviour , IUpdatable
 {
     [SerializeField]
     private InvectoryGrid originSelectedItemGrid;
@@ -69,11 +69,21 @@ public class InventoryController : MonoBehaviour
     Transform canvasTrasform;
     [SerializeField]
     Canvas inventoryUI;
-    bool inventoryState = true;
+    public bool inventoryState = true;
     InventoryHighLight inventoryHighLight;
     InventoryItem itemToHighLight;
     Vector2Int oldPosition;
 
+
+    private void OnEnable()
+    {
+        UpdateManager.OnSubscribe(this, true, false, false);
+    }
+
+    private void OnDisable()
+    {
+        UpdateManager.UnSubscribe(this, true, false, false);
+    }
 
 
     private void Awake()
@@ -83,20 +93,20 @@ public class InventoryController : MonoBehaviour
         SelectedItemGrid = originSelectedItemGrid;
         StartCoroutine(InitInventory());
     }
+    public void FixedUpdateWork() { }
 
-    private void Update()
+    public void UpdateWork()
     {
 
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            inventoryState = !inventoryState;
-            inventoryUI.gameObject.SetActive(inventoryState);
+            ChangeInventoryState(!inventoryState);
         }
         if (!inventoryState) return;
-        
+
         DragItemIcon();
-        
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             RotateItem();
@@ -114,9 +124,15 @@ public class InventoryController : MonoBehaviour
         {
             LeftButtonPress();
         }
-
     }
 
+    public void ChangeInventoryState(bool isOpen)
+    {
+        inventoryState = isOpen;
+        inventoryUI.gameObject.SetActive(isOpen);
+    }
+
+    public void LateUpdateWork() { }
 
     private void RotateItem()
     {
@@ -309,5 +325,6 @@ public class InventoryController : MonoBehaviour
 
         inventoryState = false;
         inventoryUI.gameObject.SetActive(false);
+       
     }
 }

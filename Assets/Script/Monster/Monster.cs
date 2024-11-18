@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class Monster : MonoBehaviour
+public class Monster : MonoBehaviour , IUpdatable
 {
 
     public MonsterData monsterData;
@@ -22,6 +22,18 @@ public class Monster : MonoBehaviour
     private Animator animator;
     private float updateTime = 1.0f;
 
+    private void OnEnable()
+    {
+        UpdateManager.OnSubscribe(this, true, true, false);
+    }
+
+    private void OnDisable()
+    {
+        UpdateManager.UnSubscribe(this, true, true, false);
+    }
+
+
+
     void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
@@ -33,16 +45,16 @@ public class Monster : MonoBehaviour
         InvokeRepeating(nameof(UpdateNearPlayer), 0, updateTime);
     }
 
-    private void FixedUpdate()
+    public void FixedUpdateWork()
     {
-        if(target != null && Hp > 0)
-        navMeshAgent.SetDestination(target.position);
+        if (target != null && Hp > 0)
+            navMeshAgent.SetDestination(target.position);
     }
-    void Update()
+    public void UpdateWork()
     {
         if (Hp <= 0)
         {
-            animator.SetBool("Die",true);
+            animator.SetBool("Die", true);
         }
         else
         {
@@ -55,6 +67,10 @@ public class Monster : MonoBehaviour
                 animator.SetBool("Walk", false);
             }
         }
+    }
+    public void LateUpdateWork()
+    {
+        
     }
 
     public Vector3 DirectionFromAngle(float angleDegree, bool angleIsGlobal)
