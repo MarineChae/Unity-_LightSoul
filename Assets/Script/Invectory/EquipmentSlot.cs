@@ -23,12 +23,12 @@ public class EquipmentSlot : MonoBehaviour
 
     public bool EquipItem(InventoryItem item, ref InventoryItem overlapItem)
     {
+        if (slotType != item.ItemData.itemType) return false;
         if ((item.ItemData.itemType == ITEMTYPE.WEAPON || item.ItemData.itemType == ITEMTYPE.WEAPON2))
         {
             overlapItem = CheckAndEquip(item, overlapItem);
             return true;
         }
-        if (slotType != item.ItemData.itemType) return false;
         CheckAndEquip(item, overlapItem);
 
         return true;

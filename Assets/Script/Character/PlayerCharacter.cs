@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerCharacter : MonoBehaviour, IUpdatable
+public class PlayerCharacter : Entity, IUpdatable
 {
     private Animator animator;
     private NavMeshAgent navMeshAgent;
@@ -18,11 +18,26 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
     [SerializeField]
     private EquipItem equipItem;
     private EquipItem[] equipItems;
-    private Weapon[] equipWeapon;
-    private bool isRoll=false;
+    public Weapon[] equipWeapon;
+    private PlayerAttack playerAttack;
+    Status status;
+
+    private bool isRoll = false;
     private bool isAttack = false;
+
+    private bool isCombo = false;
     private float attackDelay = 0.0f;
     private bool canAttack = true;
+    [SerializeField]
+    private float baseHp = 100;
+    public override float MaxHP => baseHp;
+
+    public override float MaxStamina => 100;
+
+    public override float StaminaRecovery => 5;
+
+
+    private float staminerConsumption = 30;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -36,13 +51,16 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
 
     void Start()
     {
+        InitStatus();
         itemDatas = new ItemData[(int)ITEMTYPE.END];
         equipItems = new EquipItem[(int)ITEMTYPE.END];
         equipWeapon = new Weapon[2];
         animator = GetComponentInChildren<Animator>();
         navMeshAgent = GetComponentInChildren<NavMeshAgent>();
+        playerAttack = GetComponent<PlayerAttack>();
+        
     }
-    public void FixedUpdateWork() 
+    public void FixedUpdateWork()
     {
         Move();
     }
@@ -58,13 +76,7 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
         {
             animator.SetBool("Walk", false);
         }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            animator.SetTrigger("Roll");
-            navMeshAgent.isStopped = true;
-            navMeshAgent.velocity = Vector3.zero;
-            isRoll = true;
-        }
+
         if (itemDatas[(int)ITEMTYPE.WEAPON] == null)
         {
             animator.SetBool("EquipWeapon", false);
@@ -73,32 +85,20 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
         {
             animator.SetBool("EquipWeapon", true);
         }
-
-        Attack();
+        Roll();
 
     }
 
-    private void Attack()
+    private void Roll()
     {
-        if (equipWeapon[0] == null) return;
-        attackDelay += Time.deltaTime;
-        canAttack = equipWeapon[0].attackRate < attackDelay;
-        if (Input.GetMouseButtonDown(1) && canAttack)
+        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !isRoll)
         {
-            equipWeapon[0].Attack();
-            animator.SetTrigger("Attack");
-            attackDelay = 0.0f;
-            isAttack = true;
+            animator.SetTrigger("Roll");
             navMeshAgent.isStopped = true;
             navMeshAgent.velocity = Vector3.zero;
+            isRoll = true;
+            UseStamina(staminerConsumption);
         }
-    }
-    public void AttackEnd()
-    {
-        navMeshAgent.destination = transform.position;
-        isAttack = false;
-        navMeshAgent.isStopped = false;
-        navMeshAgent.velocity = Vector3.zero;
     }
     private void Move()
     {
@@ -132,6 +132,7 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
         {
             EquipWeapon(itemData, weaponSocket.transform);
             equipWeapon[0] = equipItems[(int)ITEMTYPE.WEAPON].weaponData;
+            playerAttack.Weapon = equipWeapon[0];
         }
         else if(itemData.slotType == ITEMTYPE.WEAPON2)
         {
@@ -164,5 +165,15 @@ public class PlayerCharacter : MonoBehaviour, IUpdatable
         }
     }
 
+    public override void TakeDamage(float damage)
+    {
+        HP -= damage;
+        Debug.Log(damage);
+    }
 
+    public override void UseStamina(float stamina)
+    {
+        Stamina -= stamina;
+        Debug.Log(stamina);
+    }
 }

@@ -3,9 +3,9 @@
     {
       "id": 1000,
       "name": "Axe",
-      "width": 3,
-      "height": 3,
-      "itemIcon": "itemIcons/Sword",
+      "width": 2,
+      "height": 4,
+      "itemIcon": "itemIcons/Axe",
       "mesh": "itemMeshs/SM_Wep_Axe_01",
       "itemType": 1,
       "slotType": 1
@@ -13,23 +13,32 @@
     {
       "id": 1001,
       "name": "Shiled",
-      "width": 1,
-      "height": 4,
-      "itemIcon": "itemIcons/Sword",
+      "width": 3,
+      "height": 3,
+      "itemIcon": "itemIcons/Shiled",
       "mesh": "itemMeshs/SM_Wep_Shield_02",
-      "itemType": 1,
-      "slotType": 1
+      "itemType": 2,
+      "slotType": 2
     },
     {
       "id": 1002,
       "name": "Sword",
-      "width": 3,
-      "height": 3,
+      "width": 1,
+      "height": 4,
       "itemIcon": "itemIcons/Sword",
       "mesh": "itemMeshs/SM_Wep_Crystal_Ornate_Straightsword_01",
       "itemType": 1,
       "slotType": 1
+    },
+    {
+      "id": 2001,
+      "name": "HealthPotion",
+      "width": 1,
+      "height": 2,
+      "itemIcon": "itemIcons/Potion",
+      "mesh": "itemMeshs/SM_Item_Potion_09",
+      "itemType": 3,
+      "slotType": 3
     }
-
   ]
 } 

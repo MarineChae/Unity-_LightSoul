@@ -318,9 +318,6 @@ PrefabInstance:
       addedObject: {fileID: 3076634618898192540}
     - targetCorrespondingSourceObject: {fileID: 100040, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 7292143386143562988}
-    - targetCorrespondingSourceObject: {fileID: 100040, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 1148956327724338347}
   m_SourcePrefab: {fileID: 100100000, guid: b6ef2f4d0154b2747860a3332fa05f97, type: 3}
 --- !u!1 &742676865802691240 stripped
@@ -394,27 +391,6 @@ MonoBehaviour:
   viewRadius: 5
   viewAngle: 156
   walkSpeed: 3
---- !u!135 &7292143386143562988
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 742676865802691240}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!195 &1148956327724338347
 NavMeshAgent:
   m_ObjectHideFlags: 0

@@ -21,7 +21,7 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
     {
         UpdateManager.UnSubscribe(this, true, true, false);
     }
-    void Start()
+    void Awake()
     {
 
         var loadedJson = Resources.Load<TextAsset>("ItemData").text;

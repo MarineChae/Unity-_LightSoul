@@ -5,14 +5,14 @@ using UnityEditor;
 using UnityEngine;
 
 
-[CustomEditor(typeof(Monster))]
+[CustomEditor(typeof(MonsterRangeChecker))]
 public class FOVDebuger : Editor
 {
 
     private void OnSceneGUI()
     {
-        
-        Monster monster = (Monster)target;
+
+        MonsterRangeChecker monster = (MonsterRangeChecker)target;
         Handles.color = Color.white;
         Handles.DrawWireArc(monster.transform.position, Vector3.up, Vector3.forward, 360, monster.ViewRadius);
         Vector3 viewAngleA = monster.DirectionFromAngle(-monster.ViewAngle / 2 , false);

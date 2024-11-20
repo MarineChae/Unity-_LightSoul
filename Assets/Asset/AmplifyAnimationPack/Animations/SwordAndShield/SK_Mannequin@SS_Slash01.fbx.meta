@@ -505,10 +505,24 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.8004175
+      - time: 0.14592275
+        functionName: ColliderEnable
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.39055791
+        functionName: ColliderDisable
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.8032488
         functionName: AttackEnd
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

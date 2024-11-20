@@ -5,7 +5,7 @@ using UnityEngine;
 public class Weapon : MonoBehaviour
 {
 
-    CapsuleCollider capsuleCollider;
+    public CapsuleCollider capsuleCollider;
     public float attackRate = 1.5f;
     private void Start()
     {
@@ -20,22 +20,22 @@ public class Weapon : MonoBehaviour
     }
 
 
-    public void Attack()
-    {
-        StopCoroutine("Swip");
-        StartCoroutine("Swip");
-    }
+    //public void Attack()
+    //{
+    //    StopCoroutine("Swip");
+    //    StartCoroutine("Swip");
+    //}
 
-    IEnumerator Swip()
-    {
-        yield return new WaitForSeconds(0.2f);
-        capsuleCollider.enabled = true;
-        Debug.Log("attackstart");
-        yield return new WaitForSeconds(0.4f);
-        capsuleCollider.enabled = false;
-        Debug.Log("attackend");
-        yield return null;
-    }
+    //IEnumerator Swip()
+    //{
+    //    yield return new WaitForSeconds(0.2f);
+    //    capsuleCollider.enabled = true;
+    //    Debug.Log("attackstart");
+    //    yield return new WaitForSeconds(0.4f);
+    //    capsuleCollider.enabled = false;
+    //    Debug.Log("attackend");
+    //    yield return null;
+    //}
 
     private void OnTriggerEnter(Collider other)
     {
