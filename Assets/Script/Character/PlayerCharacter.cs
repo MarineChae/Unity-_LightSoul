@@ -20,14 +20,10 @@ public class PlayerCharacter : Entity, IUpdatable
     private EquipItem[] equipItems;
     public Weapon[] equipWeapon;
     private PlayerAttack playerAttack;
-    Status status;
 
     private bool isRoll = false;
     private bool isAttack = false;
 
-    private bool isCombo = false;
-    private float attackDelay = 0.0f;
-    private bool canAttack = true;
     [SerializeField]
     private float baseHp = 100;
     public override float MaxHP => baseHp;
@@ -130,21 +126,21 @@ public class PlayerCharacter : Entity, IUpdatable
         itemDatas[(int)itemData.slotType] = itemData;
         if(itemData.slotType == ITEMTYPE.WEAPON )
         {
-            EquipWeapon(itemData, weaponSocket.transform);
+            EquipWeapon(itemData, weaponSocket.transform,true);
             equipWeapon[0] = equipItems[(int)ITEMTYPE.WEAPON].weaponData;
             playerAttack.Weapon = equipWeapon[0];
         }
         else if(itemData.slotType == ITEMTYPE.WEAPON2)
         {
-            EquipWeapon(itemData ,weapon2Socket.transform);
+            EquipWeapon(itemData ,weapon2Socket.transform,false);
             equipWeapon[1] = equipItems[(int)ITEMTYPE.WEAPON2].weaponData;
         }
     }
 
-    private void EquipWeapon(ItemData itemData,Transform socketTransform)
+    private void EquipWeapon(ItemData itemData,Transform socketTransform,bool isWeapon)
     {
         equipItems[(int)itemData.slotType] = Instantiate(equipItem);
-        equipItems[(int)itemData.slotType].IsWeapon = true;
+        equipItems[(int)itemData.slotType].IsWeapon = isWeapon;
         equipItems[(int)itemData.slotType].Init(itemData);
         equipItems[(int)itemData.slotType].transform.SetParent(socketTransform);
         equipItems[(int)itemData.slotType].transform.localPosition = Vector3.zero;

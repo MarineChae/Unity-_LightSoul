@@ -120,4 +120,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 5023460358469346443, guid: 620b7781649e7f444a1b4dd400bf71bd, type: 3}
+  itemPrefabGameObject: {fileID: 7819476769454752268, guid: 16fb0a74dab07fe46ab6bd58424b0c16, type: 3}
   weaponData: {fileID: 0}

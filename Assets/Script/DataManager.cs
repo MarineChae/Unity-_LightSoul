@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using Newtonsoft.Json;
+using System;
 
 public class DataManager : SingleTon<DataManager>, IUpdatable
 {
 
     public Dictionary<int, ItemData> dicItemDatas = new Dictionary<int, ItemData>();
-
-    
+    public Dictionary<int, MonsterData> dicMonsterDatas = new Dictionary<int, MonsterData>();
+    public Dictionary<string, Action<GameObject>> dicBehaviorFuncs = new Dictionary<string, Action<GameObject>>();
 
 
     private void OnEnable()
@@ -23,7 +24,23 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
     }
     void Awake()
     {
+        LoadItemData();
+        LoadMonsterData();
+        dicBehaviorFuncs.Add("WolfBehavior", obj => obj.AddComponent<WolfBehavior>());
+    }
 
+    private void LoadMonsterData()
+    {
+        var loadedJson = Resources.Load<TextAsset>("MonsterData").text;
+        var data = JsonUtility.FromJson<MonsterDataArray>(loadedJson);
+        foreach (var monsterData in data.MonsterDatas)
+        {
+            dicMonsterDatas.Add(monsterData.id, monsterData);
+        }
+    }
+
+    private void LoadItemData()
+    {
         var loadedJson = Resources.Load<TextAsset>("ItemData").text;
         var data = JsonUtility.FromJson<ItemDataArray>(loadedJson);
 
@@ -31,8 +48,6 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
         {
             dicItemDatas.Add(itemData.id, itemData);
         }
-
-
     }
 
     public void UpdateWork() { }

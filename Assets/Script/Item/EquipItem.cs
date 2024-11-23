@@ -8,7 +8,8 @@ public class EquipItem : MonoBehaviour
     [SerializeField]
     private Object itemPrefab;
     private readonly ItemData itemData;
-
+    [SerializeField] 
+    private GameObject itemPrefabGameObject;
     private bool isInit = false;
     private bool isWeapon = false;
     public bool IsWeapon
@@ -35,6 +36,9 @@ public class EquipItem : MonoBehaviour
         {
             gameObject.AddComponent<CapsuleCollider>().isTrigger = true;
             weaponData = gameObject.AddComponent<Weapon>();
+            var trail = Instantiate(itemPrefabGameObject);
+            trail.transform.parent = transform;
+
         }
     }
     public void SetItemData(ItemData data)
@@ -42,6 +46,7 @@ public class EquipItem : MonoBehaviour
         MeshFilter meshFilter = GetComponent<MeshFilter>();
         var newMesh = Resources.Load<Mesh>(data.mesh);
         meshFilter.mesh = newMesh;
+       
     }
 
 }

@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
@@ -9,12 +11,13 @@ public class Monster : MonoBehaviour , IUpdatable
 
     public MonsterData monsterData;
     public MonsterRangeChecker monsterRangeChecker;
-    private int hp;
 
-    [SerializeField]
+    private BehaviorTreeBase behaviorTreeBase;
+    private int hp;
     private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
+
 
     private void OnEnable()
     {
@@ -30,23 +33,39 @@ public class Monster : MonoBehaviour , IUpdatable
 
     void Start()
     {
-        monsterRangeChecker = GetComponentInChildren<MonsterRangeChecker>();    
+        InitMonsterData();
+        monsterRangeChecker = GetComponentInChildren<MonsterRangeChecker>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = walkSpeed;
-        var meshFilter = GetComponentInChildren<SkinnedMeshRenderer>();
         animator = GetComponent<Animator>();
-        meshFilter.sharedMesh = monsterData.mesh;
+
+        
+
+    }
+
+    private void InitMonsterData()
+    {
+        var jsonData = DataManager.Instance.dicMonsterDatas[monsterData.id];
+        monsterData = jsonData;
         Hp = monsterData.hp;
+        walkSpeed = monsterData.moveSpeed;
+
+        var obj = new GameObject("BehaviorTree");
+        obj.transform.parent = this.transform;
+        DataManager.Instance.dicBehaviorFuncs[monsterData.behaviorTreeName](obj);
+        behaviorTreeBase = obj.GetComponent<BehaviorTreeBase>();
+        behaviorTreeBase.Monster = this;
 
     }
 
     public void FixedUpdateWork()
     {
-        if (monsterRangeChecker.Target != null && Hp > 0)
-            navMeshAgent.SetDestination(monsterRangeChecker.Target.position);
+        //if (monsterRangeChecker.Target != null && Hp > 0)
+        //    navMeshAgent.SetDestination(monsterRangeChecker.Target.position);
     }
     public void UpdateWork()
     {
+        behaviorTreeBase.RunTree();
         if (Hp <= 0)
         {
             animator.SetBool("Die", true);

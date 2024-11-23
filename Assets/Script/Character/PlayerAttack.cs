@@ -11,6 +11,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     private NavMeshAgent navMeshAgent;
     private Weapon weapon;
     private bool isGuard;
+    private TrailRenderer trailRenderer;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -24,11 +25,13 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     {
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        
     }
     public void UpdateWork()
     {
         if (Input.GetMouseButtonDown(1) && weapon != null && !isGuard)
         {
+            trailRenderer.enabled = true;
             animator.SetTrigger("Attack");
             AttackCount = 0;
             navMeshAgent.isStopped = true;
@@ -68,10 +71,20 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         get => animator.GetInteger(acttackCount);
         set => animator.SetInteger(acttackCount, value);
     }
-    public Weapon Weapon { get => weapon; set => weapon = value; }
+    public Weapon Weapon
+    {
+        get => weapon;
+        set 
+            {   
+                weapon = value; 
+                trailRenderer = Weapon.GetComponentInChildren<TrailRenderer>();
+                trailRenderer.enabled = false;
+            } 
+    }
 
     public void AttackEnd()
     {
+        trailRenderer.enabled = false;
         navMeshAgent.destination = transform.position;
         navMeshAgent.isStopped = false;
         navMeshAgent.velocity = Vector3.zero;

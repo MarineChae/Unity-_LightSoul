@@ -6,17 +6,17 @@ using UnityEngine;
 
 public abstract class Entity : MonoBehaviour
 { 
-    private Status status;
+    private Status entityStatus;
 
     public float HP
     {   
-        get => status.hp;
-        set => status.hp = Mathf.Clamp(value, 0, MaxHP); 
+        get => entityStatus.hp;
+        set => entityStatus.hp = Mathf.Clamp(value, 0, MaxHP); 
     }
     public float Stamina
     {
-        get => status.stamina;
-        set => status.stamina = Mathf.Clamp(value, 0, MaxStamina);
+        get => entityStatus.stamina;
+        set => entityStatus.stamina = Mathf.Clamp(value, 0, MaxStamina);
     }
     public abstract float MaxHP { get; }
     public abstract float MaxStamina { get; }
