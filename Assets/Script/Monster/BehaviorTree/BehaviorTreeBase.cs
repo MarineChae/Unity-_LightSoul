@@ -25,4 +25,7 @@ public class BehaviorTreeBase : MonoBehaviour
     {
         return isRun;
     }
+
+    virtual public ReturnCode Wait() { return ReturnCode.FAILURE; }
+
 }

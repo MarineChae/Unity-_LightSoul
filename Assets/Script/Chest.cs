@@ -11,6 +11,7 @@ public class Chest : MonoBehaviour ,IUpdatable
     private Quaternion targetRotation;
     private Quaternion originRotation;
     private bool isOpen;
+    private bool isRotate;
     
     private Canvas canvas;
 
@@ -61,6 +62,7 @@ public class Chest : MonoBehaviour ,IUpdatable
             if (character.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
             {
                 Debug.Log("test!");
+                isRotate = true;
                 isOpen = true;
                 canvas.gameObject.SetActive(true);
                 inventoryUI.ChangeInventoryState(true);
@@ -71,12 +73,12 @@ public class Chest : MonoBehaviour ,IUpdatable
                 inventoryUI.ChangeInventoryState(false);
             }
         }
-        if (isOpen)
+        if (isRotate)
         {
             cehstTop.transform.rotation = Quaternion.Slerp(cehstTop.transform.rotation, targetRotation, Time.deltaTime * 2.0f);
             if (Quaternion.Angle(cehstTop.transform.rotation, targetRotation) < 0.5f)
             {
-                isOpen = false;
+                isRotate = false;
             }
 
         }
@@ -92,10 +94,12 @@ public class Chest : MonoBehaviour ,IUpdatable
     }
     private void OnTriggerExit(Collider other)
     {
-        canvas.gameObject.SetActive(false);
-        inventoryUI.ChangeInventoryState(false);
-        character = null;
-
+        if(isOpen)
+        {
+            canvas.gameObject.SetActive(false);
+            inventoryUI.ChangeInventoryState(false);
+            character = null;
+        }
     }
 
 }

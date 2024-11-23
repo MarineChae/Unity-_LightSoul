@@ -11,13 +11,14 @@ public class Monster : MonoBehaviour , IUpdatable
 
     public MonsterData monsterData;
     public MonsterRangeChecker monsterRangeChecker;
-
+    [SerializeField]
+    private float patrolRange;
     private BehaviorTreeBase behaviorTreeBase;
     private int hp;
     private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
-
+    private bool findPlayer;
 
     private void OnEnable()
     {
@@ -65,30 +66,51 @@ public class Monster : MonoBehaviour , IUpdatable
     }
     public void UpdateWork()
     {
-        behaviorTreeBase.RunTree();
-        if (Hp <= 0)
+        if(behaviorTreeBase.GetRunState())
         {
-            animator.SetBool("Die", true);
-        }
-        else
-        {
-            if (navMeshAgent.velocity != Vector3.zero)
+            behaviorTreeBase.RunTree();
+            if (Hp <= 0)
             {
-                animator.SetBool("Walk", true);
+                navMeshAgent.enabled = false;
+                behaviorTreeBase.ChangeTreeState();
+                animator.SetBool("Die", true);
             }
             else
             {
-                animator.SetBool("Walk", false);
+                if (navMeshAgent.velocity != Vector3.zero)
+                {
+                    animator.SetBool("Walk", true);
+                }
+                else
+                {
+                    animator.SetBool("Walk", false);
+                }
             }
         }
+         
     }
     public void LateUpdateWork()
     {
         
     }
 
-
+    public bool RandomPoint(out Vector3 result)
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            Vector3 randomPoint = transform.position + Random.insideUnitSphere * patrolRange;
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(randomPoint, out hit, patrolRange, NavMesh.AllAreas))
+            {
+                result = hit.position;
+                return true;
+            }
+        }
+        result = transform.position;
+        return true;
+    }
 
     public int Hp { get => hp; set => hp = value; }
-
+    public float PatrolRange { get => patrolRange; set => patrolRange = value; }
+    public bool FindPlayer { get => findPlayer; set => findPlayer = value; }
 }

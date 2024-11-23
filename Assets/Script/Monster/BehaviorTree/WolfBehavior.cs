@@ -9,8 +9,9 @@ public class WolfBehavior : BehaviorTreeBase
 
     private NavMeshAgent agent;
     private MonsterRangeChecker rangeChecker;
-    float time = 0;
-    private void Start()
+    private Vector3 destination;
+    private float waitTime = 0;
+    private void Start() 
     {
         Debug.Log("Wolf");
         rootNode = new SelectNode();
@@ -22,12 +23,14 @@ public class WolfBehavior : BehaviorTreeBase
 
         SequenceNode patrolSequence = new SequenceNode();
         rootNode.childList.Add(patrolSequence);
-        TaskNode patrol = new TaskNode(test2);
+        TaskNode findPatrolPos = new TaskNode(SetPatrolPosition);
+        patrolSequence.childList.Add(findPatrolPos);
+        TaskNode patrol = new TaskNode(Patrol);
         patrolSequence.childList.Add(patrol);
+        TaskNode wait = new TaskNode(Wait);
+        patrolSequence.childList.Add(wait);
 
 
-
-      
         agent = monster.GetComponent<NavMeshAgent>();
         rangeChecker = monster.monsterRangeChecker;
     }
@@ -36,13 +39,47 @@ public class WolfBehavior : BehaviorTreeBase
         if (rangeChecker.Target != null && monster.Hp > 0)
         {
             agent.SetDestination(rangeChecker.Target.position);
+            monster.FindPlayer = true;
             return ReturnCode.SUCCESS;
         }
+        monster.FindPlayer = false;
         return ReturnCode.FAILURE;
     }
-    ReturnCode test2()
+    ReturnCode SetPatrolPosition()
     {
-        Debug.Log("NotFound");
+        monster.RandomPoint(out destination);
+        agent.SetDestination(destination);
         return ReturnCode.SUCCESS;
+    }
+    ReturnCode Patrol()
+    {
+        float dist = Vector3.Distance(destination, monster.transform.position);
+        if (dist < 1 || monster.FindPlayer)
+        {
+            return ReturnCode.SUCCESS;
+        }
+        else
+        {
+
+            return ReturnCode.RUNNING;
+        }
+    }
+     override public ReturnCode Wait() 
+    {
+        waitTime += Time.deltaTime;
+        if (waitTime >= 5)
+        {
+            Debug.Log("wait");
+            waitTime = 0;
+            return ReturnCode.SUCCESS;
+        }
+        else if (monster.FindPlayer)
+        {
+            return ReturnCode.FAILURE;
+        }
+        else
+        {
+            return ReturnCode.RUNNING;
+        }
     }
 }
