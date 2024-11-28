@@ -22,7 +22,8 @@ public class GameManager : SingleTon<GameManager>, IUpdatable
         pool.transform.SetParent(transform);
         pool.AddComponent<ObjectPool>().InitializePool(10,"prefabs/WayPoint");
         objectPool = pool.GetComponent<ObjectPool>();
-
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     public void TestFunc()

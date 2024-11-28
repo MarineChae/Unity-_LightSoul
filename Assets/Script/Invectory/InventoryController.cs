@@ -73,7 +73,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
     InventoryHighLight inventoryHighLight;
     InventoryItem itemToHighLight;
     Vector2Int oldPosition;
-
+    private FollowCamera followCamera;
 
     private void OnEnable()
     {
@@ -92,6 +92,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
         inventoryHighLight.SetParent(selectedItemGrid);
         SelectedItemGrid = originSelectedItemGrid;
         StartCoroutine(InitInventory());
+        followCamera = GetComponent<FollowCamera>();
     }
     public void FixedUpdateWork() { }
 
@@ -102,6 +103,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
         if (Input.GetKeyDown(KeyCode.E))
         {
             ChangeInventoryState(!inventoryState);
+           
         }
         if (!inventoryState) return;
 
@@ -128,7 +130,13 @@ public class InventoryController : MonoBehaviour , IUpdatable
 
     public void ChangeInventoryState(bool isOpen)
     {
+        Cursor.visible = isOpen;
+        if(isOpen)
+            Cursor.lockState = CursorLockMode.None;
+        else
+            Cursor.lockState = CursorLockMode.Locked;
         inventoryState = isOpen;
+        followCamera.IsUIActive = isOpen;
         inventoryUI.gameObject.SetActive(isOpen);
     }
 

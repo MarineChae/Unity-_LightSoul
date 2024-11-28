@@ -10,12 +10,14 @@ public class FollowCamera : MonoBehaviour, IUpdatable
 
     [SerializeField]  Transform camTarget;
     [SerializeField]  Vector3 offSet;
-    [SerializeField]  private float rayLength;
+    [SerializeField]  private float cameraSensitive;
+
     private Vector2 camLook;
+    private bool isUIActive;
     public Transform CamTarget { get => camTarget; set => camTarget = value; }
     public Vector3 OffSet { get => offSet; }
     public Vector2 CamLook { get => camLook; set => camLook = value; }
-
+    public bool IsUIActive { get => isUIActive; set => isUIActive = value; }
     private void Start()
     {
         
@@ -32,17 +34,18 @@ public class FollowCamera : MonoBehaviour, IUpdatable
 
     public void FixedUpdateWork() 
     {
-        
+  
     }
     public void UpdateWork()
     {
-        CameraLook();
+        if (!isUIActive)
+            CameraLook();
 
     }
 
     public void CameraLook()
     {
-        Vector2 mouseDelta = new Vector2 (camLook.x, camLook.y);
+        Vector2 mouseDelta = new Vector2 (camLook.x, camLook.y)*Time.deltaTime * cameraSensitive;
         Vector3 cameraAngle = CamTarget.rotation.eulerAngles;
         
         float x = cameraAngle.x - mouseDelta.y;
