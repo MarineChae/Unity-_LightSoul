@@ -11,7 +11,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     private Weapon weapon;
     private bool isGuard;
     private TrailRenderer trailRenderer;
-
+    private Move move;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -21,15 +21,16 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     {
         UpdateManager.UnSubscribe(this, true, false, false);
     }
-    private void Start()
+    private void Awake()
     {
         animator = GetComponent<Animator>();
-        
+        move = GetComponent<Move>();
     }
     public void UpdateWork()
     {
         if (Input.GetMouseButtonDown(1) && weapon != null && !isGuard)
         {
+            move.StopMovement();
             trailRenderer.enabled = true;
             animator.SetTrigger("Attack");
             AttackCount = 0;
@@ -81,6 +82,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
 
     public void AttackEnd()
     {
+        move.AllowMovement();
         trailRenderer.enabled = false;
     }
    

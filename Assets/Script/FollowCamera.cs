@@ -11,9 +11,10 @@ public class FollowCamera : MonoBehaviour, IUpdatable
     [SerializeField]  Transform camTarget;
     [SerializeField]  Vector3 offSet;
     [SerializeField]  private float rayLength;
-
+    private Vector2 camLook;
     public Transform CamTarget { get => camTarget; set => camTarget = value; }
     public Vector3 OffSet { get => offSet; }
+    public Vector2 CamLook { get => camLook; set => camLook = value; }
 
     private void Start()
     {
@@ -29,16 +30,19 @@ public class FollowCamera : MonoBehaviour, IUpdatable
         UpdateManager.UnSubscribe(this, true, false, false);
     }
 
-    public void FixedUpdateWork() { }
+    public void FixedUpdateWork() 
+    {
+        
+    }
     public void UpdateWork()
     {
-      
+        CameraLook();
 
     }
 
-    public void CameraLook(Vector2 inputValue)
+    public void CameraLook()
     {
-        Vector2 mouseDelta = new Vector2 (inputValue.x, inputValue.y);
+        Vector2 mouseDelta = new Vector2 (camLook.x, camLook.y);
         Vector3 cameraAngle = CamTarget.rotation.eulerAngles;
         
         float x = cameraAngle.x - mouseDelta.y;

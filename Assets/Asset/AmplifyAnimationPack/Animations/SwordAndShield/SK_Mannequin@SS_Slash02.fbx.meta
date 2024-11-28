@@ -520,7 +520,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.97614527
+      - time: 0.94126153
         functionName: AttackEnd
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}

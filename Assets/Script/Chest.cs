@@ -72,16 +72,17 @@ public class Chest : MonoBehaviour ,IUpdatable
                 canvas.gameObject.SetActive(false);
                 inventoryUI.ChangeInventoryState(false);
             }
-        }
-        if (isRotate)
-        {
-            cehstTop.transform.rotation = Quaternion.Slerp(cehstTop.transform.rotation, targetRotation, Time.deltaTime * 2.0f);
-            if (Quaternion.Angle(cehstTop.transform.rotation, targetRotation) < 0.5f)
+            if (isRotate)
             {
-                isRotate = false;
-            }
+                cehstTop.transform.rotation = Quaternion.Slerp(cehstTop.transform.rotation, targetRotation, Time.deltaTime * 2.0f);
+                if (Quaternion.Angle(cehstTop.transform.rotation, targetRotation) < 0.5f)
+                {
+                    isRotate = false;
+                }
 
+            }
         }
+
 
     }
 

@@ -6,16 +6,17 @@ using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Move : MonoBehaviour
 {
-
-    private Rigidbody   playerRigidbody;
-    private Vector2     moveInput;
-    private float       rotSpeed=3.0f;
-    private float       moveSpeed = 5.0f;
-    private Animator    animator;
+    private readonly float rotSpeed = 5.0f;
+    private readonly float moveSpeed = 5.0f;
+    private Rigidbody      playerRigidbody;
+    private Vector2        moveInput;
+    private Animator       animator;
     [SerializeField]
     private FollowCamera followCamera;
     private bool isMove;
-    
+    private bool canMove = true;
+
+
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody>();
@@ -28,19 +29,23 @@ public class Move : MonoBehaviour
     private void FixedUpdate()
     {
         followCamera.CamTarget.position = playerRigidbody.position + followCamera.OffSet;
-        isMove = moveInput.magnitude != 0;
-        animator.SetBool("Walk", isMove);
-        if (isMove)
+        if(canMove)
         {
-            Vector3 lookForward = new Vector3(followCamera.CamTarget.forward.x, 0.0f, followCamera.CamTarget.forward.z).normalized;
-            Vector3 lookRight = new Vector3(followCamera.CamTarget.right.x, 0.0f, followCamera.CamTarget.right.z).normalized;
-            Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
+            isMove = moveInput.magnitude != 0;
+            animator.SetBool("Walk", isMove);
+            if (isMove)
+            {
+                Vector3 lookForward = new Vector3(followCamera.CamTarget.forward.x, 0.0f, followCamera.CamTarget.forward.z).normalized;
+                Vector3 lookRight = new Vector3(followCamera.CamTarget.right.x, 0.0f, followCamera.CamTarget.right.z).normalized;
+                Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
 
-            var look = Quaternion.LookRotation(moveDirection);
-            playerRigidbody.MoveRotation(look);
-            playerRigidbody.MovePosition(playerRigidbody.position + moveDirection * Time.fixedDeltaTime * moveSpeed);
-            
+                var look = Quaternion.LookRotation(moveDirection);
+                playerRigidbody.rotation = Quaternion.Slerp(playerRigidbody.rotation, look, Time.fixedDeltaTime * rotSpeed);
+                playerRigidbody.MovePosition(playerRigidbody.position + moveDirection * Time.fixedDeltaTime * moveSpeed);
+
+            }
         }
+
     }
 
 
@@ -57,9 +62,15 @@ public class Move : MonoBehaviour
     private void OnLook(InputValue value)
     {
         Vector2 mousePosition = value.Get<Vector2>();
-        followCamera.CameraLook(mousePosition);
+        followCamera.CamLook = mousePosition;
     }
 
-
-
+    public void StopMovement()
+    {
+        canMove = false;
+    }
+    public void AllowMovement()
+    {
+        canMove = true;
+    }
 }

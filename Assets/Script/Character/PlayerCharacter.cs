@@ -21,6 +21,8 @@ public class PlayerCharacter : Entity, IUpdatable
 
     private bool isRoll = false;
     private bool isAttack = false;
+    
+
 
     [SerializeField]
     private float baseHp = 100;
