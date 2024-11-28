@@ -1,0 +1,65 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
+
+public class Move : MonoBehaviour
+{
+
+    private Rigidbody   playerRigidbody;
+    private Vector2     moveInput;
+    private float       rotSpeed=3.0f;
+    private float       moveSpeed = 5.0f;
+    private Animator    animator;
+    [SerializeField]
+    private FollowCamera followCamera;
+    private bool isMove;
+    
+    void Start()
+    {
+        playerRigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+    }
+    void Update()
+    {
+        
+    }
+    private void FixedUpdate()
+    {
+        followCamera.CamTarget.position = playerRigidbody.position + followCamera.OffSet;
+        isMove = moveInput.magnitude != 0;
+        animator.SetBool("Walk", isMove);
+        if (isMove)
+        {
+            Vector3 lookForward = new Vector3(followCamera.CamTarget.forward.x, 0.0f, followCamera.CamTarget.forward.z).normalized;
+            Vector3 lookRight = new Vector3(followCamera.CamTarget.right.x, 0.0f, followCamera.CamTarget.right.z).normalized;
+            Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
+
+            var look = Quaternion.LookRotation(moveDirection);
+            playerRigidbody.MoveRotation(look);
+            playerRigidbody.MovePosition(playerRigidbody.position + moveDirection * Time.fixedDeltaTime * moveSpeed);
+            
+        }
+    }
+
+
+    private void OnMove(InputValue value)
+    {
+        Vector2 input = value.Get<Vector2>();
+        if (input != null)
+        {
+            moveInput = new Vector2(input.x,input.y);
+        }
+
+    }
+
+    private void OnLook(InputValue value)
+    {
+        Vector2 mousePosition = value.Get<Vector2>();
+        followCamera.CameraLook(mousePosition);
+    }
+
+
+
+}

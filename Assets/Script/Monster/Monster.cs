@@ -18,7 +18,6 @@ public class Monster : MonoBehaviour , IUpdatable
     private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
-    private bool findPlayer;
 
     private void OnEnable()
     {
@@ -112,5 +111,5 @@ public class Monster : MonoBehaviour , IUpdatable
 
     public int Hp { get => hp; set => hp = value; }
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
-    public bool FindPlayer { get => findPlayer; set => findPlayer = value; }
+
 }

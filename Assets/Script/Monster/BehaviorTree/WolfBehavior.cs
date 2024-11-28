@@ -39,10 +39,8 @@ public class WolfBehavior : BehaviorTreeBase
         if (rangeChecker.Target != null && monster.Hp > 0)
         {
             agent.SetDestination(rangeChecker.Target.position);
-            monster.FindPlayer = true;
             return ReturnCode.SUCCESS;
         }
-        monster.FindPlayer = false;
         return ReturnCode.FAILURE;
     }
     ReturnCode SetPatrolPosition()
@@ -54,7 +52,7 @@ public class WolfBehavior : BehaviorTreeBase
     ReturnCode Patrol()
     {
         float dist = Vector3.Distance(destination, monster.transform.position);
-        if (dist < 1 || monster.FindPlayer)
+        if (dist < 1 || rangeChecker.Target != null)
         {
             return ReturnCode.SUCCESS;
         }
@@ -73,7 +71,7 @@ public class WolfBehavior : BehaviorTreeBase
             waitTime = 0;
             return ReturnCode.SUCCESS;
         }
-        else if (monster.FindPlayer)
+        else if (rangeChecker.Target != null)
         {
             return ReturnCode.FAILURE;
         }

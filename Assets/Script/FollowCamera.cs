@@ -1,16 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Animations;
 
 public class FollowCamera : MonoBehaviour, IUpdatable
 {
 
-    [SerializeField] Transform camTarget;
-    [SerializeField] Vector3 offSet;
+    [SerializeField]  Transform camTarget;
+    [SerializeField]  Vector3 offSet;
     [SerializeField]  private float rayLength;
 
-    
+    public Transform CamTarget { get => camTarget; set => camTarget = value; }
+    public Vector3 OffSet { get => offSet; }
+
     private void Start()
     {
         
@@ -28,44 +32,28 @@ public class FollowCamera : MonoBehaviour, IUpdatable
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
-        //float wheelValue = Input.GetAxis("Mouse ScrollWheel");
-        //if (0 < wheelValue)
-        //{
-        //    var dir = camTarget.position - transform.position;
-        //    var dist = Vector3.Distance(camTarget.position, transform.position);
-        //    if(dist > 5)
-        //    {
-        //        offSet.x += dir.normalized.x;
-        //        offSet.y += dir.normalized.y;
-        //        offSet.z += dir.normalized.z;
-        //    }
-
-        //}
-        //else if (0 > wheelValue)
-        //{
-        //    var dir = camTarget.position - transform.position;
-        //    var dist = Vector3.Distance(camTarget.position, transform.position);
-        //    if(dist<10)
-        //    {
-        //        offSet.x -= dir.normalized.x;
-        //        offSet.y -= dir.normalized.y;
-        //        offSet.z -= dir.normalized.z;
-        //    }
-
-        //}
-        transform.position = camTarget.position + offSet;
-
-        Vector3 look =  transform.position - (camTarget.transform.position + Vector3.up) ;
-        Debug.DrawRay(camTarget.transform.position + Vector3.up, look * rayLength, Color.red);
-
-        if (Physics.Raycast(camTarget.transform.position + Vector3.up , look, out RaycastHit hit , rayLength))
-        {
-            Debug.Log("hit");
-            transform.position = hit.point; ;
-            Debug.DrawLine(camTarget.transform.position, hit.point,Color.yellow);
-        }
+      
 
     }
+
+    public void CameraLook(Vector2 inputValue)
+    {
+        Vector2 mouseDelta = new Vector2 (inputValue.x, inputValue.y);
+        Vector3 cameraAngle = CamTarget.rotation.eulerAngles;
+        
+        float x = cameraAngle.x - mouseDelta.y;
+        if(x <180.0f)
+        {
+            x = Mathf.Clamp(x , -1f, 45f);
+        }
+        else
+        {
+            x = Mathf.Clamp(x, 320f, 361f);
+        }
+        CamTarget.rotation = Quaternion.Euler(x, cameraAngle.y + mouseDelta.x, cameraAngle.z);
+
+    }
+
     public void LateUpdateWork() { }
 
 }

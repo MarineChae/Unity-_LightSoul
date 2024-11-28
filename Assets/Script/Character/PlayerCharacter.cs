@@ -7,8 +7,6 @@ using UnityEngine.AI;
 public class PlayerCharacter : Entity, IUpdatable
 {
     private Animator animator;
-    private NavMeshAgent navMeshAgent;
-    private Vector3 moveVector;
     [HideInInspector]
     public ItemData[] itemDatas;
     [SerializeField]
@@ -52,27 +50,15 @@ public class PlayerCharacter : Entity, IUpdatable
         equipItems = new EquipItem[(int)ITEMTYPE.END];
         equipWeapon = new Weapon[2];
         animator = GetComponentInChildren<Animator>();
-        navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         playerAttack = GetComponent<PlayerAttack>();
         
     }
     public void FixedUpdateWork()
     {
-        Move();
+        
     }
     public void UpdateWork()
     {
-
-        if (moveVector != Vector3.zero)
-        {
-            animator.SetBool("Walk", true);
-
-        }
-        else
-        {
-            animator.SetBool("Walk", false);
-        }
-
         if (itemDatas[(int)ITEMTYPE.WEAPON] == null)
         {
             animator.SetBool("EquipWeapon", false);
@@ -90,32 +76,14 @@ public class PlayerCharacter : Entity, IUpdatable
         if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !isRoll)
         {
             animator.SetTrigger("Roll");
-            navMeshAgent.isStopped = true;
-            navMeshAgent.velocity = Vector3.zero;
             isRoll = true;
             UseStamina(staminerConsumption);
-        }
-    }
-    private void Move()
-    {
-        moveVector = navMeshAgent.velocity;
-
-        if (navMeshAgent.remainingDistance >= 0.5f && !isRoll && !isAttack && navMeshAgent.desiredVelocity != Vector3.zero)
-        {
-            Vector3 direction = navMeshAgent.desiredVelocity;
-            Quaternion rot = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, rot, Time.fixedDeltaTime * 10.0f);
-
-
         }
     }
 
     void RollEnd()
     {
         isRoll=false;
-        navMeshAgent.destination = transform.position;
-        navMeshAgent.isStopped = false;
-        navMeshAgent.velocity = Vector3.zero;
     }
 
 
