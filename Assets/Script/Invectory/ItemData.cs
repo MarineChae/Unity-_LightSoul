@@ -14,7 +14,7 @@ public class ItemData
     public string mesh;
     public ITEMTYPE itemType;
     public ITEMTYPE slotType;
-
+    public string hitEffect;
 
 }
 [Serializable]

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -36,6 +37,7 @@ public class EquipItem : MonoBehaviour
         {
             gameObject.AddComponent<CapsuleCollider>().isTrigger = true;
             weaponData = gameObject.AddComponent<Weapon>();
+            weaponData.hitPrefab = Resources.Load<GameObject>(data.hitEffect);
             var trail = Instantiate(itemPrefabGameObject);
             trail.transform.parent = transform;
 

@@ -18,7 +18,7 @@ public class Monster : MonoBehaviour , IUpdatable
     private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
-
+    private bool isAttack;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -51,6 +51,7 @@ public class Monster : MonoBehaviour , IUpdatable
         walkSpeed = monsterData.moveSpeed;
 
         var obj = new GameObject("BehaviorTree");
+        obj.transform.position = this.transform.position;
         obj.transform.parent = this.transform;
         DataManager.Instance.dicBehaviorFuncs[monsterData.behaviorTreeName](obj);
         behaviorTreeBase = obj.GetComponent<BehaviorTreeBase>();
@@ -85,6 +86,7 @@ public class Monster : MonoBehaviour , IUpdatable
                     animator.SetBool("Walk", false);
                 }
             }
+            navMeshAgent.velocity = navMeshAgent.desiredVelocity;
         }
          
     }
@@ -109,7 +111,16 @@ public class Monster : MonoBehaviour , IUpdatable
         return true;
     }
 
+    public void Attack()
+    {
+        animator.SetTrigger("Attack");
+        IsAttack = true;
+    }
+    public void AttackEnd()
+    {
+        IsAttack = false;
+    }
     public int Hp { get => hp; set => hp = value; }
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
-
+    public bool IsAttack { get => isAttack; set => isAttack = value; }
 }

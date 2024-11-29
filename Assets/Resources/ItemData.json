@@ -8,7 +8,8 @@
       "itemIcon": "itemIcons/Axe",
       "mesh": "itemMeshs/SM_Wep_Axe_01",
       "itemType": 1,
-      "slotType": 1
+      "slotType": 1,
+      "hitEffect" : "Prefabs/Hit_25_orange_explosion"
     },
     {
       "id": 1001,
@@ -18,7 +19,8 @@
       "itemIcon": "itemIcons/Shiled",
       "mesh": "itemMeshs/SM_Wep_Shield_02",
       "itemType": 2,
-      "slotType": 2
+      "slotType": 2,
+      "hitEffect": "Prefabs/Hit_25_orange_explosion"
     },
     {
       "id": 1002,
@@ -28,7 +30,8 @@
       "itemIcon": "itemIcons/Sword",
       "mesh": "itemMeshs/SM_Wep_Crystal_Ornate_Straightsword_01",
       "itemType": 1,
-      "slotType": 1
+      "slotType": 1,
+      "hitEffect": "Prefabs/Hit_25_orange_explosion"
     },
     {
       "id": 2001,
@@ -38,7 +41,8 @@
       "itemIcon": "itemIcons/Potion",
       "mesh": "itemMeshs/SM_Item_Potion_09",
       "itemType": 3,
-      "slotType": 3
+      "slotType": 3,
+      "hitEffect": "Prefabs/Hit_25_orange_explosion"
     }
   ]
 } 

@@ -105,8 +105,12 @@ public class InventoryController : MonoBehaviour , IUpdatable
             ChangeInventoryState(!inventoryState);
            
         }
-        if (!inventoryState) return;
 
+        if (!inventoryState) return;
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ChangeInventoryState(false);
+        }
         DragItemIcon();
 
         if (Input.GetKeyDown(KeyCode.R))

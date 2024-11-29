@@ -51,7 +51,7 @@ public class Chest : MonoBehaviour ,IUpdatable
         targetRotation *= Quaternion.Euler(-130, 0, 0);
         canvas = GetComponentInChildren<Canvas>();
         canvas.gameObject.SetActive(false);
-      
+        inventoryUI = Camera.main.GetComponent<InventoryController>();
     }
 
     public void FixedUpdateWork() { }
@@ -70,7 +70,8 @@ public class Chest : MonoBehaviour ,IUpdatable
             else if(character.CompareTag("Player") && Input.GetKeyDown(KeyCode.Escape))
             {
                 canvas.gameObject.SetActive(false);
-                inventoryUI.ChangeInventoryState(false);
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
             }
             if (isRotate)
             {
@@ -91,11 +92,12 @@ public class Chest : MonoBehaviour ,IUpdatable
 
     private void OnTriggerEnter(Collider other)
     {
-        character = other.transform;
+        if(other.CompareTag("Player"))
+            character = other.transform;
     }
     private void OnTriggerExit(Collider other)
     {
-        if(isOpen)
+        if(isOpen && other.CompareTag("Player"))
         {
             canvas.gameObject.SetActive(false);
             inventoryUI.ChangeInventoryState(false);
