@@ -6,7 +6,9 @@
       "hp": 100,
       "attackSpeed": 1.0,
       "moveSpeed": 2.0,
-      "behaviorTreeName" : "WolfBehavior"
+      "meleeDamage": 5.0,
+      "skillDamage": 20.0,
+      "behaviorTreeName": "WolfBehavior"
     },
     {
       "id": 10002,
@@ -14,6 +16,8 @@
       "hp": 1000,
       "attackSpeed": 1.0,
       "moveSpeed": 2.0,
+      "meleeDamage": 5.0,
+      "skillDamage": 20.0,
       "behaviorTreeName": "WolfBehavior"
     },
     {
@@ -22,6 +26,8 @@
       "hp": 1000,
       "attackSpeed": 1.0,
       "moveSpeed": 5.0,
+      "meleeDamage": 5.0,
+      "skillDamage": 20.0,
       "behaviorTreeName": "WolfBehavior"
     },
     {
@@ -30,6 +36,8 @@
       "hp": 1000,
       "attackSpeed": 1.0,
       "moveSpeed": 5.0,
+      "meleeDamage": 5.0,
+      "skillDamage": 20.0,
       "behaviorTreeName": "WolfBehavior"
     }
   ]

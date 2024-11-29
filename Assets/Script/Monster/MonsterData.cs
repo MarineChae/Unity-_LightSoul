@@ -11,6 +11,8 @@ public class MonsterData
     public int hp;
     public float attackSpeed;
     public float moveSpeed;
+    public float meleeDamage;
+    public float skillDamage;
     public string behaviorTreeName;
 }
 [Serializable]

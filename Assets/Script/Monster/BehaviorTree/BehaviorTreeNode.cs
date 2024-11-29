@@ -36,25 +36,6 @@ public class BranchNode : BaseNode
     }
 
 }
-//노드가 실행 될 수 있는지 확인하는 함수, 컨디션확인
-
-public class DecoratorNode : BaseNode
-{
-    public Func<ReturnCode> condition;
-
-
-    public override ReturnCode Tick()
-    {
-        return condition();
-    }
-
-    public DecoratorNode(Func<ReturnCode> condition)
-    {
-        this.condition = condition;
-    }
-
-}
-
 
 //셀렉트 노드는 한곳에서 성공했다면 그자리에서 실행 종료
 //실패한 경우 다음 노드실행을 반복한다
@@ -150,4 +131,29 @@ public class TaskNode : BaseNode
     {
         this.action = action;
     }
+}
+//노드가 실행 될 수 있는지 확인하는 함수, 컨디션확인
+public class DecoratorNode : BaseNode
+{
+    public Func<ReturnCode> condition;
+    public BaseNode child;
+
+    public override ReturnCode Tick()
+    {
+        if (condition() == ReturnCode.FAILURE)
+        {
+            return ReturnCode.FAILURE;
+        }
+        else
+        {
+            return child.Tick();
+        }
+  
+    }
+
+    public DecoratorNode(Func<ReturnCode> condition)
+    {
+        this.condition = condition;
+    }
+
 }

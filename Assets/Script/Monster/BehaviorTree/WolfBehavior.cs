@@ -8,18 +8,28 @@ using UnityEngine.AI;
 public class WolfBehavior : BehaviorTreeBase
 {
 
-
+    private float cooldown;
     private Animator animator;
     private void Awake() 
     {
         Debug.Log("Wolf");
         rootNode = new SelectNode();
 
-        
+        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(5.0f));
+        rootNode.childList.Add(skillCoolDown);
+        DecoratorNode inSkillRange = new DecoratorNode(() => InRange(10.0f, ATTACK_TYPE.Skill1));
+        skillCoolDown.child = inSkillRange;
+        SequenceNode SkillSequence = new SequenceNode();
+        inSkillRange.child = SkillSequence;
+        TaskNode skill = new TaskNode(AttackPlayer);
+        SkillSequence.childList.Add(skill);
+        TaskNode skillWait = new TaskNode(() => Wait(1.0f, WaitContext.AfterAttack));
+        SkillSequence.childList.Add(skillWait);
+
+        DecoratorNode inRange = new DecoratorNode(() => InRange(2.0f, ATTACK_TYPE.Melee));
+        rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
-        rootNode.childList.Add(attackSequence);
-        DecoratorNode inRange = new DecoratorNode(InRange);
-        attackSequence.childList.Add(inRange);
+        inRange.child = attackSequence;
         TaskNode attack = new TaskNode(AttackPlayer);
         attackSequence.childList.Add(attack);
         TaskNode attackWait = new TaskNode(() => Wait(1.0f,WaitContext.AfterAttack));
@@ -43,18 +53,33 @@ public class WolfBehavior : BehaviorTreeBase
 
     }
 
-
-    private ReturnCode InRange()
+    private void Update()
+    {
+        cooldown += Time.deltaTime;
+    }
+    private ReturnCode CoolDown(float time)
+    {
+        if(cooldown >= time)
+        {
+            cooldown = 0;
+            return ReturnCode.SUCCESS;
+        }
+        else
+        {
+            return ReturnCode.FAILURE;
+        }
+    }
+    private ReturnCode InRange(float range , ATTACK_TYPE type)
     {
         if (rangeChecker.Target == null) return 
                 ReturnCode.FAILURE;
 
-        float dist = Vector3.SqrMagnitude(monster.transform.position - rangeChecker.Target.transform.position);
-        if (dist <= 5.0f)
+        float dist = Vector3.Magnitude(monster.transform.position - rangeChecker.Target.transform.position);
+        if (dist <= range)
         {
             agent.ResetPath();
             Debug.Log("Attack");
-            monster.Attack();
+            monster.Attack(type);
             return ReturnCode.SUCCESS;
         }
         return ReturnCode.FAILURE;
@@ -80,13 +105,13 @@ public class WolfBehavior : BehaviorTreeBase
         {
             lastSeenPosition = rangeChecker.Target.position;
             agent.SetDestination(rangeChecker.Target.position);
-            return ReturnCode.RUNNING;
+            return ReturnCode.SUCCESS;
         }
         float dist  = Vector3.SqrMagnitude(lastSeenPosition-transform.position);
-        if (dist>=1.0f)
+        if (dist>=5.0f)
         {
             agent.SetDestination(lastSeenPosition);
-            return ReturnCode.RUNNING;
+            return ReturnCode.SUCCESS;
         }
         return ReturnCode.FAILURE;
     }

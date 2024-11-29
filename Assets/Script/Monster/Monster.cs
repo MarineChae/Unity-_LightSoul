@@ -6,6 +6,12 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
 
+public enum ATTACK_TYPE
+{
+    Melee,
+    Skill1,
+}
+
 public class Monster : MonoBehaviour , IUpdatable
 {
 
@@ -13,12 +19,14 @@ public class Monster : MonoBehaviour , IUpdatable
     public MonsterRangeChecker monsterRangeChecker;
     [SerializeField]
     private float patrolRange;
+    private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
     private int hp;
     private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
     private bool isAttack;
+    private ATTACK_TYPE currentAttackType;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -38,8 +46,7 @@ public class Monster : MonoBehaviour , IUpdatable
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = walkSpeed;
         animator = GetComponent<Animator>();
-
-        
+        monsterAttack = GetComponentInChildren<MonsterAttack>();
 
     }
 
@@ -111,13 +118,25 @@ public class Monster : MonoBehaviour , IUpdatable
         return true;
     }
 
-    public void Attack()
+    public void Attack(ATTACK_TYPE type)
     {
-        animator.SetTrigger("Attack");
+        if(ATTACK_TYPE.Melee == type)
+             animator.SetTrigger("Attack");
+        else if(ATTACK_TYPE.Skill1 == type)
+            animator.SetTrigger("Skill1");
+        currentAttackType = type;
         IsAttack = true;
+    }
+    public void AttackStart()
+    {
+        if(ATTACK_TYPE.Melee == currentAttackType)
+            monsterAttack.AllowAttack(monsterData.meleeDamage);
+        else if (ATTACK_TYPE.Skill1 == currentAttackType)
+            monsterAttack.AllowSkillAttack(monsterAttack.transform.position,monsterRangeChecker.Target.transform.position);
     }
     public void AttackEnd()
     {
+        monsterAttack.StopAttack();
         IsAttack = false;
     }
     public int Hp { get => hp; set => hp = value; }
