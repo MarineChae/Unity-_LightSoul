@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class MonsterAttack : MonoBehaviour
 {
+    private Monster monster;
+    private PlayerCharacter targetCharacter;
     private SphereCollider attackCollider;
     [SerializeField]
     private float attackDamage;
@@ -12,6 +15,7 @@ public class MonsterAttack : MonoBehaviour
     private ProjectileObject projectile;
     private void Awake()
     {
+        monster = GetComponentInParent<Monster>();
         attackCollider = GetComponent<SphereCollider>();
         attackCollider.enabled = false;
     }
@@ -23,6 +27,13 @@ public class MonsterAttack : MonoBehaviour
 
     internal void StopAttack()
     {
+        if (!monster.IsParried && targetCharacter != null)
+        {
+            
+            targetCharacter.HP -= attackDamage;
+            targetCharacter = null;
+        }
+        monster.IsParried = false;
         attackCollider.enabled = false;
     }
     internal void AllowSkillAttack(Vector3 positon,Vector3 destination)
@@ -40,8 +51,7 @@ public class MonsterAttack : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            var player = other.GetComponentInChildren<PlayerCharacter>();
-            player.HP -= attackDamage;
+            targetCharacter = other.GetComponentInChildren<PlayerCharacter>();
         }
     }
 

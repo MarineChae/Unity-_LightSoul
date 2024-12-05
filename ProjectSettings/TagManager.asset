@@ -8,6 +8,8 @@ TagManager:
   - DropItem
   - Walkable
   - Weapon
+  - Shield
+  - MonsterWeapon
   layers:
   - Default
   - TransparentFX

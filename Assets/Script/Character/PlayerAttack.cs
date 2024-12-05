@@ -3,15 +3,23 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
+using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerAttack : MonoBehaviour , IUpdatable
 {
     private Animator animator;
     private int acttackCount = Animator.StringToHash("AttackCount");
     private Weapon weapon;
+    private Weapon shield;
     private bool isGuard;
     private TrailRenderer trailRenderer;
     private Move move;
+    private bool guardTrigger;
+    private float rightButtunHoldTime = 0.0f;
+    private float rightButtunholdThreshold = 0.1f;
+    InputAction.CallbackContext testvalue;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -28,20 +36,45 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     }
     public void UpdateWork()
     {
-        if (Input.GetMouseButtonDown(1) && weapon != null && !isGuard)
+        if (Input.GetMouseButtonDown(0) && weapon != null && !isGuard && !Cursor.visible)
         {
             move.StopMovement();
             trailRenderer.enabled = true;
             animator.SetTrigger("Attack");
             AttackCount = 0;
         }
+        GuardAndParring();
 
-        if (Input.GetKeyDown(KeyCode.Q))
+    }
+
+    private void GuardAndParring()
+    {
+        if (testvalue.performed)
         {
-            isGuard = !isGuard;
-            animator.SetBool("Guard", isGuard);
-
+            rightButtunHoldTime += Time.deltaTime;
+            Debug.Log(rightButtunHoldTime);
         }
+        if (guardTrigger)
+        {
+            //마우스 입력이 단발성인 경우 패링모션
+            if (!isGuard)
+                animator.SetTrigger("Parring");
+            else
+                ChangeGuardState();
+            guardTrigger = false;
+            rightButtunHoldTime = 0.0f;
+        }
+        //홀드상태면 가드
+        if (!isGuard && rightButtunholdThreshold <= rightButtunHoldTime)
+        {
+            ChangeGuardState();
+        }
+    }
+
+    private void ChangeGuardState()
+    {
+        isGuard = !isGuard;
+        animator.SetBool("Guard", isGuard);
     }
 
     public void FixedUpdateWork()
@@ -63,7 +96,16 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         Debug.Log("ColliderDisable");
         Weapon.capsuleCollider.enabled = false;
     }
-
+    public void ShieldColliderEnable()
+    {
+        Debug.Log("colliderEnable");
+        Shield.capsuleCollider.enabled = true;
+    }
+    public void ShieldColliderDisable()
+    {
+        Debug.Log("ColliderDisable");
+        Shield.capsuleCollider.enabled = false;
+    }
     public int AttackCount
     {
         get => animator.GetInteger(acttackCount);
@@ -80,10 +122,31 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
             } 
     }
 
+    public Weapon Shield
+    {  
+       get => shield; 
+       set => shield = value; 
+    }
+
     public void AttackEnd()
     {
         move.AllowMovement();
         trailRenderer.enabled = false;
     }
-   
+    public void OnGuard(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            testvalue = value;
+        }
+
+        if (value.canceled)
+        {
+            testvalue = value;
+            guardTrigger = true;
+        }
+           
+    }
+
+
 }

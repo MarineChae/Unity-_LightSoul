@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class PlayerCharacter : Entity, IUpdatable
 {
@@ -20,9 +21,6 @@ public class PlayerCharacter : Entity, IUpdatable
     private PlayerAttack playerAttack;
 
     private bool isRoll = false;
-    private bool isAttack = false;
-    
-
 
     [SerializeField]
     private float baseHp = 100;
@@ -70,7 +68,10 @@ public class PlayerCharacter : Entity, IUpdatable
             animator.SetBool("EquipWeapon", true);
         }
         Roll();
-
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            HP = MaxHP;
+        }
     }
 
     private void Roll()
@@ -98,12 +99,15 @@ public class PlayerCharacter : Entity, IUpdatable
         {
             EquipWeapon(itemData, weaponSocket.transform,true);
             equipWeapon[0] = equipItems[(int)ITEMTYPE.WEAPON].weaponData;
+            equipWeapon[0].tag = "Weapon";
             playerAttack.Weapon = equipWeapon[0];
         }
         else if(itemData.slotType == ITEMTYPE.WEAPON2)
         {
             EquipWeapon(itemData ,weapon2Socket.transform,false);
             equipWeapon[1] = equipItems[(int)ITEMTYPE.WEAPON2].weaponData;
+            equipWeapon[1].tag = "Shield";
+            playerAttack.Shield = equipWeapon[1];
         }
     }
 
@@ -115,7 +119,6 @@ public class PlayerCharacter : Entity, IUpdatable
         equipItems[(int)itemData.slotType].transform.SetParent(socketTransform);
         equipItems[(int)itemData.slotType].transform.localPosition = Vector3.zero;
         equipItems[(int)itemData.slotType].transform.localRotation = Quaternion.identity;
-
     }
 
     public void UnEquipItem(ItemData itemData)

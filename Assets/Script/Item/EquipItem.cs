@@ -33,14 +33,21 @@ public class EquipItem : MonoBehaviour
         if (data == null) return;
         isInit = true;
         SetItemData(data);
-        if (IsWeapon)
+        if (data.itemType == ITEMTYPE.WEAPON)
         {
             gameObject.AddComponent<CapsuleCollider>().isTrigger = true;
             weaponData = gameObject.AddComponent<Weapon>();
+            weaponData.InitCollider();
             weaponData.hitPrefab = Resources.Load<GameObject>(data.hitEffect);
             var trail = Instantiate(itemPrefabGameObject);
             trail.transform.parent = transform;
-
+        }
+        else if (data.itemType == ITEMTYPE.WEAPON2)
+        {
+            gameObject.AddComponent<CapsuleCollider>().isTrigger = true;
+            weaponData = gameObject.AddComponent<Weapon>();
+            weaponData.InitCollider();
+            weaponData.hitPrefab = Resources.Load<GameObject>(data.hitEffect);
         }
     }
     public void SetItemData(ItemData data)

@@ -49,9 +49,9 @@ public class Move : MonoBehaviour
     }
 
 
-    private void OnMove(InputValue value)
+    public void OnMove(InputAction.CallbackContext value)
     {
-        Vector2 input = value.Get<Vector2>();
+        Vector2 input = value.ReadValue<Vector2>();
         if (input != null)
         {
             moveInput = new Vector2(input.x,input.y);
@@ -59,9 +59,9 @@ public class Move : MonoBehaviour
 
     }
 
-    private void OnLook(InputValue value)
+    public void OnLook(InputAction.CallbackContext value)
     {
-        Vector2 mousePosition = value.Get<Vector2>();
+        Vector2 mousePosition = value.ReadValue<Vector2>();
         followCamera.CamLook = mousePosition;
     }
 

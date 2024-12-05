@@ -27,6 +27,7 @@ public class Monster : MonoBehaviour , IUpdatable
     private Animator animator;
     private bool isAttack;
     private ATTACK_TYPE currentAttackType;
+    private bool isParried;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -80,17 +81,17 @@ public class Monster : MonoBehaviour , IUpdatable
             {
                 navMeshAgent.enabled = false;
                 behaviorTreeBase.ChangeTreeState();
-                animator.SetBool("Die", true);
+                Animator.SetBool("Die", true);
             }
             else
             {
                 if (navMeshAgent.velocity != Vector3.zero)
                 {
-                    animator.SetBool("Walk", true);
+                    Animator.SetBool("Walk", true);
                 }
                 else
                 {
-                    animator.SetBool("Walk", false);
+                    Animator.SetBool("Walk", false);
                 }
             }
             navMeshAgent.velocity = navMeshAgent.desiredVelocity;
@@ -120,12 +121,14 @@ public class Monster : MonoBehaviour , IUpdatable
 
     public void Attack(ATTACK_TYPE type)
     {
+        if (IsAttack)
+            return;
         if(ATTACK_TYPE.Melee == type)
-             animator.SetTrigger("Attack");
+             Animator.SetTrigger("Attack");
         else if(ATTACK_TYPE.Skill1 == type)
-            animator.SetTrigger("Skill1");
+            Animator.SetTrigger("Skill1");
         currentAttackType = type;
-        IsAttack = true;
+     
     }
     public void AttackStart()
     {
@@ -133,13 +136,18 @@ public class Monster : MonoBehaviour , IUpdatable
             monsterAttack.AllowAttack(monsterData.meleeDamage);
         else if (ATTACK_TYPE.Skill1 == currentAttackType)
             monsterAttack.AllowSkillAttack(monsterAttack.transform.position,monsterRangeChecker.Target.transform.position);
+        IsAttack = true;
+        navMeshAgent.speed = 0;
     }
     public void AttackEnd()
     {
         monsterAttack.StopAttack();
         IsAttack = false;
+        navMeshAgent.speed = monsterData.moveSpeed;
     }
     public int Hp { get => hp; set => hp = value; }
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
     public bool IsAttack { get => isAttack; set => isAttack = value; }
+    public bool IsParried { get => isParried; set => isParried = value; }
+    public Animator Animator { get => animator;}
 }
