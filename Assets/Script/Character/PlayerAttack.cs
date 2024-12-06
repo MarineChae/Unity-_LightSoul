@@ -20,6 +20,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     private float rightButtunHoldTime = 0.0f;
     private float rightButtunholdThreshold = 0.1f;
     InputAction.CallbackContext testvalue;
+    private Monster targetMonster;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -40,10 +41,24 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         {
             move.StopMovement();
             trailRenderer.enabled = true;
-            animator.SetTrigger("Attack");
+            if(targetMonster != null)
+            {
+                move.RotateToTarget(targetMonster.transform.position);
+            }
+            if (targetMonster != null &&  targetMonster.IsStunned)
+            {
+                animator.SetTrigger("StrongAttack");
+            }
+            else
+            {
+                animator.SetTrigger("Attack");
+            }
             AttackCount = 0;
         }
         GuardAndParring();
+        if (targetMonster != null && targetMonster.Hp <= 0)
+            targetMonster = null;
+
 
     }
 
@@ -127,6 +142,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
        get => shield; 
        set => shield = value; 
     }
+    public Monster TargetMonster { get => targetMonster; set => targetMonster = value; }
 
     public void AttackEnd()
     {

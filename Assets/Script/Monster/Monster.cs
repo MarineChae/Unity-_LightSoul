@@ -19,6 +19,8 @@ public class Monster : MonoBehaviour , IUpdatable
     public MonsterRangeChecker monsterRangeChecker;
     [SerializeField]
     private float patrolRange;
+    [SerializeField]
+    private Material dissolveMaterial;
     private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
     private int hp;
@@ -28,6 +30,9 @@ public class Monster : MonoBehaviour , IUpdatable
     private bool isAttack;
     private ATTACK_TYPE currentAttackType;
     private bool isParried;
+    private bool isStunned;
+    private bool canRotate = true;
+
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -79,9 +84,12 @@ public class Monster : MonoBehaviour , IUpdatable
             behaviorTreeBase.RunTree();
             if (Hp <= 0)
             {
+                GetComponent<CapsuleCollider>().enabled = false;
                 navMeshAgent.enabled = false;
                 behaviorTreeBase.ChangeTreeState();
                 Animator.SetBool("Die", true);
+          
+                StartCoroutine("Die");
             }
             else
             {
@@ -128,7 +136,7 @@ public class Monster : MonoBehaviour , IUpdatable
         else if(ATTACK_TYPE.Skill1 == type)
             Animator.SetTrigger("Skill1");
         currentAttackType = type;
-     
+        canRotate = false;
     }
     public void AttackStart()
     {
@@ -145,9 +153,46 @@ public class Monster : MonoBehaviour , IUpdatable
         IsAttack = false;
         navMeshAgent.speed = monsterData.moveSpeed;
     }
+    public void StartStun()
+    {
+        IsStunned = true;
+    }
+    public void EndStun()
+    {
+        IsStunned = false;
+    }
+    public void AllowRotate()
+    {
+        canRotate = true;
+    }
+    internal void RotateToTarget(Transform target)
+    {
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        // 부드럽게 회전
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5.0f);
+    }
+    IEnumerator Die()
+    {
+        yield return new WaitForSeconds(1.0f);
+        var mat = GetComponentInChildren<SkinnedMeshRenderer>().material = dissolveMaterial;
+        float time = -1.0f;
+        while(true)
+        {
+            time += Time.deltaTime;
+            mat.SetFloat("_time", time);
+            yield return new WaitForSeconds(Time.deltaTime);
+            if (time >= 0.4f) break; ;
+        }
+        Destroy(gameObject);
+        yield return null;
+    }
+
     public int Hp { get => hp; set => hp = value; }
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
     public bool IsAttack { get => isAttack; set => isAttack = value; }
     public bool IsParried { get => isParried; set => isParried = value; }
     public Animator Animator { get => animator;}
+    public bool IsStunned { get => isStunned; set => isStunned = value; }
+    public bool CanRotate { get => canRotate;}
 }

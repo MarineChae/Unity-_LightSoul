@@ -26,7 +26,9 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
     {
         LoadItemData();
         LoadMonsterData();
+        //몬스터 추가시 트리를 넣어주어야함
         dicBehaviorFuncs.Add("WolfBehavior", obj => obj.AddComponent<WolfBehavior>());
+        dicBehaviorFuncs.Add("MutantBehavior", obj => obj.AddComponent<MutantBehavior>());
     }
 
     private void LoadMonsterData()

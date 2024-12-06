@@ -8,7 +8,7 @@ public class MonsterAttack : MonoBehaviour
 {
     private Monster monster;
     private PlayerCharacter targetCharacter;
-    private SphereCollider attackCollider;
+    private Collider attackCollider;
     [SerializeField]
     private float attackDamage;
     [SerializeField]
@@ -16,7 +16,7 @@ public class MonsterAttack : MonoBehaviour
     private void Awake()
     {
         monster = GetComponentInParent<Monster>();
-        attackCollider = GetComponent<SphereCollider>();
+        attackCollider = GetComponent <Collider>();
         attackCollider.enabled = false;
     }
     internal void AllowAttack(float damage)
@@ -31,13 +31,15 @@ public class MonsterAttack : MonoBehaviour
         {
             
             targetCharacter.HP -= attackDamage;
-            targetCharacter = null;
+
         }
         monster.IsParried = false;
         attackCollider.enabled = false;
+        targetCharacter = null;
     }
     internal void AllowSkillAttack(Vector3 positon,Vector3 destination)
     {
+        if (projectile == null) return;
         var obj = Instantiate<ProjectileObject>(projectile);
 
         obj.transform.position = positon;

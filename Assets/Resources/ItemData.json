@@ -9,7 +9,8 @@
       "mesh": "itemMeshs/SM_Wep_Axe_01",
       "itemType": 1,
       "slotType": 1,
-      "hitEffect" : "Prefabs/Hit_25_orange_explosion"
+      "hitEffect": "Prefabs/Hit_25_orange_explosion",
+      "damage": 50
     },
     {
       "id": 1001,
@@ -20,7 +21,8 @@
       "mesh": "itemMeshs/SM_Wep_Shield_02",
       "itemType": 2,
       "slotType": 2,
-      "hitEffect": "Prefabs/Hit_25_orange_explosion"
+      "hitEffect": "Prefabs/Hit_25_orange_explosion",
+      "damage": 50
     },
     {
       "id": 1002,
@@ -31,7 +33,8 @@
       "mesh": "itemMeshs/SM_Wep_Crystal_Ornate_Straightsword_01",
       "itemType": 1,
       "slotType": 1,
-      "hitEffect": "Prefabs/Hit_25_orange_explosion"
+      "hitEffect": "Prefabs/Hit_25_orange_explosion",
+      "damage": 50
     },
     {
       "id": 2001,
@@ -42,7 +45,8 @@
       "mesh": "itemMeshs/SM_Item_Potion_09",
       "itemType": 3,
       "slotType": 3,
-      "hitEffect": "Prefabs/Hit_25_orange_explosion"
+      "hitEffect": "Prefabs/Hit_25_orange_explosion",
+      "damage": 50
     }
   ]
 } 

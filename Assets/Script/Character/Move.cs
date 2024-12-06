@@ -73,4 +73,9 @@ public class Move : MonoBehaviour
     {
         canMove = true;
     }
+    public void RotateToTarget(Vector3 target)
+    {
+
+        playerRigidbody.rotation = Quaternion.LookRotation(target - playerRigidbody.position);
+    }
 }

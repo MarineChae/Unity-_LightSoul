@@ -8,8 +8,6 @@ using UnityEngine.AI;
 public class WolfBehavior : BehaviorTreeBase
 {
 
-    private float cooldown;
-    private Animator animator;
     private void Awake() 
     {
         Debug.Log("Wolf");
@@ -25,7 +23,7 @@ public class WolfBehavior : BehaviorTreeBase
         TaskNode skill = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill1));
         SkillSequence.childList.Add(skill);
 
-        DecoratorNode inRange = new DecoratorNode(() => InRange(3.0f));
+        DecoratorNode inRange = new DecoratorNode(() => InRange(2.5f));
         rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
         inRange.child = attackSequence;
@@ -52,89 +50,8 @@ public class WolfBehavior : BehaviorTreeBase
 
     }
 
-    private void Update()
-    {
-        cooldown += Time.deltaTime;
-    }
-    private ReturnCode CoolDown(float time)
-    {
-        if(cooldown >= time)
-        {
-            cooldown = 0;
-            return ReturnCode.SUCCESS;
-        }
-        else
-        {
-            return ReturnCode.FAILURE;
-        }
-    }
-    private ReturnCode InRange(float range )
-    {
-        if (rangeChecker.Target == null) return 
-                ReturnCode.FAILURE;
 
-        float dist = Vector3.Magnitude(monster.transform.position - rangeChecker.Target.transform.position);
-        if (dist <= range)
-        {
-            agent.ResetPath();
-
-            return ReturnCode.SUCCESS;
-        }
-        monster.IsAttack = false;
-        return ReturnCode.FAILURE;
-    }
-
-    private ReturnCode AttackPlayer(ATTACK_TYPE type)
-    {
-        monster.Attack(type);
-        if (monster.IsAttack)
-        {
-            return ReturnCode.RUNNING;
-        }
-        else
-        {
- 
-            return ReturnCode.SUCCESS;
-        }
-
-
-    }
-
-    ReturnCode ChasePlayer()
-    {
-        if (rangeChecker.Target != null && monster.Hp > 0)
-        {
-            lastSeenPosition = rangeChecker.Target.position;
-            agent.SetDestination(rangeChecker.Target.position);
-            return ReturnCode.SUCCESS;
-        }
-        float dist  = Vector3.SqrMagnitude(lastSeenPosition-transform.position);
-        if (dist>=5.0f)
-        {
-            agent.SetDestination(lastSeenPosition);
-            return ReturnCode.SUCCESS;
-        }
-        return ReturnCode.FAILURE;
-    }
-    ReturnCode SetPatrolPosition()
-    {
-        monster.RandomPoint(out destination);
-        agent.SetDestination(destination);
-        return ReturnCode.SUCCESS;
-    }
-    ReturnCode Patrol()
-    {
-        float dist = Vector3.SqrMagnitude(destination - monster.transform.position);
-        if (dist < 1 || rangeChecker.Target != null)
-        {
-            return ReturnCode.SUCCESS;
-        }
-        else
-        {
-
-            return ReturnCode.RUNNING;
-        }
-    }
+   
 
 
 }

@@ -15,6 +15,7 @@ public class ItemData
     public ITEMTYPE itemType;
     public ITEMTYPE slotType;
     public string hitEffect;
+    public int damage;
 
 }
 [Serializable]

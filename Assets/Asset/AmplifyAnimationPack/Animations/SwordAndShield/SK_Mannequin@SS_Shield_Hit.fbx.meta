@@ -506,17 +506,31 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.19005947
+      - time: 0
+        functionName: StopMovement
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.16687106
         functionName: ShieldColliderEnable
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.28281304
+      - time: 0.36397246
         functionName: ShieldColliderDisable
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9230769
+        functionName: AllowMovement
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

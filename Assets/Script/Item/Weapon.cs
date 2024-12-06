@@ -6,14 +6,21 @@ public class Weapon : MonoBehaviour
 {
 
     public CapsuleCollider capsuleCollider;
+    private PlayerAttack playerAttack;
+    private ItemData itemData;
     public float attackRate = 1.5f;
     public GameObject hitPrefab;
+
+    public ItemData ItemData { get => itemData; set => itemData = value; }
+
     private void Awake()
     {
         capsuleCollider = GetComponent<CapsuleCollider>();
-
     }
-
+    private void Start()
+    {
+        playerAttack= GetComponentInParent<PlayerAttack>();
+    }
     public void InitCollider()
     {
         capsuleCollider.enabled = false;
@@ -35,7 +42,14 @@ public class Weapon : MonoBehaviour
             if (other.gameObject.CompareTag("Monster"))
             {
                 var monster = other.GetComponentInChildren<Monster>();
-                monster.Hp -= 50;
+                if(monster.IsStunned)
+                {
+                    monster.Hp -= itemData.damage * 2;
+                }
+                else
+                {
+                    monster.Hp -= itemData.damage;
+                }
 
                 Vector3 dir = (other.transform.position + transform.position) * 0.5f;
 
@@ -57,6 +71,7 @@ public class Weapon : MonoBehaviour
                 var monster = other.GetComponentInParent<Monster>();
                 monster.IsParried = true;
                 monster.Animator.SetTrigger("Stunned");
+                playerAttack.TargetMonster = monster;
             }
         }
     }
