@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -72,6 +73,16 @@ public class PlayerCharacter : Entity, IUpdatable
         {
             HP = MaxHP;
         }
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+          
+            if (Physics.Raycast(transform.position+transform.up, transform.forward, out RaycastHit hit, 1.5f))
+            {
+                DialogueManager.Instance.Interact(hit.collider.gameObject);
+
+            }
+        }
+        Debug.DrawRay(transform.position + transform.up, transform.forward * 1.5f, Color.green);
     }
 
     private void Roll()

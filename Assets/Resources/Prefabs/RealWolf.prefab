@@ -93,7 +93,7 @@ Transform:
   m_GameObject: {fileID: 8478734587847432282}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 16.81031, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -128,6 +128,10 @@ PrefabInstance:
       propertyPath: attackCollider
       value: 
       objectReference: {fileID: 4709799347919321066}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: dissolveMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 8a12971e393db4148bd2edaa4da11a67, type: 2}
     - target: {fileID: 5145754205937052248, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_Name
       value: Body

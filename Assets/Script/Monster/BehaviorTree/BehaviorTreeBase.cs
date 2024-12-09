@@ -32,7 +32,7 @@ public class BehaviorTreeBase : MonoBehaviour
         {
             cooldown += Time.deltaTime;
             if (rangeChecker.Target != null && monster.CanRotate)
-                monster.RotateToTarget(rangeChecker.Target);
+                monster.RotateToTarget(rangeChecker.Target,false);
         }
     }
     public Monster Monster { get => monster; set => monster = value; }
@@ -122,12 +122,6 @@ public class BehaviorTreeBase : MonoBehaviour
         {
             lastSeenPosition = rangeChecker.Target.position;
             agent.SetDestination(rangeChecker.Target.position);
-            return ReturnCode.SUCCESS;
-        }
-        float dist = Vector3.SqrMagnitude(lastSeenPosition - transform.position);
-        if (dist >= 5.0f)
-        {
-            agent.SetDestination(lastSeenPosition);
             return ReturnCode.SUCCESS;
         }
         return ReturnCode.FAILURE;

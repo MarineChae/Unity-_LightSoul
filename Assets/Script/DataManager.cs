@@ -10,6 +10,7 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
 
     public Dictionary<int, ItemData> dicItemDatas = new Dictionary<int, ItemData>();
     public Dictionary<int, MonsterData> dicMonsterDatas = new Dictionary<int, MonsterData>();
+    public Dictionary<int, DialogueData> dicDialogueDatas = new Dictionary<int, DialogueData>();
     public Dictionary<string, Action<GameObject>> dicBehaviorFuncs = new Dictionary<string, Action<GameObject>>();
 
 
@@ -26,9 +27,20 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
     {
         LoadItemData();
         LoadMonsterData();
+        LoadDialogueData();
         //몬스터 추가시 트리를 넣어주어야함
         dicBehaviorFuncs.Add("WolfBehavior", obj => obj.AddComponent<WolfBehavior>());
         dicBehaviorFuncs.Add("MutantBehavior", obj => obj.AddComponent<MutantBehavior>());
+    }
+
+    private void LoadDialogueData()
+    {
+        var loadedJson = Resources.Load<TextAsset>("DialogueData").text;
+        var data = JsonUtility.FromJson<DialogueDataArray>(loadedJson);
+        foreach (var dialogueData in data.DialogueDatas)
+        {
+            dicDialogueDatas.Add(dialogueData.dialogueID, dialogueData);
+        }
     }
 
     private void LoadMonsterData()

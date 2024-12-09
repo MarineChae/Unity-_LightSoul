@@ -165,12 +165,15 @@ public class Monster : MonoBehaviour , IUpdatable
     {
         canRotate = true;
     }
-    internal void RotateToTarget(Transform target)
+    internal void RotateToTarget(Transform target, bool immediately)
     {
         Vector3 directionToTarget = (target.position - transform.position).normalized;
         Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
         // 부드럽게 회전
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5.0f);
+        if (immediately)
+            transform.rotation = targetRotation;
+        else
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5.0f);
     }
     IEnumerator Die()
     {
