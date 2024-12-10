@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEditor.Progress;
 using static UnityEngine.Rendering.DebugUI;
 
 public enum ITEMTYPE
@@ -14,6 +15,8 @@ public enum ITEMTYPE
     HEAD,
     GLOVES,
     BOOTS,
+    POTION,
+    CHEST,
     END,
 }
 
@@ -266,7 +269,6 @@ public class InventoryController : MonoBehaviour , IUpdatable
 
                 Debug.Log("DROP");
             }
-
             Destroy(selectedItem.gameObject);
             selectedItem = null;
         }
@@ -316,9 +318,15 @@ public class InventoryController : MonoBehaviour , IUpdatable
         else if (selectedItemGrid != null)
         {
             selectedItem = selectedItemGrid.PickUpItem(positionOnGrid.x, positionOnGrid.y);
+
         }
         if (selectedItem != null)
         {
+            if (selectedItem.ItemData.itemType == ITEMTYPE.POTION && selectedItemGrid.ItemSlotType == ITEMTYPE.NONE)
+            {
+                EventManager.Instance.PotionTriggerAction("DROP");
+                /////ui에 포션 갯수정보 추가
+            }
             rectTransform = selectedItem.GetComponent<RectTransform>();
             
         }
@@ -338,5 +346,10 @@ public class InventoryController : MonoBehaviour , IUpdatable
         inventoryState = false;
         inventoryUI.gameObject.SetActive(false);
        
+    }
+    public void UsePotion()
+    {
+        var potion = originSelectedItemGrid.UsePotion();
+        Destroy(potion.gameObject);
     }
 }

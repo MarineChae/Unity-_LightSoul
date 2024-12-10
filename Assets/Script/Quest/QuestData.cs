@@ -5,18 +5,24 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.LookDev;
 
+///// Quest type == {KILL , EQUIP,COLLECTION , ECT....}
 [Serializable]
 public class QuestData 
 {
-
+    public int questIndex;
     public string questName;
-    public int[] npcID;
-
+    public string questType;
+    public string questTarget;
+    public int nextQuestIndex;
+    public int currentCount;
+    public int count;
+    public bool isAccept;
+    public bool isCleared;
 }
 
 
 [Serializable]
 public class QuestDataArray
 {
-    public QuestDataArray[] QuestDatas;
+    public QuestData[] QuestDatas;
 }

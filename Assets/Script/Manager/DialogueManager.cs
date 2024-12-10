@@ -24,14 +24,30 @@ public class DialogueManager : SingleTon<DialogueManager>
 
     private bool GetMessage()
     {
-        if (DataManager.Instance.dicDialogueDatas[npc.DialogueBase].dialogueList.Length <= currentIndex)
+
+        if(npc.HasQuest)
+        {
+            DataManager.Instance.dicQuestDatas[npc.QuestList[npc.QuestIndex]].isAccept = true;
+            return FindMessage(npc.QuestList[npc.QuestIndex]);
+
+        }
+        else
+        {
+            return FindMessage(npc.DialogueBase);
+        }
+
+   
+    }
+
+    private bool FindMessage(int id)
+    {
+        if (DataManager.Instance.dicDialogueDatas[id].dialogueList.Length <= currentIndex)
         {
             currentIndex = 0;
             return false;
         }
-        dialogueText.text = DataManager.Instance.dicDialogueDatas[npc.DialogueBase].dialogueList[currentIndex++];
+        dialogueText.text = DataManager.Instance.dicDialogueDatas[id].dialogueList[currentIndex++];
 
         return true;
     }
-
 }

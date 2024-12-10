@@ -6,12 +6,12 @@ using UnityEngine;
 public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
-    
     public static T Instance
     {
         get
         {
-            if(_instance == null)
+          
+            if (_instance == null)
             {
                 _instance = FindObjectOfType<T>();
                 if (_instance == null)
@@ -22,7 +22,7 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
 
                 }
             }
-
+            
             return _instance;
         }
 
@@ -30,8 +30,16 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake()
     {
-        DontDestroyOnLoad(gameObject);
-        Init();
+        if (_instance == null)
+        {
+            _instance = this as T;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject); 
+        }
+
     }
     private void Init()
     {

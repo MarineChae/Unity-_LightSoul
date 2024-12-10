@@ -65,12 +65,17 @@ public class InvectoryGrid : MonoBehaviour
             CleanGridRef(overlapItem);
         }
 
+       
         PlaceItem(item, posX, posY);
         return true;
     }
 
     public void PlaceItem(InventoryItem item, int posX, int posY)
     {
+        if (item.ItemData.itemType == ITEMTYPE.POTION && itemSlotType == ITEMTYPE.NONE)
+        {            /////ui에 포션 갯수정보 추가
+            EventManager.Instance.PotionTriggerAction("GET");
+        }
         RectTransform rectTransform = item.GetComponent<RectTransform>();
         rectTransform.SetParent(this.rectTransform);
 
@@ -228,6 +233,29 @@ public class InvectoryGrid : MonoBehaviour
 
         PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
 
+    }
+
+
+    public InventoryItem UsePotion()
+    {
+        InventoryItem ret = null;
+        for (int x = 0 ; x < gridSizeWidth; x++)
+        {
+            for(int y = 0; y < gridSizeHeight; y++)
+            {
+                if (inventoryItemsSlot[x, y] != null &&  inventoryItemsSlot[x, y].ItemData.itemType == ITEMTYPE.POTION)
+                {
+                    ret = inventoryItemsSlot[x, y];
+                    break;
+                }
+            }
+        }
+
+        if (ret == null) return null;
+
+        CleanGridRef(ret);
+
+        return ret;
     }
 
 }

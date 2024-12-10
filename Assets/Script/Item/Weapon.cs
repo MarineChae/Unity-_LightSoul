@@ -59,7 +59,7 @@ public class Weapon : MonoBehaviour
                 var eff = Instantiate(hitPrefab, dir, Quaternion.identity);
                 //이펙트가 끝나면 destory하는 코루틴
                 StartCoroutine("EffectCoroutine", eff);
-                Debug.Log("OnTriggerEnter " + other.gameObject.name);
+                
             }
         }
         else if (this.CompareTag("Shield"))

@@ -1,0 +1,49 @@
+{
+  "QuestDatas": [
+    {
+      "questIndex": 100,
+      "questName": "EquipTutorial",
+      "nextQuestIndex": 101,
+      "questType": "EQUIP",
+      "questTarget": "Weapon",
+      "currentCount": 0,
+      "count": 0,
+      "isAccept": false,
+      "isCleared": false
+
+    },
+    {
+      "questIndex": 101,
+      "questName": "AttackTutorial",
+      "nextQuestIndex": 102,
+      "questType": "KILL",
+      "questTarget": "Target Dummy",
+      "currentCount": 0,
+      "count": 1,
+      "isAccept": false,
+      "isCleared": false
+    },
+    {
+      "questIndex": 102,
+      "questName": "UsingTutorial",
+      "nextQuestIndex": 103,
+      "questType": "USE",
+      "questTarget": "Potion",
+      "currentCount": 0,
+      "count": 0,
+      "isAccept": false,
+      "isCleared": false
+    },
+    {
+      "questIndex": 103,
+      "questName": "RollTutorial",
+      "nextQuestIndex": 104,
+      "questType": "USE",
+      "questTarget": "Potion",
+      "currentCount": 0,
+      "count": 0,
+      "isAccept": false,
+      "isCleared": false
+    }
+  ]
+} 

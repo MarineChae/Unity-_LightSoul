@@ -42,6 +42,7 @@ public class EquipItem : MonoBehaviour
             var trail = Instantiate(itemPrefabGameObject);
             trail.transform.parent = transform;
             weaponData.ItemData = data;
+            EventManager.Instance.TriggerAction("EQUIP", "Weapon");
         }
         else if (data.itemType == ITEMTYPE.WEAPON2)
         {

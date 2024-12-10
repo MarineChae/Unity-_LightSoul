@@ -21,6 +21,8 @@ public class Monster : MonoBehaviour , IUpdatable
     private float patrolRange;
     [SerializeField]
     private Material dissolveMaterial;
+    [SerializeField]
+    private bool isDummy = false;
     private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
     private int hp;
@@ -62,23 +64,28 @@ public class Monster : MonoBehaviour , IUpdatable
         monsterData = jsonData;
         Hp = monsterData.hp;
         walkSpeed = monsterData.moveSpeed;
+        InitBehaviorTree();
 
+    }
+
+    //behaviorTree √ ±‚»≠
+    private void InitBehaviorTree()
+    {
         var obj = new GameObject("BehaviorTree");
         obj.transform.position = this.transform.position;
         obj.transform.parent = this.transform;
         DataManager.Instance.dicBehaviorFuncs[monsterData.behaviorTreeName](obj);
         behaviorTreeBase = obj.GetComponent<BehaviorTreeBase>();
         behaviorTreeBase.Monster = this;
-
     }
 
     public void FixedUpdateWork()
     {
-        //if (monsterRangeChecker.Target != null && Hp > 0)
-        //    navMeshAgent.SetDestination(monsterRangeChecker.Target.position);
+
     }
     public void UpdateWork()
     {
+
         if(behaviorTreeBase.GetRunState())
         {
             behaviorTreeBase.RunTree();
@@ -88,8 +95,8 @@ public class Monster : MonoBehaviour , IUpdatable
                 navMeshAgent.enabled = false;
                 behaviorTreeBase.ChangeTreeState();
                 Animator.SetBool("Die", true);
-          
                 StartCoroutine("Die");
+                EventManager.Instance.TriggerAction("KILL", monsterData.name);
             }
             else
             {

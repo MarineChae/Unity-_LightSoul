@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -30,17 +31,17 @@ public class Chest : MonoBehaviour ,IUpdatable
     private void Start()
     {
         Init();
-        var itemCount = Random.Range(5, 10);
-
 
         var temp = canvas.GetComponentInChildren<InvectoryGrid>();
-        for(int i = 0; i < itemCount; i++)
+        for(int i = 0; i < 3; i++)
         {
-            int randomId = 1000 + Random.Range(0,3);
+            int randomId = 1000+i;
             temp.InsertRandomItem(randomId);
         }
-
-
+        for (int i = 0; i < 3; i++)
+        {
+            temp.InsertRandomItem(2001);
+        }
     }
 
     private void Init()
