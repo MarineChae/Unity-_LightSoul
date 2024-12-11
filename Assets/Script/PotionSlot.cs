@@ -18,7 +18,11 @@ public class PotionSlot : MonoBehaviour
     }
     private void OnDisable()
     {
-        EventManager.Instance.onPotionTriggerd -= PotionAction;
+        if (EventManager.Instance !=null)
+        {
+            EventManager.Instance.onPotionTriggerd -= PotionAction;
+        }
+
     }
     public void PotionAction(string actionName)
     {
@@ -28,7 +32,7 @@ public class PotionSlot : MonoBehaviour
             {
                 QuestManager.Instance.OnUseItem("Potion");
                 UIManager.Instance.InventoryController.UsePotion();
-                character.HP = Mathf.Clamp(character.HP + 10 , 0,character.MaxHP);
+                character.HP = Mathf.Clamp(character.HP + 100 , 0,character.MaxHP);
                 PotionCount--;
             }
         }

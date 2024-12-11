@@ -221,7 +221,7 @@ public class InvectoryGrid : MonoBehaviour
         return null;
     }
 
-    public void InsertRandomItem(int num)
+    public void InsertItem(int num)
     {
         var itemPrefab = Resources.Load("Item");
         InventoryItem item = Instantiate(itemPrefab).GetComponent<InventoryItem>();

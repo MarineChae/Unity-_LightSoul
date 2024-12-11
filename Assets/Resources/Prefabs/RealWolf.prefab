@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 574178111234724423}
   m_Layer: 0
   m_Name: HitBox
-  m_TagString: Untagged
+  m_TagString: MonsterWeapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -150,7 +150,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5145754205937350264, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5145754205937350264, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -158,7 +158,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5145754205937350264, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5145754205937350264, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_LocalRotation.w

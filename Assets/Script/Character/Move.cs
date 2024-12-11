@@ -6,8 +6,10 @@ using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 public class Move : MonoBehaviour
 {
-    private readonly float rotSpeed = 5.0f;
-    private readonly float moveSpeed = 5.0f;
+    [SerializeField]
+    private float rotSpeed = 5.0f;
+    [SerializeField]
+    private float moveSpeed = 5.0f;
     private Rigidbody      playerRigidbody;
     private Vector2        moveInput;
     private Animator       animator;

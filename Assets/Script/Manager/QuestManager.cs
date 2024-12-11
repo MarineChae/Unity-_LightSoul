@@ -12,7 +12,10 @@ public class QuestManager : SingleTon<QuestManager>
     }
     private void OnDisable()
     {
-        EventManager.Instance.onActionTriggerd -= OnActionTriggered;
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.onActionTriggerd -= OnActionTriggered;
+        }
     }
     public void OnActionTriggered(string actionType, string targetName)
     {

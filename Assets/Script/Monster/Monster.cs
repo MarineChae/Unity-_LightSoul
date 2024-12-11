@@ -34,7 +34,7 @@ public class Monster : MonoBehaviour , IUpdatable
     private bool isParried;
     private bool isStunned;
     private bool canRotate = true;
-
+    private NavMeshPath path;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -45,7 +45,10 @@ public class Monster : MonoBehaviour , IUpdatable
         UpdateManager.UnSubscribe(this, true, true, false);
     }
 
-
+    private void Awake()
+    {
+        path = new NavMeshPath();
+    }
 
     void Start()
     {
@@ -126,10 +129,20 @@ public class Monster : MonoBehaviour , IUpdatable
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomPoint, out hit, patrolRange, NavMesh.AllAreas))
             {
-                result = hit.position;
-                return true;
+                //Sampling한 위치의 navmesh가 끊겼는지 갈 수 없는 곳인지 판단하기 위해 사용
+                //체크하지 않으면 네비메쉬가 끊겨있는 곳으로 계속해서 이동하려함 
+                if(NavMesh.CalculatePath(transform.position, hit.position,NavMesh.AllAreas, path))
+                {
+                    if(path.status == NavMeshPathStatus.PathComplete)
+                    {
+                        result = hit.position;
+                        return true;
+                    }
+
+                }
             }
         }
+        
         result = transform.position;
         return true;
     }

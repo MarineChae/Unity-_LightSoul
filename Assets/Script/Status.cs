@@ -35,7 +35,7 @@ public abstract class Entity : MonoBehaviour
         while(true)
         {
             if (Stamina < MaxStamina) Stamina += StaminaRecovery;
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(0.1f);
         }
 
     }

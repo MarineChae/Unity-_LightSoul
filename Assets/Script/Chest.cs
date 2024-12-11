@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class Chest : MonoBehaviour ,IUpdatable
@@ -13,6 +14,8 @@ public class Chest : MonoBehaviour ,IUpdatable
     private Quaternion originRotation;
     private bool isOpen;
     private bool isRotate;
+    [SerializeField]
+    private int[] itemList;
     
     private Canvas canvas;
 
@@ -32,15 +35,10 @@ public class Chest : MonoBehaviour ,IUpdatable
     {
         Init();
 
-        var temp = canvas.GetComponentInChildren<InvectoryGrid>();
-        for(int i = 0; i < 3; i++)
+        var grid = canvas.GetComponentInChildren<InvectoryGrid>();
+        foreach(var num in itemList)
         {
-            int randomId = 1000+i;
-            temp.InsertRandomItem(randomId);
-        }
-        for (int i = 0; i < 3; i++)
-        {
-            temp.InsertRandomItem(2001);
+            grid.InsertItem(num);
         }
     }
 

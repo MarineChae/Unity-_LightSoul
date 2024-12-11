@@ -22,16 +22,17 @@ public class PlayerCharacter : Entity, IUpdatable
     private EquipItem[] equipItems;
     public Weapon[] equipWeapon;
     private PlayerAttack playerAttack;
+    private int layerMask;
 
     private bool isRoll = false;
-
+    private Coroutine runCoroutine;
     [SerializeField]
     private float baseHp = 100;
     public override float MaxHP => baseHp;
 
     public override float MaxStamina => 100;
 
-    public override float StaminaRecovery => 5;
+    public override float StaminaRecovery => 0.5f;
 
 
     private float staminerConsumption = 30;
@@ -48,6 +49,7 @@ public class PlayerCharacter : Entity, IUpdatable
 
     void Start()
     {
+        layerMask = 1 << LayerMask.NameToLayer("NPC");//
         InitStatus();
         itemDatas = new ItemData[(int)ITEMTYPE.END];
         equipItems = new EquipItem[(int)ITEMTYPE.END];
@@ -71,21 +73,17 @@ public class PlayerCharacter : Entity, IUpdatable
             animator.SetBool("EquipWeapon", true);
         }
         Roll();
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            HP = MaxHP;
-        }
         if (Input.GetKeyDown(KeyCode.F))
         {
-          
-            if (Physics.Raycast(transform.position+transform.up, transform.forward, out RaycastHit hit, 1.5f))
+            if (Physics.Raycast(transform.position+transform.up, transform.forward, out RaycastHit hit, 1.5f, layerMask))
             {
                 DialogueManager.Instance.Interact(hit.collider.gameObject);
 
             }
         }
-        Debug.DrawRay(transform.position + transform.up, transform.forward * 1.5f, Color.green);
+
     }
+
 
     private void Roll()
     {
@@ -165,5 +163,28 @@ public class PlayerCharacter : Entity, IUpdatable
             EventManager.Instance.PotionTriggerAction("USE");
         }
     }
+    public void OnRun(InputAction.CallbackContext value)
+    {
+        if (value.started)
+        {
+            animator.SetBool("Run",true);
+            runCoroutine = StartCoroutine("Run");
+            StopCoroutine("Recovery");
+        }
+        if(value.canceled)
+        {
+            animator.SetBool("Run", false);
+            StopCoroutine(runCoroutine);
+            StartCoroutine("Recovery");
+        }
+    }
 
+    IEnumerator Run()
+    {
+        while (true)
+        {
+            UseStamina(1.0f);
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
 }
