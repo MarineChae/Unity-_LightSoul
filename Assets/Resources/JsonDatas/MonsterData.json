@@ -13,7 +13,7 @@
     {
       "id": 10002,
       "name": "Mutant",
-      "hp": 2000,
+      "hp": 1000,
       "attackSpeed": 1.0,
       "moveSpeed": 1.5,
       "meleeDamage": 30.0,
@@ -32,13 +32,13 @@
     },
     {
       "id": 10004,
-      "name": "Sword",
-      "hp": 1000,
+      "name": "Skeleton",
+      "hp": 2000,
       "attackSpeed": 1.0,
-      "moveSpeed": 5.0,
-      "meleeDamage": 5.0,
-      "skillDamage": 20.0,
-      "behaviorTreeName": "WolfBehavior"
+      "moveSpeed": 2.0,
+      "meleeDamage": 35.0,
+      "skillDamage": 70.0,
+      "behaviorTreeName": "SkeletonBehavior"
     }
   ]
 } 

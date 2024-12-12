@@ -112,6 +112,10 @@ public class Monster : MonoBehaviour , IUpdatable
                     Animator.SetBool("Walk", false);
                 }
             }
+            if (monsterRangeChecker.Target != null)
+            {
+                RotateToTarget(monsterRangeChecker.Target.transform,false);
+            }
             navMeshAgent.velocity = navMeshAgent.desiredVelocity;
         }
          
@@ -157,13 +161,14 @@ public class Monster : MonoBehaviour , IUpdatable
             Animator.SetTrigger("Skill1");
         currentAttackType = type;
         canRotate = false;
+        IsAttack = true;
     }
     public void AttackStart()
     {
         if(ATTACK_TYPE.Melee == currentAttackType)
             monsterAttack.AllowAttack(monsterData.meleeDamage);
         else if (ATTACK_TYPE.Skill1 == currentAttackType)
-            monsterAttack.AllowSkillAttack(monsterAttack.transform.position,monsterRangeChecker.Target.transform.position);
+            monsterAttack.AllowSkillAttack(monsterAttack.transform.position,monsterRangeChecker.Target.transform.position, monsterData.skillDamage);
         IsAttack = true;
         navMeshAgent.speed = 0;
     }
@@ -171,6 +176,10 @@ public class Monster : MonoBehaviour , IUpdatable
     {
         monsterAttack.StopAttack();
         IsAttack = false;
+        
+    }
+    public void MoveStart()
+    {
         navMeshAgent.speed = monsterData.moveSpeed;
     }
     public void StartStun()
@@ -184,6 +193,10 @@ public class Monster : MonoBehaviour , IUpdatable
     public void AllowRotate()
     {
         canRotate = true;
+    }
+    public void StopAttack()
+    {
+        monsterAttack.StopAttack();
     }
     internal void RotateToTarget(Transform target, bool immediately)
     {

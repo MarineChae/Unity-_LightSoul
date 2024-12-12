@@ -31,8 +31,6 @@ public class BehaviorTreeBase : MonoBehaviour
         if(isRun)
         {
             cooldown += Time.deltaTime;
-            if (rangeChecker.Target != null && monster.CanRotate)
-                monster.RotateToTarget(rangeChecker.Target,false);
         }
     }
     public Monster Monster { get => monster; set => monster = value; }
@@ -69,6 +67,7 @@ public class BehaviorTreeBase : MonoBehaviour
         }
         else
         {
+            Debug.Log("Wait");
             return ReturnCode.RUNNING;
         }
     }
@@ -81,6 +80,7 @@ public class BehaviorTreeBase : MonoBehaviour
         }
         else
         {
+            Debug.Log("CoolDown");
             return ReturnCode.FAILURE;
         }
     }
@@ -93,7 +93,6 @@ public class BehaviorTreeBase : MonoBehaviour
         if (dist <= range)
         {
             agent.ResetPath();
-
             return ReturnCode.SUCCESS;
         }
         monster.IsAttack = false;

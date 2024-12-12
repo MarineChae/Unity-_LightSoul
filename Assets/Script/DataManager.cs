@@ -31,9 +31,17 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
         LoadDialogueData();
         LoadQuestData();
         //몬스터 추가시 트리를 넣어주어야함
-        dicBehaviorFuncs.Add("WolfBehavior", obj => obj.AddComponent<WolfBehavior>());
-        dicBehaviorFuncs.Add("MutantBehavior", obj => obj.AddComponent<MutantBehavior>());
-        dicBehaviorFuncs.Add("TraningBotBehavior", obj => obj.AddComponent<TraningBotBehavior>());
+        //dicBehaviorFuncs.Add("WolfBehavior", obj => obj.AddComponent<WolfBehavior>());
+        //dicBehaviorFuncs.Add("MutantBehavior", obj => obj.AddComponent<MutantBehavior>());
+        //dicBehaviorFuncs.Add("TraningBotBehavior", obj => obj.AddComponent<TraningBotBehavior>());
+    }
+    private void LoadBehaviorTree(string treeName)
+    {
+        Type componentType = Type.GetType(treeName);
+        if (componentType != null)
+        {
+            dicBehaviorFuncs.Add(treeName, obj => obj.AddComponent(componentType));
+        }
     }
     private void LoadQuestData()
     {
@@ -62,6 +70,7 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
         foreach (var monsterData in data.MonsterDatas)
         {
             dicMonsterDatas.Add(monsterData.id, monsterData);
+            LoadBehaviorTree(monsterData.behaviorTreeName);
         }
     }
 

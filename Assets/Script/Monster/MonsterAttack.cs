@@ -25,7 +25,7 @@ public class MonsterAttack : MonoBehaviour
         attackCollider.enabled = true;
     }
 
-    internal void StopAttack()
+    public void StopAttack()
     {
         if (!monster.IsParried && targetCharacter != null)
         {
@@ -33,12 +33,14 @@ public class MonsterAttack : MonoBehaviour
             targetCharacter.HP -= attackDamage;
 
         }
+        monster.IsAttack = false;
         monster.IsParried = false;
         attackCollider.enabled = false;
         targetCharacter = null;
     }
-    internal void AllowSkillAttack(Vector3 positon,Vector3 destination)
+    internal void AllowSkillAttack(Vector3 positon,Vector3 destination,float damage)
     {
+        attackDamage = damage;
         if (projectile == null) return;
         var obj = Instantiate<ProjectileObject>(projectile);
 
