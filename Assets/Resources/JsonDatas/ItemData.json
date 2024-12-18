@@ -34,7 +34,7 @@
       "itemType": 1,
       "slotType": 1,
       "hitEffect": "Prefabs/Hit_25_orange_explosion",
-      "damage": 50
+      "damage": 5220
     },
     {
       "id": 2001,

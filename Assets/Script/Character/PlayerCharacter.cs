@@ -34,6 +34,7 @@ public class PlayerCharacter : Entity, IUpdatable
 
     public override float StaminaRecovery => 0.5f;
 
+    public bool IsRoll { get => isRoll; set => isRoll = value; }
 
     private float staminerConsumption = 30;
     private void OnEnable()
@@ -81,23 +82,26 @@ public class PlayerCharacter : Entity, IUpdatable
 
             }
         }
-
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            Stamina = MaxStamina;
+        }
     }
 
 
     private void Roll()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !isRoll)
+        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll)
         {
             animator.SetTrigger("Roll");
-            isRoll = true;
+            IsRoll = true;
             UseStamina(staminerConsumption);
         }
     }
 
     void RollEnd()
     {
-        isRoll=false;
+        IsRoll=false;
     }
 
 
@@ -148,13 +152,13 @@ public class PlayerCharacter : Entity, IUpdatable
     public override void TakeDamage(float damage)
     {
         HP -= damage;
-        Debug.Log(damage);
+
     }
 
     public override void UseStamina(float stamina)
     {
         Stamina -= stamina;
-        Debug.Log(stamina);
+
     }
     public void OnPotion(InputAction.CallbackContext value)
     {
@@ -166,7 +170,7 @@ public class PlayerCharacter : Entity, IUpdatable
     public void OnRun(InputAction.CallbackContext value)
     {
         if (value.started)
-        {
+        { 
             animator.SetBool("Run",true);
             runCoroutine = StartCoroutine("Run");
             StopCoroutine("Recovery");

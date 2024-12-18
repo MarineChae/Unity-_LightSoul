@@ -67,7 +67,6 @@ public class BehaviorTreeBase : MonoBehaviour
         }
         else
         {
-            Debug.Log("Wait");
             return ReturnCode.RUNNING;
         }
     }
@@ -80,11 +79,10 @@ public class BehaviorTreeBase : MonoBehaviour
         }
         else
         {
-            Debug.Log("CoolDown");
             return ReturnCode.FAILURE;
         }
     }
-    protected ReturnCode InRange(float range)
+    protected ReturnCode InRange(float range, ATTACK_TYPE type)
     {
         if (rangeChecker.Target == null) return
                 ReturnCode.FAILURE;
@@ -92,16 +90,16 @@ public class BehaviorTreeBase : MonoBehaviour
         float dist = Vector3.Magnitude(monster.transform.position - rangeChecker.Target.transform.position);
         if (dist <= range)
         {
-            agent.ResetPath();
+            monster.Attack(type);
             return ReturnCode.SUCCESS;
         }
         monster.IsAttack = false;
         return ReturnCode.FAILURE;
     }
 
-    protected ReturnCode AttackPlayer(ATTACK_TYPE type)
+    protected ReturnCode AttackPlayer()
     {
-        monster.Attack(type);
+
         if (monster.IsAttack)
         {
             return ReturnCode.RUNNING;

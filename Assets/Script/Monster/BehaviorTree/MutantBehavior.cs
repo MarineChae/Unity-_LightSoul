@@ -10,21 +10,20 @@ public class MutantBehavior : BehaviorTreeBase
         Debug.Log("mutant");
         rootNode = new SelectNode();
 
-
-        DecoratorNode inSkillRange = new DecoratorNode(() => InRange(8.0f));
-        rootNode.childList.Add(inSkillRange);
-        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(15.0f));
-        inSkillRange.child = skillCoolDown;
+        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(10.0f));
+        rootNode.childList.Add(skillCoolDown);
+        DecoratorNode inSkillRange = new DecoratorNode(() => InRange(4.5f, ATTACK_TYPE.Skill1));
+        skillCoolDown.child = inSkillRange;
         SequenceNode SkillSequence = new SequenceNode();
-        skillCoolDown.child = SkillSequence;
-        TaskNode skill = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill1));
+        inSkillRange.child = SkillSequence;
+        TaskNode skill = new TaskNode(() => AttackPlayer());
         SkillSequence.childList.Add(skill);
 
-        DecoratorNode inRange = new DecoratorNode(() => InRange(3.5f));
+        DecoratorNode inRange = new DecoratorNode(() => InRange(3.5f, ATTACK_TYPE.Melee));
         rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
         inRange.child = attackSequence;
-        TaskNode attack = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Melee));
+        TaskNode attack = new TaskNode(() => AttackPlayer());
         attackSequence.childList.Add(attack);
         TaskNode attackWait = new TaskNode(() => Wait(2.0f, WaitContext.AfterAttack));
         attackSequence.childList.Add(attackWait);

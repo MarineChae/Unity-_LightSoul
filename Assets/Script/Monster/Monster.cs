@@ -162,6 +162,7 @@ public class Monster : MonoBehaviour , IUpdatable
         currentAttackType = type;
         canRotate = false;
         IsAttack = true;
+        navMeshAgent.speed = 0;
     }
     public void AttackStart()
     {
@@ -170,13 +171,18 @@ public class Monster : MonoBehaviour , IUpdatable
         else if (ATTACK_TYPE.Skill1 == currentAttackType)
             monsterAttack.AllowSkillAttack(monsterAttack.transform.position,monsterRangeChecker.Target.transform.position, monsterData.skillDamage);
         IsAttack = true;
-        navMeshAgent.speed = 0;
+
     }
     public void AttackEnd()
     {
         monsterAttack.StopAttack();
         IsAttack = false;
-        
+        MoveStart();
+    }
+    public void MoveStop()
+    {
+        navMeshAgent.ResetPath();
+        navMeshAgent.speed = 0;
     }
     public void MoveStart()
     {
