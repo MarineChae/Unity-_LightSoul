@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,7 +21,7 @@ public class BehaviorTreeBase : MonoBehaviour
     protected Vector3 lastSeenPosition;
     private float waitTime = 0;
     private bool isRun = true;
-    
+
     private void Start()
     {
         rangeChecker = monster.monsterRangeChecker;
@@ -70,11 +71,12 @@ public class BehaviorTreeBase : MonoBehaviour
             return ReturnCode.RUNNING;
         }
     }
-    protected ReturnCode CoolDown(float time)
+    protected ReturnCode CoolDown(ATTACK_TYPE skillType)
     {
-        if (cooldown >= time)
+        var skillData = monster.MonsterSkillDatas[skillType];
+        if (skillData.remainCoolDown >= skillData.coolDown)
         {
-            cooldown = 0;
+            skillData.remainCoolDown = 0;
             return ReturnCode.SUCCESS;
         }
         else

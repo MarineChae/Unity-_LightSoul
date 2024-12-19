@@ -35,6 +35,7 @@ public class PlayerCharacter : Entity, IUpdatable
     public override float StaminaRecovery => 0.5f;
 
     public bool IsRoll { get => isRoll; set => isRoll = value; }
+    public PlayerAttack PlayerAttack { get => playerAttack;}
 
     private float staminerConsumption = 30;
     private void OnEnable()
@@ -84,7 +85,7 @@ public class PlayerCharacter : Entity, IUpdatable
         }
         if (Input.GetKeyDown(KeyCode.F4))
         {
-            Stamina = MaxStamina;
+            HP = MaxHP;
         }
     }
 
@@ -115,14 +116,14 @@ public class PlayerCharacter : Entity, IUpdatable
             EquipWeapon(itemData, weaponSocket.transform,true);
             equipWeapon[0] = equipItems[(int)ITEMTYPE.WEAPON].weaponData;
             equipWeapon[0].tag = "Weapon";
-            playerAttack.Weapon = equipWeapon[0];
+            PlayerAttack.Weapon = equipWeapon[0];
         }
         else if(itemData.slotType == ITEMTYPE.WEAPON2)
         {
             EquipWeapon(itemData ,weapon2Socket.transform,false);
             equipWeapon[1] = equipItems[(int)ITEMTYPE.WEAPON2].weaponData;
             equipWeapon[1].tag = "Shield";
-            playerAttack.Shield = equipWeapon[1];
+            PlayerAttack.Shield = equipWeapon[1];
         }
     }
 
@@ -151,7 +152,11 @@ public class PlayerCharacter : Entity, IUpdatable
 
     public override void TakeDamage(float damage)
     {
-        HP -= damage;
+        animator.SetTrigger("Hit");
+        if (playerAttack.IsGuard)
+            HP -= damage * 0.2f;
+        else
+            HP -= damage;
 
     }
 
@@ -191,4 +196,5 @@ public class PlayerCharacter : Entity, IUpdatable
             yield return new WaitForSeconds(0.1f);
         }
     }
+
 }

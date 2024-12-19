@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -5,11 +6,13 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using static UnityEngine.UI.Image;
 
 public enum ATTACK_TYPE
 {
     Melee,
     Skill1,
+    Skill2,
 }
 
 public class Monster : MonoBehaviour , IUpdatable
@@ -23,6 +26,10 @@ public class Monster : MonoBehaviour , IUpdatable
     private Material dissolveMaterial;
     [SerializeField]
     private bool isDummy = false;
+    [SerializeField]
+    private SerializedDictianary<ATTACK_TYPE,int> skillDic;
+
+    private Dictionary<ATTACK_TYPE,MonsterSkillData> monsterSkillDatas = new Dictionary<ATTACK_TYPE,MonsterSkillData>();
     private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
     private int hp;
@@ -67,6 +74,16 @@ public class Monster : MonoBehaviour , IUpdatable
         monsterData = jsonData;
         Hp = monsterData.hp;
         walkSpeed = monsterData.moveSpeed;
+
+        for(int i = 0; i < skillDic.keys.Count; i++) 
+        {
+            var original = DataManager.Instance.dicMonsterSkillDatas[skillDic.values[i]];
+            string json = JsonConvert.SerializeObject(original);
+
+            MonsterSkillData copy = JsonConvert.DeserializeObject<MonsterSkillData>(json);
+            MonsterSkillDatas.Add(skillDic.keys[i], copy);
+        }
+
         InitBehaviorTree();
 
     }
@@ -103,6 +120,11 @@ public class Monster : MonoBehaviour , IUpdatable
             }
             else
             {
+                foreach(var skill in monsterSkillDatas)
+                {
+                    skill.Value.remainCoolDown += Time.deltaTime;
+                }
+
                 if (navMeshAgent.velocity != Vector3.zero)
                 {
                     Animator.SetBool("Walk", true);
@@ -153,16 +175,15 @@ public class Monster : MonoBehaviour , IUpdatable
 
     public void Attack(ATTACK_TYPE type)
     {
+
         if (IsAttack)
             return;
-        if(ATTACK_TYPE.Melee == type)
-             Animator.SetTrigger("Attack");
-        else if(ATTACK_TYPE.Skill1 == type)
-            Animator.SetTrigger("Skill1");
+        Animator.SetTrigger(type.ToString());
         currentAttackType = type;
         canRotate = false;
         IsAttack = true;
         navMeshAgent.speed = 0;
+        navMeshAgent.ResetPath();
     }
     public void AttackStart()
     {
@@ -177,12 +198,15 @@ public class Monster : MonoBehaviour , IUpdatable
     {
         monsterAttack.StopAttack();
         IsAttack = false;
-        MoveStart();
+
     }
     public void MoveStop()
     {
-        navMeshAgent.ResetPath();
-        navMeshAgent.speed = 0;
+        if (navMeshAgent.enabled)
+        {
+            navMeshAgent.ResetPath();
+            navMeshAgent.speed = 0;
+        }
     }
     public void MoveStart()
     {
@@ -237,4 +261,5 @@ public class Monster : MonoBehaviour , IUpdatable
     public Animator Animator { get => animator;}
     public bool IsStunned { get => isStunned; set => isStunned = value; }
     public bool CanRotate { get => canRotate;}
+    public Dictionary<ATTACK_TYPE, MonsterSkillData> MonsterSkillDatas { get => monsterSkillDatas; }
 }

@@ -25,14 +25,18 @@ public class MonsterAttack : MonoBehaviour
         attackCollider.enabled = true;
     }
 
-    public void StopAttack()
+    public void ValidateAttack()
     {
         if (!monster.IsParried && targetCharacter != null)
         {
-            
-            targetCharacter.HP -= attackDamage;
+
+            targetCharacter.TakeDamage(attackDamage);
 
         }
+    }
+    public void StopAttack()
+    {
+        //ValidateAttack();
         monster.IsAttack = false;
         monster.IsParried = false;
         attackCollider.enabled = false;
@@ -56,8 +60,16 @@ public class MonsterAttack : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             targetCharacter = other.GetComponentInChildren<PlayerCharacter>();
+
         }
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            ValidateAttack();
 
+        }
+    }
 
 }

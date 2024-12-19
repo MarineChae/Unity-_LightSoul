@@ -10,7 +10,7 @@ public class MutantBehavior : BehaviorTreeBase
         Debug.Log("mutant");
         rootNode = new SelectNode();
 
-        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(10.0f));
+        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill1));
         rootNode.childList.Add(skillCoolDown);
         DecoratorNode inSkillRange = new DecoratorNode(() => InRange(4.5f, ATTACK_TYPE.Skill1));
         skillCoolDown.child = inSkillRange;

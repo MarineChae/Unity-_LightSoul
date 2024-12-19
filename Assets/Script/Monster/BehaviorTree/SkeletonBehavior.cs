@@ -12,15 +12,24 @@ public class SkeletonBehavior : BehaviorTreeBase
 
 
 
-        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(10.0f));
+        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill1));
         rootNode.childList.Add(skillCoolDown);
         DecoratorNode inSkillRange = new DecoratorNode(() => InRange(2.5f, ATTACK_TYPE.Skill1));
         skillCoolDown.child = inSkillRange;
-
         SequenceNode SkillSequence = new SequenceNode();
         inSkillRange.child = SkillSequence;
         TaskNode skill = new TaskNode(() => AttackPlayer());
         SkillSequence.childList.Add(skill);
+
+        DecoratorNode skill2CoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill2));
+        rootNode.childList.Add(skill2CoolDown);
+        DecoratorNode inSkill2Range = new DecoratorNode(() => InRange(8.0f, ATTACK_TYPE.Skill2));
+        skill2CoolDown.child = inSkill2Range;
+        SequenceNode Skill2Sequence = new SequenceNode();
+        inSkill2Range.child = Skill2Sequence;
+        TaskNode skill2 = new TaskNode(() => AttackPlayer());
+        Skill2Sequence.childList.Add(skill2);
+
 
         DecoratorNode inRange = new DecoratorNode(() => InRange(2.0f, ATTACK_TYPE.Melee));
         rootNode.childList.Add(inRange);

@@ -1,7 +1,7 @@
 {
   "MonsterDatas": [
     {
-      "id": 10001,
+      "id": 100,
       "name": "Wolf",
       "hp": 100,
       "attackSpeed": 1.0,
@@ -11,7 +11,7 @@
       "behaviorTreeName": "WolfBehavior"
     },
     {
-      "id": 10002,
+      "id": 200,
       "name": "Mutant",
       "hp": 1000,
       "attackSpeed": 1.0,
@@ -21,7 +21,7 @@
       "behaviorTreeName": "MutantBehavior"
     },
     {
-      "id": 10003,
+      "id": 300,
       "name": "Target Dummy",
       "hp": 10,
       "attackSpeed": 0.0,
@@ -31,7 +31,7 @@
       "behaviorTreeName": "TraningBotBehavior"
     },
     {
-      "id": 10004,
+      "id": 400,
       "name": "Skeleton",
       "hp": 2000,
       "attackSpeed": 1.0,

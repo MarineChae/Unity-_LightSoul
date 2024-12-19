@@ -315,7 +315,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterData:
-    id: 10004
+    id: 400
     name: 
     hp: 0
     attackSpeed: 0
@@ -327,6 +327,9 @@ MonoBehaviour:
   patrolRange: 10
   dissolveMaterial: {fileID: 0}
   isDummy: 0
+  skillDic:
+    keys: 0100000002000000
+    values: 811a0600821a0600
 --- !u!195 &3623624057659181351
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -341,7 +344,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 10000
-  m_StoppingDistance: 0.8
+  m_StoppingDistance: 0.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

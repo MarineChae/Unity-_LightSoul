@@ -37,7 +37,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     }
     public void UpdateWork()
     {
-        if (Input.GetMouseButtonDown(0) && weapon != null && !isGuard && !Cursor.visible)
+        if (Input.GetMouseButtonDown(0) && weapon != null && !IsGuard && !Cursor.visible)
         {
             move.StopMovement();
             trailRenderer.enabled = true;
@@ -75,7 +75,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         if (guardTrigger)
         {
             //마우스 입력이 단발성인 경우 패링모션
-            if (!isGuard)
+            if (!IsGuard)
                 animator.SetTrigger("Parring");
             else
                 ChangeGuardState();
@@ -83,7 +83,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
             rightButtunHoldTime = 0.0f;
         }
         //홀드상태면 가드
-        if (!isGuard && rightButtunholdThreshold <= rightButtunHoldTime)
+        if (!IsGuard && rightButtunholdThreshold <= rightButtunHoldTime)
         {
             ChangeGuardState();
         }
@@ -91,8 +91,8 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
 
     private void ChangeGuardState()
     {
-        isGuard = !isGuard;
-        animator.SetBool("Guard", isGuard);
+        IsGuard = !IsGuard;
+        animator.SetBool("Guard", IsGuard);
     }
 
     public void FixedUpdateWork()
@@ -106,22 +106,19 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     }
     public void ColliderEnable()
     {
-        Debug.Log("colliderEnable");
         Weapon.capsuleCollider.enabled = true;
     }
     public void ColliderDisable()
     {
-        Debug.Log("ColliderDisable");
-        Weapon.capsuleCollider.enabled = false;
+        if(weapon != null)
+         Weapon.capsuleCollider.enabled = false;
     }
     public void ShieldColliderEnable()
     {
-        Debug.Log("colliderEnable");
         Shield.capsuleCollider.enabled = true;
     }
     public void ShieldColliderDisable()
     {
-        Debug.Log("ColliderDisable");
         Shield.capsuleCollider.enabled = false;
     }
     public int AttackCount
@@ -146,10 +143,12 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
        set => shield = value; 
     }
     public Monster TargetMonster { get => targetMonster; set => targetMonster = value; }
+    public bool IsGuard { get => isGuard; set => isGuard = value; }
 
     public void AttackEnd()
     {
         move.AllowMovement();
+        if(trailRenderer != null)
         trailRenderer.enabled = false;
     }
     public void OnGuard(InputAction.CallbackContext value)

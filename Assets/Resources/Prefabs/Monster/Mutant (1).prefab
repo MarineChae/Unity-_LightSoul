@@ -573,9 +573,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2972430728868733180}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.44, y: 0, z: 12.39}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.745, y: 0, z: -0.775}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7952147066574281426}
@@ -594,7 +594,7 @@ Animator:
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: dde4fc06d64dc174bb6628cd7dd4e4a9, type: 3}
   m_Controller: {fileID: 9100000, guid: ebb5fa2b55970a141ad92c2d39633a8f, type: 2}
-  m_CullingMode: 0
+  m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
@@ -627,10 +627,10 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
+  m_Constraints: 116
+  m_CollisionDetection: 1
 --- !u!136 &9031659707181547146
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -638,7 +638,7 @@ CapsuleCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2972430728868733180}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 8896cf9df7738f44eb5f0515b1d9d1be, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -667,7 +667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterData:
-    id: 10002
+    id: 200
     name: 
     hp: 0
     attackSpeed: 0
@@ -679,6 +679,9 @@ MonoBehaviour:
   patrolRange: 10
   dissolveMaterial: {fileID: 2100000, guid: f21fe55105eecce45810043688b2ee2b, type: 2}
   isDummy: 0
+  skillDic:
+    keys: 01000000
+    values: 410d0300
 --- !u!195 &1420970951705480604
 NavMeshAgent:
   m_ObjectHideFlags: 0

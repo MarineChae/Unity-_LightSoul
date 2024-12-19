@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterData:
-    id: 10003
+    id: 300
     name: 
     hp: 0
     attackSpeed: 0
@@ -186,6 +186,9 @@ MonoBehaviour:
   patrolRange: 0
   dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
   isDummy: 1
+  skillDic:
+    keys: 
+    values: 
 --- !u!136 &6680404318631161132
 CapsuleCollider:
   m_ObjectHideFlags: 0

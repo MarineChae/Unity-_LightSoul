@@ -129,9 +129,29 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 4709799347919321066}
     - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: monsterData.id
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: dissolveMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 8a12971e393db4148bd2edaa4da11a67, type: 2}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: skillDic.keys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: skillDic.values.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: skillDic.keys.Array.data[0]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: skillDic.values.Array.data[0]
+      value: 100001
+      objectReference: {fileID: 0}
     - target: {fileID: 5145754205937052248, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_Name
       value: Body

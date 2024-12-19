@@ -523,7 +523,7 @@ ModelImporter:
       - time: 0.36397246
         functionName: ShieldColliderDisable
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
