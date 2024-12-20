@@ -1,7 +1,7 @@
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using static UnityEditor.Progress;
 public enum SKILL_TYPE
 {
     RUSH,
@@ -18,6 +18,7 @@ public class MonsterSkillData
     public float coolDown;
     public float remainCoolDown;
     public SKILL_TYPE skillType;
+
 }
 [Serializable]
 public class MonsterSkillDataArray

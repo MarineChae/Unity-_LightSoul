@@ -54,10 +54,9 @@ public class BehaviorTreeBase : MonoBehaviour
 
     virtual public ReturnCode Wait(float waitingTime, WaitContext context)
     {
-        waitTime += Time.deltaTime;
-
         if (context == WaitContext.Patrol && rangeChecker.Target != null)
         {
+            waitTime = 0;
             return ReturnCode.FAILURE;
         }
 
@@ -68,6 +67,7 @@ public class BehaviorTreeBase : MonoBehaviour
         }
         else
         {
+            waitTime += Time.deltaTime;
             return ReturnCode.RUNNING;
         }
     }
@@ -84,7 +84,7 @@ public class BehaviorTreeBase : MonoBehaviour
             return ReturnCode.FAILURE;
         }
     }
-    protected ReturnCode InRange(float range, ATTACK_TYPE type)
+    protected ReturnCode InRange(float range)
     {
         if (rangeChecker.Target == null) return
                 ReturnCode.FAILURE;
@@ -92,27 +92,17 @@ public class BehaviorTreeBase : MonoBehaviour
         float dist = Vector3.Magnitude(monster.transform.position - rangeChecker.Target.transform.position);
         if (dist <= range)
         {
-            monster.Attack(type);
+
             return ReturnCode.SUCCESS;
         }
-        monster.IsAttack = false;
+
         return ReturnCode.FAILURE;
     }
 
-    protected ReturnCode AttackPlayer()
+    protected ReturnCode AttackPlayer(ATTACK_TYPE type)
     {
-
-        if (monster.IsAttack)
-        {
-            return ReturnCode.RUNNING;
-        }
-        else
-        {
-
-            return ReturnCode.SUCCESS;
-        }
-
-
+        monster.Attack(type);
+        return ReturnCode.SUCCESS;
     }
 
     protected ReturnCode ChasePlayer()

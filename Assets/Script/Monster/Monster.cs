@@ -113,9 +113,10 @@ public class Monster : MonoBehaviour , IUpdatable
             if (Hp <= 0)
             {
                 GetComponent<CapsuleCollider>().enabled = false;
-                navMeshAgent.enabled = false;
+                //navMeshAgent.enabled = false;
                 behaviorTreeBase.ChangeTreeState();
-                Animator.SetBool("Die", true);
+                navMeshAgent.ResetPath();
+                Animator.SetTrigger("Die");
                 StartCoroutine("Die");
                 EventManager.Instance.TriggerAction("KILL", monsterData.name);
             }
@@ -141,11 +142,10 @@ public class Monster : MonoBehaviour , IUpdatable
             }
             navMeshAgent.velocity = navMeshAgent.desiredVelocity;
         }
-         
     }
     public void LateUpdateWork()
     {
-        
+   
     }
 
     public bool RandomPoint(out Vector3 result)
@@ -190,17 +190,20 @@ public class Monster : MonoBehaviour , IUpdatable
     {
         if(ATTACK_TYPE.Melee == currentAttackType)
             monsterAttack.AllowAttack(monsterData.meleeDamage);
-        else if (ATTACK_TYPE.Skill1 == currentAttackType)
+        else
             monsterAttack.AllowSkillAttack(monsterAttack.transform.position,
                                            monsterRangeChecker.Target.transform.position,
                                            monsterData.skillDamage,
-                                           MonsterSkillDatas[ATTACK_TYPE.Skill1].skillType);
-        IsAttack = true;
+                                           MonsterSkillDatas[currentAttackType].skillType);
 
+
+    }
+    public void ResetHit()
+    {
+        animator.ResetTrigger("Hit");
     }
     public void AttackEnd()
     {
-        monsterAttack.StopAttack();
         IsAttack = false;
 
     }
@@ -223,6 +226,7 @@ public class Monster : MonoBehaviour , IUpdatable
     public void EndStun()
     {
         IsStunned = false;
+        MoveStart();
     }
     public void AllowRotate()
     {
@@ -231,10 +235,6 @@ public class Monster : MonoBehaviour , IUpdatable
     public void StopAttack()
     {
         monsterAttack.StopAttack();
-    }
-    public void MoveToAnimation()
-    {
-        transform.position = animator.rootPosition;
     }
     internal void RotateToTarget(Transform target, bool immediately)
     {

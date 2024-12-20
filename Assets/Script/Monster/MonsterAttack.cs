@@ -19,7 +19,7 @@ public class MonsterAttack : MonoBehaviour
     private void Awake()
     {
         monster = GetComponentInParent<Monster>();
-        attackCollider = GetComponent <Collider>();
+        attackCollider = GetComponent<Collider>();
         attackCollider.enabled = false;
     }
     internal void AllowAttack(float damage)
@@ -40,16 +40,14 @@ public class MonsterAttack : MonoBehaviour
     }
     public void StopAttack()
     {
-        //ValidateAttack();
-        monster.IsAttack = false;
         monster.IsParried = false;
         attackCollider.enabled = false;
         targetCharacter = null;
     }
-    internal void AllowSkillAttack(Vector3 positon,Vector3 destination,float damage, SKILL_TYPE type)
+    internal void AllowSkillAttack(Vector3 positon, Vector3 destination, float damage, SKILL_TYPE type)
     {
         attackDamage = damage;
-        if(SKILL_TYPE.RUSH == type)
+        if (SKILL_TYPE.RUSH == type || SKILL_TYPE.NONE == type)
         {
             attackCollider.enabled = true;
         }

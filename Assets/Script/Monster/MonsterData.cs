@@ -10,6 +10,7 @@ public class MonsterData
     public string name = "";
     public int hp;
     public float attackSpeed;
+    public float attackRange;
     public float moveSpeed;
     public float meleeDamage;
     public float skillDamage;

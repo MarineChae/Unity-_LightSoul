@@ -60,6 +60,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0
+        functionName: MoveStop
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.3448276
         functionName: AttackStart
         data: 
@@ -67,7 +74,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.4956897
+      - time: 0.47085205
+        functionName: StopAttack
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.9897017
         functionName: AttackEnd
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
@@ -83,13 +97,6 @@ ModelImporter:
         messageOptions: 0
       - time: 1
         functionName: AllowRotate
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0
-        functionName: MoveStop
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
         floatParameter: 0

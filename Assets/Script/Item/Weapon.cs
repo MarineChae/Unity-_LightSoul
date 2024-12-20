@@ -49,9 +49,11 @@ public class Weapon : MonoBehaviour
                 if(monster.IsStunned)
                 {
                     monster.Hp -= itemData.damage * 3;
+                    monster.Animator.SetTrigger("HardHit");
                 }
                 else
                 {
+                    monster.Animator.SetTrigger("Hit");
                     monster.Hp -= itemData.damage;
                 }
                 //몬스터가 뒤돌아보고 있는 경우 플레이어 쪽으로 회전시키게

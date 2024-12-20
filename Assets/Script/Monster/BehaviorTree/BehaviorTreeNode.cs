@@ -8,14 +8,16 @@ public enum ReturnCode { FAILURE, SUCCESS, RUNNING };
 //노드는 따로 스크립트로 만들 필요가 없기 때문에 기본클래스로 생성
 public class BaseNode
 {
-    // Start is called before the first frame update
 
     public virtual ReturnCode Tick()
     {
         return ReturnCode.SUCCESS;
     }
 
-
+    public virtual void ResetChild()
+    {
+       
+    }
 }
 //분기를 나눌 수 있는 노드는 이 노드를 파생하여 사용해야한다
 public class BranchNode : BaseNode
@@ -34,7 +36,10 @@ public class BranchNode : BaseNode
     {
         childList = new List<BaseNode>();
     }
-
+    public override void ResetChild()
+    {
+        currentChild = 0;
+    }
 }
 
 //셀렉트 노드는 한곳에서 성공했다면 그자리에서 실행 종료
@@ -63,15 +68,16 @@ public class SelectNode : BranchNode
             //셀렉터의 자식이 성공적으로 끝났다면 다음 틱에서 셀렉터의 첫 번째 부터 시작
             else if (State == ReturnCode.SUCCESS)
             {
-                currentChild = 0;
+                ResetChild();
                 return ReturnCode.SUCCESS;
             }
 
         }
 
-        currentChild = 0;
+        ResetChild();
         return ReturnCode.FAILURE;
     }
+
 }
 
 //시퀀스 노드는 시퀀스의 자식노드를 전부 실행
@@ -98,12 +104,12 @@ public class SequenceNode : BranchNode
             //다음에 시퀀스에 들어오면 0번 자식부터 실행하기 위함
             else if (State == ReturnCode.FAILURE)
             {
-                currentChild = 0;
+                ResetChild();
                 return ReturnCode.FAILURE;
             }
 
         }
-        currentChild = 0;
+        ResetChild();
         return ReturnCode.SUCCESS;
     }
 
@@ -142,6 +148,7 @@ public class DecoratorNode : BaseNode
     {
         if (condition() == ReturnCode.FAILURE)
         {
+            child.ResetChild();
             return ReturnCode.FAILURE;
         }
         else

@@ -6,7 +6,7 @@
       "skillDamage": 50.0,
       "coolDown": 10.0,
       "remainCoolDown": 0.0,
-      "skillType": "PROJECTILE"
+      "skillType": 1
     },
     {
       "id": 200001,
@@ -14,31 +14,31 @@
       "skillDamage": 70.0,
       "coolDown": 15.0,
       "remainCoolDown": 0.0,
-      "skillType": "RUSH"
+      "skillType": 0
     },
     {
       "id": 400001,
-      "name": "SkeletonJumpAttack",
-      "skillDamage": 100.0,
+      "name": "SkeletonDoubleSwip",
+      "skillDamage": 70.0,
       "coolDown": 10.0,
       "remainCoolDown": 0.0,
-      "skillType": "RUSH"
+      "skillType": 2
     },
     {
       "id": 400002,
-      "name": "SkeletonDoubleSwip",
-      "skillDamage": 70.0,
-      "coolDown": 5.0,
+      "name": "SkeletonJumpAttack",
+      "skillDamage": 100.0,
+      "coolDown": 15.0,
       "remainCoolDown": 0.0,
-      "skillType": "NONE"
+      "skillType": 0
     },
     {
       "id": 500001,
       "name": "WereWolfJumpAttack",
       "skillDamage": 70.0,
-      "coolDown": 5.0,
+      "coolDown": 10.0,
       "remainCoolDown": 0.0,
-      "skillType": "RUSH"
+      "skillType": 0
     }
   ]
 } 

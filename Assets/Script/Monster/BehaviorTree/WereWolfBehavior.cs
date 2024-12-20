@@ -9,23 +9,27 @@ public class WereWolfBehavior : BehaviorTreeBase
         Debug.Log("WereWolf");
         rootNode = new SelectNode();
 
+        DecoratorNode inSkillRange = new DecoratorNode(() => InRange(8.0f));
+        rootNode.childList.Add(inSkillRange);
         DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill1));
-        rootNode.childList.Add(skillCoolDown);
-        DecoratorNode inSkillRange = new DecoratorNode(() => InRange(8.0f, ATTACK_TYPE.Skill1));
-        skillCoolDown.child = inSkillRange;
+        inSkillRange.child = skillCoolDown;
         SequenceNode SkillSequence = new SequenceNode();
-        inSkillRange.child = SkillSequence;
-        TaskNode skill = new TaskNode(() => AttackPlayer());
+        skillCoolDown.child = SkillSequence;
+        TaskNode skill = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill1));
         SkillSequence.childList.Add(skill);
 
-        DecoratorNode inRange = new DecoratorNode(() => InRange(2.5f, ATTACK_TYPE.Melee));
+
+
+        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.monsterData.attackRange));
         rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
         inRange.child = attackSequence;
-        TaskNode attack = new TaskNode(() => AttackPlayer());
+        TaskNode attack = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Melee));
         attackSequence.childList.Add(attack);
-        TaskNode attackWait = new TaskNode(() => Wait(2.0f, WaitContext.AfterAttack));
+        TaskNode attackWait = new TaskNode(() => Wait(4.0f, WaitContext.AfterAttack));
         attackSequence.childList.Add(attackWait);
+
+
 
         SequenceNode chaseSequence = new SequenceNode();
         rootNode.childList.Add(chaseSequence);
