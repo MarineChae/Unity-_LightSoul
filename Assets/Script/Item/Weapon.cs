@@ -10,16 +10,19 @@ public class Weapon : MonoBehaviour
     private ItemData itemData;
     public float attackRate = 1.5f;
     public GameObject hitPrefab;
+    private PlayerCharacter playerCharacter;
 
     public ItemData ItemData { get => itemData; set => itemData = value; }
 
     private void Awake()
     {
+
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
     private void Start()
     {
-        playerAttack= GetComponentInParent<PlayerAttack>();
+        playerCharacter = GetComponentInParent<PlayerCharacter>();
+        playerAttack = GetComponentInParent<PlayerAttack>();
     }
     //플레이어 무기 초기화, 무기와 방패인경우 다르게 초기화해줌
     public void InitCollider()
@@ -64,8 +67,8 @@ public class Weapon : MonoBehaviour
         }
         else if (this.CompareTag("Shield"))
         {
-            //플레이어의 방패와 몬스터의 공격이 맞다으면 패링처리
-            if (other.gameObject.CompareTag("MonsterWeapon"))
+            //플레이어의 방패와 몬스터의 공격이 맞닿으면 패링처리
+            if (other.gameObject.CompareTag("MonsterWeapon") && !playerCharacter.IsHit)
             {
                 //디버그용./////
                 Vector3 dir = (other.transform.position + transform.position) * 0.5f;

@@ -23,7 +23,7 @@ public class PlayerCharacter : Entity, IUpdatable
     public Weapon[] equipWeapon;
     private PlayerAttack playerAttack;
     private int layerMask;
-
+    private bool isHit = false;
     private bool isRoll = false;
     private Coroutine runCoroutine;
     [SerializeField]
@@ -36,6 +36,7 @@ public class PlayerCharacter : Entity, IUpdatable
 
     public bool IsRoll { get => isRoll; set => isRoll = value; }
     public PlayerAttack PlayerAttack { get => playerAttack;}
+    public bool IsHit { get => isHit; set => isHit = value; }
 
     private float staminerConsumption = 30;
     private void OnEnable()
@@ -152,14 +153,18 @@ public class PlayerCharacter : Entity, IUpdatable
 
     public override void TakeDamage(float damage)
     {
+        playerAttack.ShieldColliderDisable();
         animator.SetTrigger("Hit");
         if (playerAttack.IsGuard)
             HP -= damage * 0.2f;
         else
             HP -= damage;
-
+        IsHit = true;
     }
-
+    public void EndHit()
+    {
+        IsHit = false;
+    }
     public override void UseStamina(float stamina)
     {
         Stamina -= stamina;

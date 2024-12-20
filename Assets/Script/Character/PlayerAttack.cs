@@ -37,16 +37,14 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     }
     public void UpdateWork()
     {
+
         if (Input.GetMouseButtonDown(0) && weapon != null && !IsGuard && !Cursor.visible)
         {
             move.StopMovement();
             trailRenderer.enabled = true;
-            if(targetMonster != null)
-            {
-                move.RotateToTarget(targetMonster.transform.position);
-            }
             if (targetMonster != null &&  targetMonster.IsStunned)
             {
+                move.RotateToTarget(targetMonster.transform.position);
                 animator.SetTrigger("StrongAttack");
             }
             else
@@ -106,7 +104,8 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     }
     public void ColliderEnable()
     {
-        Weapon.capsuleCollider.enabled = true;
+        if (weapon != null)
+            Weapon.capsuleCollider.enabled = true;
     }
     public void ColliderDisable()
     {
@@ -115,11 +114,13 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     }
     public void ShieldColliderEnable()
     {
-        Shield.capsuleCollider.enabled = true;
+        if (Shield != null)
+            Shield.capsuleCollider.enabled = true;
     }
     public void ShieldColliderDisable()
     {
-        Shield.capsuleCollider.enabled = false;
+        if(Shield!=null)
+             Shield.capsuleCollider.enabled = false;
     }
     public int AttackCount
     {

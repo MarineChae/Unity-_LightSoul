@@ -117,14 +117,15 @@ public class BehaviorTreeBase : MonoBehaviour
 
     protected ReturnCode ChasePlayer()
     {
+   
         if (rangeChecker.Target != null && monster.Hp > 0)
         {
-            lastSeenPosition = rangeChecker.Target.position;
             agent.SetDestination(rangeChecker.Target.position);
             return ReturnCode.SUCCESS;
         }
         return ReturnCode.FAILURE;
     }
+
     protected ReturnCode SetPatrolPosition()
     {
         monster.RandomPoint(out destination);

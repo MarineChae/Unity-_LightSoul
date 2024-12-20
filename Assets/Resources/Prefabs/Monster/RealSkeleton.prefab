@@ -490,3 +490,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackDamage: 0
   projectile: {fileID: 0}
+  hitEffectPrefab: {fileID: 1620636520166436, guid: 6d8394d00ab2293429c46628699b653b, type: 3}

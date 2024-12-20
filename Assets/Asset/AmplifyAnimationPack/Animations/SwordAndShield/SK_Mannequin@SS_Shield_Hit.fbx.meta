@@ -513,14 +513,14 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.16687106
+      - time: 0.018503103
         functionName: ShieldColliderEnable
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.36397246
+      - time: 0.6814799
         functionName: ShieldColliderDisable
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}

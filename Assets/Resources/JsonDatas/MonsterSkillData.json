@@ -5,29 +5,40 @@
       "name": "WolfFireBall",
       "skillDamage": 50.0,
       "coolDown": 10.0,
-      "remainCoolDown": 0.0
+      "remainCoolDown": 0.0,
+      "skillType": "PROJECTILE"
     },
     {
       "id": 200001,
       "name": "MutantJumpAttack",
       "skillDamage": 70.0,
       "coolDown": 15.0,
-      "remainCoolDown": 0.0
+      "remainCoolDown": 0.0,
+      "skillType": "RUSH"
     },
     {
       "id": 400001,
       "name": "SkeletonJumpAttack",
       "skillDamage": 100.0,
       "coolDown": 10.0,
-      "remainCoolDown": 0.0
+      "remainCoolDown": 0.0,
+      "skillType": "RUSH"
     },
     {
       "id": 400002,
       "name": "SkeletonDoubleSwip",
       "skillDamage": 70.0,
       "coolDown": 5.0,
-      "remainCoolDown": 0.0
+      "remainCoolDown": 0.0,
+      "skillType": "NONE"
+    },
+    {
+      "id": 500001,
+      "name": "WereWolfJumpAttack",
+      "skillDamage": 70.0,
+      "coolDown": 5.0,
+      "remainCoolDown": 0.0,
+      "skillType": "RUSH"
     }
-
   ]
 } 

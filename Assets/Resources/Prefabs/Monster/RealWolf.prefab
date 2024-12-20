@@ -68,6 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attackDamage: 30
   projectile: {fileID: 2094985196317783903, guid: 727938638b16e2c47b46a4eebcea5f7e, type: 3}
+  hitEffectPrefab: {fileID: 1620636520166436, guid: 6d8394d00ab2293429c46628699b653b, type: 3}
 --- !u!1 &8478734587847432282
 GameObject:
   m_ObjectHideFlags: 0

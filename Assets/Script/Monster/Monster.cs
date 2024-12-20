@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using Unity.VisualScripting;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -190,7 +191,10 @@ public class Monster : MonoBehaviour , IUpdatable
         if(ATTACK_TYPE.Melee == currentAttackType)
             monsterAttack.AllowAttack(monsterData.meleeDamage);
         else if (ATTACK_TYPE.Skill1 == currentAttackType)
-            monsterAttack.AllowSkillAttack(monsterAttack.transform.position,monsterRangeChecker.Target.transform.position, monsterData.skillDamage);
+            monsterAttack.AllowSkillAttack(monsterAttack.transform.position,
+                                           monsterRangeChecker.Target.transform.position,
+                                           monsterData.skillDamage,
+                                           MonsterSkillDatas[ATTACK_TYPE.Skill1].skillType);
         IsAttack = true;
 
     }
@@ -227,6 +231,10 @@ public class Monster : MonoBehaviour , IUpdatable
     public void StopAttack()
     {
         monsterAttack.StopAttack();
+    }
+    public void MoveToAnimation()
+    {
+        transform.position = animator.rootPosition;
     }
     internal void RotateToTarget(Transform target, bool immediately)
     {

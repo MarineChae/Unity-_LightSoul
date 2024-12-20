@@ -88,6 +88,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mutant (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3155190193216994411, guid: ab797c5d240ebda4594d64ed95894b1d, type: 3}
+      propertyPath: hitEffectPrefab
+      value: 
+      objectReference: {fileID: 1620636520166436, guid: 6d8394d00ab2293429c46628699b653b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

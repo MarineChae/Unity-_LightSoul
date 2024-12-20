@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+
 public class MonsterAttack : MonoBehaviour
 {
     private Monster monster;
@@ -13,6 +14,8 @@ public class MonsterAttack : MonoBehaviour
     private float attackDamage;
     [SerializeField]
     private ProjectileObject projectile;
+    [SerializeField]
+    private GameObject hitEffectPrefab;
     private void Awake()
     {
         monster = GetComponentInParent<Monster>();
@@ -29,9 +32,10 @@ public class MonsterAttack : MonoBehaviour
     {
         if (!monster.IsParried && targetCharacter != null)
         {
-
             targetCharacter.TakeDamage(attackDamage);
-
+            Vector3 dir = targetCharacter.transform.position + Vector3.up;
+            var eff = Instantiate(hitEffectPrefab, dir, Quaternion.identity);
+            StartCoroutine("EffectCoroutine", eff);
         }
     }
     public void StopAttack()
@@ -42,17 +46,22 @@ public class MonsterAttack : MonoBehaviour
         attackCollider.enabled = false;
         targetCharacter = null;
     }
-    internal void AllowSkillAttack(Vector3 positon,Vector3 destination,float damage)
+    internal void AllowSkillAttack(Vector3 positon,Vector3 destination,float damage, SKILL_TYPE type)
     {
         attackDamage = damage;
-        if (projectile == null) return;
-        var obj = Instantiate<ProjectileObject>(projectile);
+        if(SKILL_TYPE.RUSH == type)
+        {
+            attackCollider.enabled = true;
+        }
+        else if(SKILL_TYPE.PROJECTILE == type)
+        {
+            var obj = Instantiate<ProjectileObject>(projectile);
+            obj.transform.position = positon;
+            var dir = (destination - positon).normalized;
+            dir.y = 0f;
+            obj.Direction = dir;
+        }
 
-        obj.transform.position = positon;
-
-        var dir = (destination - positon).normalized;
-        dir.y= 0f;
-        obj.Direction = dir;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -60,16 +69,20 @@ public class MonsterAttack : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             targetCharacter = other.GetComponentInChildren<PlayerCharacter>();
-
+            ValidateAttack();
         }
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            ValidateAttack();
+
 
         }
     }
-
+    private IEnumerator EffectCoroutine(GameObject effet)
+    {
+        yield return new WaitForSeconds(0.5f);
+        Destroy(effet);
+    }
 }

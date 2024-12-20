@@ -497,7 +497,7 @@ ModelImporter:
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
-      loopBlendPositionXZ: 0
+      loopBlendPositionXZ: 1
       keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
@@ -507,37 +507,37 @@ ModelImporter:
       curves: []
       events:
       - time: 0
-        functionName: AttackEnd
+        functionName: RollEnd
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.008902078
+      - time: 0.014836794
         functionName: ColliderDisable
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.026548672
-        functionName: StopMovement
+      - time: 0.020771513
+        functionName: AttackEnd
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.045074977
+      - time: 0.026706232
         functionName: ShieldColliderDisable
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.061946902
-        functionName: RollEnd
+      - time: 0.032640956
+        functionName: StopMovement
         data: 
-        objectReferenceParameter: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}
+        objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
@@ -545,6 +545,13 @@ ModelImporter:
         functionName: AllowMovement
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.92878336
+        functionName: EndHit
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

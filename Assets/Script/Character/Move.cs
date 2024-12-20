@@ -48,7 +48,7 @@ public class Move : MonoBehaviour
             Vector3 lookForward = new Vector3(followCamera.CamTarget.forward.x, 0.0f, followCamera.CamTarget.forward.z).normalized;
             Vector3 lookRight = new Vector3(followCamera.CamTarget.right.x, 0.0f, followCamera.CamTarget.right.z).normalized;
             Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
-            if (isMove)
+            if (isMove && !character.IsRoll)
             {
                 var look = Quaternion.LookRotation(moveDirection);
                 playerRigidbody.rotation = Quaternion.Slerp(playerRigidbody.rotation, look, Time.fixedDeltaTime * rotSpeed);
@@ -84,11 +84,11 @@ public class Move : MonoBehaviour
                 {
                     Vector3 dir = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
                     Debug.Log(gravity);
-                    playerRigidbody.velocity = dir * 7.0f + gravity;
+                    playerRigidbody.velocity = dir * 6.0f + gravity;
                 }
                 else
                 {
-                    playerRigidbody.velocity = transform.forward * 7.0f + gravity;
+                    playerRigidbody.velocity = transform.forward * 6.0f + gravity;
                 }
             }
         }
@@ -132,8 +132,10 @@ public class Move : MonoBehaviour
     }
     public void RotateToTarget(Vector3 target)
     {
+        Vector3 directionToTarget = (target - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        transform.rotation = targetRotation;
 
-        playerRigidbody.rotation = Quaternion.LookRotation(target - playerRigidbody.position);
     }
 
 }

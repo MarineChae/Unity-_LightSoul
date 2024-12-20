@@ -33,12 +33,22 @@
     {
       "id": 400,
       "name": "Skeleton",
-      "hp": 2000,
+      "hp": 3000,
       "attackSpeed": 1.0,
-      "moveSpeed": 2.0,
+      "moveSpeed": 1.0,
       "meleeDamage": 35.0,
       "skillDamage": 70.0,
       "behaviorTreeName": "SkeletonBehavior"
+    },
+    {
+      "id": 500,
+      "name": "WereWolf",
+      "hp": 2000,
+      "attackSpeed": 1.0,
+      "moveSpeed": 2.0,
+      "meleeDamage": 20.0,
+      "skillDamage": 70.0,
+      "behaviorTreeName": "WereWolfBehavior"
     }
   ]
 } 
