@@ -35,7 +35,7 @@
     {
       "id": 400,
       "name": "Skeleton",
-      "hp": 30,
+      "hp": 1500,
       "attackSpeed": 1.0,
       "attackRange": 2.0,
       "moveSpeed": 1.0,
@@ -46,7 +46,18 @@
     {
       "id": 500,
       "name": "WereWolf",
-      "hp": 20,
+      "hp": 800,
+      "attackSpeed": 1.0,
+      "attackRange": 2.0,
+      "moveSpeed": 2.0,
+      "meleeDamage": 20.0,
+      "skillDamage": 70.0,
+      "behaviorTreeName": "WereWolfBehavior"
+    },
+    {
+      "id": 600,
+      "name": "Dragon",
+      "hp": 800,
       "attackSpeed": 1.0,
       "attackRange": 2.0,
       "moveSpeed": 2.0,

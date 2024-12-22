@@ -42,7 +42,8 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
         Type componentType = Type.GetType(treeName);
         if (componentType != null)
         {
-            dicBehaviorFuncs.Add(treeName, obj => obj.AddComponent(componentType));
+            if(!dicBehaviorFuncs.ContainsKey(treeName))
+                dicBehaviorFuncs.Add(treeName, obj => obj.AddComponent(componentType));
         }
     }
     private void LoadQuestData()
