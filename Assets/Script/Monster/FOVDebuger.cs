@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
 using UnityEditor;
 using UnityEngine;
 
+#if DEBUG
 
 [CustomEditor(typeof(MonsterRangeChecker))]
 public class FOVDebuger : Editor
@@ -29,3 +27,9 @@ public class FOVDebuger : Editor
 
 
 }
+
+#else
+public class FOVDebuger 
+{
+}
+#endif

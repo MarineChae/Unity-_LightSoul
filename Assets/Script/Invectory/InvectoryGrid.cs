@@ -1,18 +1,15 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine.UI;
 
 
 
 
 public class InvectoryGrid : MonoBehaviour
 {
-    public const float tileWidth = 51.2f;
-    public const float tileHeight = 51.2f;
-    public const float ratio = 5;
+    public const float tileWidth = 25.6f;
+    public const float tileHeight = 25.6f;
+    public const float ratio = 10;
     private RectTransform rectTransform;
     private Vector2 positionOnTheGrid = new Vector2(0, 0);
     private Vector2Int tileGridPosition = new Vector2Int();
@@ -37,7 +34,8 @@ public class InvectoryGrid : MonoBehaviour
     }
 
     public Vector2Int GetTileGridPosition(Vector2 mousePosition)
-    {
+    {    // 현재 화면 해상도 기준으로 보정된 마우스 위치를 계산
+        Vector2 adjustedMousePosition = AdjustForResolution(mousePosition);
         positionOnTheGrid.x = mousePosition.x - rectTransform.position.x;
         positionOnTheGrid.y = rectTransform.position.y - mousePosition.y;
 
@@ -46,7 +44,28 @@ public class InvectoryGrid : MonoBehaviour
 
         return tileGridPosition;
     }
+    private Vector2 AdjustForResolution(Vector2 mousePosition)
+    {
+        // CanvasScaler가 있다면 UI 스케일링 계산
+        CanvasScaler canvasScaler = rectTransform.GetComponentInParent<CanvasScaler>();
+        if (canvasScaler != null)
+        {
+            float referenceWidth = canvasScaler.referenceResolution.x;
+            float referenceHeight = canvasScaler.referenceResolution.y;
+            float screenWidth = Screen.width;
+            float screenHeight = Screen.height;
 
+            // 스케일 팩터 계산
+            float scaleFactorX = screenWidth / referenceWidth;
+            float scaleFactorY = screenHeight / referenceHeight;
+
+            // 해상도 보정된 마우스 위치
+            return new Vector2(mousePosition.x / scaleFactorX, mousePosition.y / scaleFactorY);
+        }
+
+        // CanvasScaler가 없는 경우, 기본적으로 화면 해상도만 고려
+        return mousePosition;
+    }
     public bool PlaceItemWithCheck(InventoryItem item , int posX, int posY, ref InventoryItem overlapItem)
     {
 

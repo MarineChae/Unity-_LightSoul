@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.LookDev;
+
 
 ///// Quest type == {KILL , EQUIP,COLLECTION , ECT....}
 [Serializable]

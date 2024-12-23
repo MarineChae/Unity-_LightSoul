@@ -1,7 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+
+
+#if DEBUG
 
 [CustomPropertyDrawer(typeof(SerializedDictianary<,>), true)]
 public class SerializableDictionaryDrawer : PropertyDrawer
@@ -56,3 +57,8 @@ public class SerializableDictionaryDrawer : PropertyDrawer
         return totalHeight;
     }
 }
+#else
+public class SerializableDictionaryDrawer
+{
+}
+#endif

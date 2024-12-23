@@ -1,11 +1,7 @@
-using System;
+
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
-using static UnityEngine.Rendering.DebugUI;
-
 public enum ITEMTYPE
 {
     NONE = 0,
@@ -229,7 +225,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
     private void LeftButtonPress()
     {
         Vector2Int positionOnGrid = GetTileGridPosition();
-
+        Debug.Log(positionOnGrid);
         if (selectedItem == null)
         {
             ItemPickup(positionOnGrid);

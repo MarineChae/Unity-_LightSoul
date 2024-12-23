@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
-using Newtonsoft.Json;
 using System;
-using static UnityEditor.Progress;
 
 public class DataManager : SingleTon<DataManager>, IUpdatable
 {

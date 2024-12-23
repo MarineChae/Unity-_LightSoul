@@ -1,7 +1,5 @@
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json;
 using System;
-using static UnityEditor.Progress;
+
 public enum SKILL_TYPE
 {
     RUSH,
