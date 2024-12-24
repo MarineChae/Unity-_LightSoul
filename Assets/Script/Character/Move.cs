@@ -22,6 +22,22 @@ public class Move : MonoBehaviour
     private float maxSlopeAngle = 45.0f;
 
     public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+    public bool CanMove
+    {
+        get => canMove;
+        set 
+        { 
+            canMove = value;
+            if (!canMove)
+            {
+                playerRigidbody.velocity = Vector3.zero;
+                animator.SetBool("Walk", false);
+                animator.SetBool("Run", false);
+                moveInput = Vector2.zero;
+            }
+        }
+
+    }
 
     void Start()
     {
@@ -30,14 +46,11 @@ public class Move : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
     }
-    void Update()
-    {
-        
-    }
+
     private void FixedUpdate()
     {
         followCamera.CamTarget.position = playerRigidbody.position + followCamera.OffSet;
-        if(canMove)
+        if(CanMove)
         {
             isMove = moveInput.magnitude != 0;
             animator.SetBool("Walk", isMove);
@@ -94,23 +107,29 @@ public class Move : MonoBehaviour
 
     public void OnRun(InputAction.CallbackContext value)
     {
-        if (value.started)
+        if (canMove)
         {
-            moveSpeed = 5.0f;
+            if (value.started)
+            {
+                moveSpeed = 5.0f;
+            }
+            if (value.canceled)
+            {
+                moveSpeed = 2.0f;
+            }
         }
-        if (value.canceled)
-        {
-            moveSpeed = 2.0f;
-        }
+
     }
     public void OnMove(InputAction.CallbackContext value)
     {
-        Vector2 input = value.ReadValue<Vector2>();
-        if (input != null)
+        if (canMove)
         {
-            moveInput = new Vector2(input.x,input.y);
+            Vector2 input = value.ReadValue<Vector2>();
+            if (input != null)
+            {
+                moveInput = new Vector2(input.x, input.y);
+            }
         }
-
     }
 
     public void OnLook(InputAction.CallbackContext value)

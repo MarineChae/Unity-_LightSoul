@@ -219,7 +219,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
         rectTransform.SetParent(canvasTrasform);
         rectTransform.SetAsLastSibling();
         int itemId = UnityEngine.Random.Range(0, items.Count);
-        item.Set(items[itemId]);
+        item.Set(items[itemId],0.0f);
     }
 
     private void LeftButtonPress()
@@ -244,8 +244,8 @@ public class InventoryController : MonoBehaviour , IUpdatable
         Vector2 position = Input.mousePosition;
         if (selectedItem != null)
         {
-            position.x -= (selectedItem.WIDTH - 1) * InvectoryGrid.tileWidth / 2;
-            position.y += (selectedItem.HEIGHT - 1) * InvectoryGrid.tileHeight / 2;
+            position.x -= (selectedItem.WIDTH - 1) * InvectoryGrid.tileWidth * selectedItemGrid.rootCanvas.scaleFactor / 2;
+            position.y += (selectedItem.HEIGHT - 1) * InvectoryGrid.tileHeight * selectedItemGrid.rootCanvas.scaleFactor / 2;
         }
 
         return selectedItemGrid.GetTileGridPosition(position);

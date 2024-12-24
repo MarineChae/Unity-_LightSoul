@@ -55,7 +55,6 @@ public class Chest : MonoBehaviour ,IUpdatable
         {
             if (character.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
             {
-                Debug.Log("test!");
                 isRotate = true;
                 isOpen = true;
                 canvas.gameObject.SetActive(true);

@@ -52,9 +52,6 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
             targetMonster = null;
 
 
-        if(Input.GetKeyDown(KeyCode.F3))
-            animator.SetTrigger("Attack");
-
     }
 
     private void GuardAndParring()

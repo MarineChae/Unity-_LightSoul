@@ -12,11 +12,12 @@ public class DialogueManager : SingleTon<DialogueManager>
     {
         dialogueCanvas.SetActive(isActive);
     }
-    public void Interact(GameObject sceletObject)
+    public bool Interact(GameObject sceletObject)
     {
         npc = sceletObject.GetComponent<NPC>();
-        dialogueCanvas.SetActive(GetMessage());
-
+        bool ret = GetMessage();
+        dialogueCanvas.SetActive(ret);
+        return ret;
     }
 
     private bool GetMessage()

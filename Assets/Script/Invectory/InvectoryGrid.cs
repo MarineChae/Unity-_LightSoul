@@ -7,9 +7,11 @@ using UnityEngine.UI;
 
 public class InvectoryGrid : MonoBehaviour
 {
+
     public const float tileWidth = 25.6f;
     public const float tileHeight = 25.6f;
     public const float ratio = 10;
+    private float canvasScale = 0.0f;
     private RectTransform rectTransform;
     private Vector2 positionOnTheGrid = new Vector2(0, 0);
     private Vector2Int tileGridPosition = new Vector2Int();
@@ -17,55 +19,35 @@ public class InvectoryGrid : MonoBehaviour
     [SerializeField] private int gridSizeWidth;
     [SerializeField] private int gridSizeHeight;
     [SerializeField] private ITEMTYPE itemSlotType;
+    [SerializeField] public Canvas rootCanvas;
     internal ITEMTYPE ItemSlotType { get => itemSlotType; set => itemSlotType = value; }
+    public InventoryItem[,] InventoryItemsSlot { get => inventoryItemsSlot; }
 
     private void Start()
     {
          rectTransform = GetComponent<RectTransform>();
          Init(gridSizeWidth, gridSizeHeight );
-
     }
     private void Init(int width, int height)
     {
         inventoryItemsSlot = new InventoryItem[width, height];
         Vector2 size = new Vector2 (width * tileWidth * ratio, height * tileHeight * ratio);
         rectTransform.sizeDelta = size;
-
+        GameManager.Instance.AddGird(this);
+        canvasScale = rootCanvas.scaleFactor;
     }
 
     public Vector2Int GetTileGridPosition(Vector2 mousePosition)
-    {    // 현재 화면 해상도 기준으로 보정된 마우스 위치를 계산
-        Vector2 adjustedMousePosition = AdjustForResolution(mousePosition);
+    {  
         positionOnTheGrid.x = mousePosition.x - rectTransform.position.x;
         positionOnTheGrid.y = rectTransform.position.y - mousePosition.y;
 
-        tileGridPosition.x = (int)(positionOnTheGrid.x / tileWidth);
-        tileGridPosition.y = (int)(positionOnTheGrid.y / tileHeight);
+        tileGridPosition.x = (int)(positionOnTheGrid.x / (tileWidth * rootCanvas.scaleFactor));
+        tileGridPosition.y = (int)(positionOnTheGrid.y / (tileHeight * rootCanvas.scaleFactor));
 
         return tileGridPosition;
     }
-    private Vector2 AdjustForResolution(Vector2 mousePosition)
-    {
-        // CanvasScaler가 있다면 UI 스케일링 계산
-        CanvasScaler canvasScaler = rectTransform.GetComponentInParent<CanvasScaler>();
-        if (canvasScaler != null)
-        {
-            float referenceWidth = canvasScaler.referenceResolution.x;
-            float referenceHeight = canvasScaler.referenceResolution.y;
-            float screenWidth = Screen.width;
-            float screenHeight = Screen.height;
 
-            // 스케일 팩터 계산
-            float scaleFactorX = screenWidth / referenceWidth;
-            float scaleFactorY = screenHeight / referenceHeight;
-
-            // 해상도 보정된 마우스 위치
-            return new Vector2(mousePosition.x / scaleFactorX, mousePosition.y / scaleFactorY);
-        }
-
-        // CanvasScaler가 없는 경우, 기본적으로 화면 해상도만 고려
-        return mousePosition;
-    }
     public bool PlaceItemWithCheck(InventoryItem item , int posX, int posY, ref InventoryItem overlapItem)
     {
 
@@ -102,7 +84,7 @@ public class InvectoryGrid : MonoBehaviour
         {
             for (int y = 0; y < item.HEIGHT; ++y)
             {
-                inventoryItemsSlot[posX + x, posY + y] = item;
+                InventoryItemsSlot[posX + x, posY + y] = item;
             }
         }
 
@@ -117,7 +99,7 @@ public class InvectoryGrid : MonoBehaviour
     {
         RectTransform rectTransform = item.GetComponent<RectTransform>();
         rectTransform.SetParent(this.rectTransform);
-        inventoryItemsSlot[0,0] = item;
+        InventoryItemsSlot[0,0] = item;
         Vector2 position = ComputePositionGrid(item, 0, 0);
 
         item.WIDTH = 1; item.HEIGHT = 1;
@@ -138,15 +120,15 @@ public class InvectoryGrid : MonoBehaviour
         {
             for (int y = 0; y < height; ++y)
             {
-                if (inventoryItemsSlot[posX + x, posY + y] != null)
+                if (InventoryItemsSlot[posX + x, posY + y] != null)
                 {
                     if (overlapItem == null)
                     {
-                        overlapItem = inventoryItemsSlot[posX + x, posY + y];
+                        overlapItem = InventoryItemsSlot[posX + x, posY + y];
                     }
                     else
                     {
-                        if(overlapItem != inventoryItemsSlot[posX + x, posY + y])
+                        if(overlapItem != InventoryItemsSlot[posX + x, posY + y])
                             return false;
                     }
              
@@ -163,7 +145,7 @@ public class InvectoryGrid : MonoBehaviour
         {
             for (int y = 0; y < height; ++y)
             {
-                if (inventoryItemsSlot[posX + x, posY + y] != null)
+                if (InventoryItemsSlot[posX + x, posY + y] != null)
                 {
                     return false;
                 }
@@ -176,7 +158,7 @@ public class InvectoryGrid : MonoBehaviour
     internal InventoryItem PickUpItem(int x, int y)
     {
         if (x < 0 || y < 0 || x >= gridSizeWidth || y >=gridSizeHeight ) return null;
-        InventoryItem ret = inventoryItemsSlot[x, y];
+        InventoryItem ret = InventoryItemsSlot[x, y];
 
         if (ret == null) return null;
 
@@ -191,7 +173,7 @@ public class InvectoryGrid : MonoBehaviour
         {
             for (int iy = 0; iy < item.HEIGHT; ++iy)
             {
-                inventoryItemsSlot[item.onGridPosX + ix, item.onGridPosY + iy] = null;
+                InventoryItemsSlot[item.onGridPosX + ix, item.onGridPosY + iy] = null;
             }
         }
     }
@@ -219,7 +201,7 @@ public class InvectoryGrid : MonoBehaviour
     {
         if (x < 0 || y < 0 || x >= gridSizeWidth || y >= gridSizeHeight) return null;
 
-        return inventoryItemsSlot[x,y];
+        return InventoryItemsSlot[x,y];
     }
 
     public Vector2Int? FindSapceForItem(InventoryItem item)
@@ -244,7 +226,7 @@ public class InvectoryGrid : MonoBehaviour
     {
         var itemPrefab = Resources.Load("Item");
         InventoryItem item = Instantiate(itemPrefab).GetComponent<InventoryItem>();
-        item.Set(DataManager.Instance.dicItemDatas[num]);
+        item.Set(DataManager.Instance.dicItemDatas[num], canvasScale);
 
         Vector2Int? posOnGrid = FindSapceForItem(item);
 
@@ -262,9 +244,9 @@ public class InvectoryGrid : MonoBehaviour
         {
             for(int y = 0; y < gridSizeHeight; y++)
             {
-                if (inventoryItemsSlot[x, y] != null &&  inventoryItemsSlot[x, y].ItemData.itemType == ITEMTYPE.POTION)
+                if (InventoryItemsSlot[x, y] != null &&  InventoryItemsSlot[x, y].ItemData.itemType == ITEMTYPE.POTION)
                 {
-                    ret = inventoryItemsSlot[x, y];
+                    ret = InventoryItemsSlot[x, y];
                     break;
                 }
             }

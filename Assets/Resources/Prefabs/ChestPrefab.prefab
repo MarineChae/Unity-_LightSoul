@@ -61,14 +61,14 @@ RectTransform:
   m_GameObject: {fileID: 4457317768563629610}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.014285714, y: 0.020600291, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2986906096388259479}
+  m_Father: {fileID: 7898163124739941292}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 164, y: 503}
+  m_AnchoredPosition: {x: 2.81678, y: 45.513077}
   m_SizeDelta: {x: 3072, y: 2048}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &6042029235915716876
@@ -124,6 +124,7 @@ MonoBehaviour:
   gridSizeWidth: 12
   gridSizeHeight: 8
   itemSlotType: 0
+  rootCanvas: {fileID: 7842912617159519586}
 --- !u!114 &5215008759278321435
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,7 +169,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7898163124739941292}
-  - {fileID: 1125508767173343634}
   m_Father: {fileID: 517270152751716910}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -269,13 +269,14 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 7, y: 4.8543005, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1125508767173343634}
   m_Father: {fileID: 2986906096388259479}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -485, y: -249}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: -203.6122, y: -94.81622}
+  m_SizeDelta: {x: 49.6015, y: 48.4823}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7329682795325328932
 CanvasRenderer:
@@ -403,6 +404,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 64647107281793232, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 64647107281793232, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -434,6 +443,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bc9fc16585608c4ebed44310b234c98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  itemList: 
   inventoryUI: {fileID: 0}
 --- !u!135 &9158378792595273603
 SphereCollider:
@@ -454,7 +464,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.94
+  m_Radius: 1.1
   m_Center: {x: 0.0012313128, y: 0.20658672, z: -0.00075149536}
 --- !u!4 &517270152751716910 stripped
 Transform:

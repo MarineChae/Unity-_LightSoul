@@ -15,8 +15,5 @@ public class EventManager : SingleTon<EventManager>
     {
         onPotionTriggerd?.Invoke(actiontype);
     }
-    private void OnDestroy()
-    {
-        Debug.Log("t4etnsekl;tjnseklth");
-    }
+
 }

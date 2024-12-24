@@ -40,7 +40,7 @@ public class DropItem : MonoBehaviour
         inventoryItem.transform.SetParent(this.transform);
         inventoryController = FindObjectOfType(typeof(InventoryController)) as InventoryController;
         SetItemData(data);
-        inventoryItem.Set(inventoryItem.ItemData);
+        inventoryItem.Set(inventoryItem.ItemData, inventoryController.OriginSelectedItemGrid.rootCanvas.scaleFactor);
   
     }
     public void SetItemData(ItemData data)

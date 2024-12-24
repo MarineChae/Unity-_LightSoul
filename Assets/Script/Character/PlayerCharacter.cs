@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerCharacter : Entity, IUpdatable
 {
@@ -14,6 +16,8 @@ public class PlayerCharacter : Entity, IUpdatable
     private Transform weapon2Socket;
     [SerializeField]
     private EquipItem equipItem;
+    [SerializeField]
+    private float baseHp = 100;
     private EquipItem[] equipItems;
     public Weapon[] equipWeapon;
     private PlayerAttack playerAttack;
@@ -21,13 +25,12 @@ public class PlayerCharacter : Entity, IUpdatable
     private bool isHit = false;
     private bool isRoll = false;
     private Coroutine runCoroutine;
-    [SerializeField]
-    private float baseHp = 100;
+    private Move playerMove;
     public override float MaxHP => baseHp;
 
     public override float MaxStamina => 100;
 
-    public override float StaminaRecovery => 0.5f;
+    public override float StaminaRecovery => 1.5f;
 
     public bool IsRoll { get => isRoll; set => isRoll = value; }
     public PlayerAttack PlayerAttack { get => playerAttack;}
@@ -54,7 +57,7 @@ public class PlayerCharacter : Entity, IUpdatable
         equipWeapon = new Weapon[2];
         animator = GetComponentInChildren<Animator>();
         playerAttack = GetComponent<PlayerAttack>();
-        
+        playerMove = GetComponent<Move>();
     }
     public void FixedUpdateWork()
     {
@@ -75,16 +78,22 @@ public class PlayerCharacter : Entity, IUpdatable
         {
             if (Physics.Raycast(transform.position+transform.up, transform.forward, out RaycastHit hit, 1.5f, layerMask))
             {
-                DialogueManager.Instance.Interact(hit.collider.gameObject);
+                bool isMove = DialogueManager.Instance.Interact(hit.collider.gameObject);
+                playerMove.CanMove = !isMove;
+                RotateToTarget(hit.transform);
 
             }
         }
-        if (Input.GetKeyDown(KeyCode.F4))
-        {
-            HP = MaxHP;
-        }
+
     }
 
+    private void RotateToTarget(Transform target)
+    {
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        directionToTarget.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        transform.rotation = targetRotation;
+    }
 
     private void Roll()
     {
@@ -169,6 +178,7 @@ public class PlayerCharacter : Entity, IUpdatable
     {
         if (value.performed)
         {
+            animator.SetTrigger("Drink");
             EventManager.Instance.PotionTriggerAction("USE");
         }
     }

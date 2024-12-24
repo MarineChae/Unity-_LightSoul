@@ -58,22 +58,24 @@ public class InventoryItem : MonoBehaviour
 
     }
 
-    internal void Set(ItemData itemData)
+    internal void Set(ItemData itemData,float canvasScaleFacter)
     {
         this.ItemData = itemData;
 
         var icon = Resources.Load<Sprite>(itemData.itemIcon);
         GetComponent<Image>().sprite = icon;
-
-        Vector2 size = new Vector2();
-        size.x = WIDTH * InvectoryGrid.tileWidth;
-        size.y = HEIGHT * InvectoryGrid.tileHeight;
-
+        SetSize(canvasScaleFacter);
         originWidth = WIDTH;
         originHeight = HEIGHT;
 
-        GetComponent<RectTransform>().sizeDelta = size;
+
     }
-
-
+    public void SetSize(float canvasScaleFacter)
+    {
+        Vector2 size = new Vector2();
+        size.x = WIDTH * InvectoryGrid.tileWidth * canvasScaleFacter;
+        size.y = HEIGHT * InvectoryGrid.tileHeight * canvasScaleFacter;
+        var rect = GetComponent<RectTransform>();
+        rect.sizeDelta = size;
+    }
 }
