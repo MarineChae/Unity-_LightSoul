@@ -29,18 +29,24 @@ public class SingleTon<T> : MonoBehaviour where T : MonoBehaviour
 
     private void Awake()
     {
+
         if (_instance == null)
         {
             _instance = this as T;
+            Init();
             DontDestroyOnLoad(gameObject);
         }
-        else if (_instance != this)
+        else
         {
             Destroy(gameObject); 
         }
 
     }
 
+    virtual protected void Init()
+    {
+
+    }
     //OnDestroy 와 다른 스크립트의 OnDisable의 호출 순서가 보장되지 않기때문에
     //OnDisable의 호출에서 null을 참조하는 경우가 생길 수 있다.
     //프로그램이 종료되는경우에 null을 리턴하도록 해주고

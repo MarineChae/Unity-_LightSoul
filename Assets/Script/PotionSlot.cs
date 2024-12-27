@@ -15,7 +15,8 @@ public class PotionSlot : MonoBehaviour
     }
     private void OnDisable()
     {
-        if (EventManager.Instance !=null)
+
+        if (EventManager.Instance != null)
         {
             EventManager.Instance.onPotionTriggerd -= PotionAction;
         }

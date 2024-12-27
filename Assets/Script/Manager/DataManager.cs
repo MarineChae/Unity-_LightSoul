@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class DataManager : SingleTon<DataManager>, IUpdatable
+public class DataManager : SingleTon<DataManager>
 {
 
     public Dictionary<int, ItemData> dicItemDatas = new Dictionary<int, ItemData>();
@@ -12,26 +12,12 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
     public Dictionary<int, QuestData> dicQuestDatas = new Dictionary<int, QuestData>();
     public Dictionary<string, Action<GameObject>> dicBehaviorFuncs = new Dictionary<string, Action<GameObject>>();
 
-
-    private void OnEnable()
-    {
-        UpdateManager.OnSubscribe(this, true, true, false);
-    }
-
-    private void OnDisable()
-    {
-        UpdateManager.UnSubscribe(this, true, true, false);
-    }
     void Awake()
     {
         LoadItemData();
         LoadMonsterData();
         LoadDialogueData();
         LoadQuestData();
-        //몬스터 추가시 트리를 넣어주어야함
-        //dicBehaviorFuncs.Add("WolfBehavior", obj => obj.AddComponent<WolfBehavior>());
-        //dicBehaviorFuncs.Add("MutantBehavior", obj => obj.AddComponent<MutantBehavior>());
-        //dicBehaviorFuncs.Add("TraningBotBehavior", obj => obj.AddComponent<TraningBotBehavior>());
     }
     private void LoadBehaviorTree(string treeName)
     {
@@ -95,14 +81,6 @@ public class DataManager : SingleTon<DataManager>, IUpdatable
             dicItemDatas.Add(itemData.id, itemData);
         }
     }
-
-    public void UpdateWork() { }
-
-    public void FixedUpdateWork() { }
-
-    public void LateUpdateWork() { }
-
-
  
 
 }

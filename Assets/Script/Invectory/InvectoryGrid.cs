@@ -1,6 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 
 
@@ -23,17 +24,32 @@ public class InvectoryGrid : MonoBehaviour
     internal ITEMTYPE ItemSlotType { get => itemSlotType; set => itemSlotType = value; }
     public InventoryItem[,] InventoryItemsSlot { get => inventoryItemsSlot; }
 
-    private void Start()
+    //private void Start()
+    //{
+    //    rectTransform = GetComponent<RectTransform>();
+    //    Init(gridSizeWidth, gridSizeHeight);
+    //}
+    private void OnEnable()
     {
-         rectTransform = GetComponent<RectTransform>();
-         Init(gridSizeWidth, gridSizeHeight );
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        Init(gridSizeWidth, gridSizeHeight);
+    }
+
     private void Init(int width, int height)
     {
+        rectTransform = GetComponent<RectTransform>();
         inventoryItemsSlot = new InventoryItem[width, height];
         Vector2 size = new Vector2 (width * tileWidth * ratio, height * tileHeight * ratio);
         rectTransform.sizeDelta = size;
-        GameManager.Instance.AddGird(this);
         canvasScale = rootCanvas.scaleFactor;
     }
 

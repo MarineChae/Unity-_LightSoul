@@ -55,13 +55,12 @@ public class Monster : MonoBehaviour , IUpdatable
 
     void Start()
     {
-        InitMonsterData();
         monsterRangeChecker = GetComponentInChildren<MonsterRangeChecker>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = walkSpeed;
         animator = GetComponent<Animator>();
         monsterAttack = GetComponentInChildren<MonsterAttack>();
-
+        InitMonsterData();
     }
 
     private void InitMonsterData()

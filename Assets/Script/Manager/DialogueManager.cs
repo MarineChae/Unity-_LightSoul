@@ -1,17 +1,36 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DialogueManager : SingleTon<DialogueManager>
 {
-    public GameObject dialogueCanvas;
-    public TextMeshProUGUI dialogueText;
-    public NPC npc;
+    private GameObject dialogueCanvas;
+    private TextMeshProUGUI dialogueText;
+    private NPC npc;
     private bool isActive = false;
     private int currentIndex = 0;
-    public void Start()
+    private void OnEnable()
     {
-        dialogueCanvas.SetActive(isActive);
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        dialogueCanvas = GameObject.Find("Dialogue");
+        if (dialogueCanvas != null)
+        {
+            dialogueText = dialogueCanvas.GetComponentInChildren<TextMeshProUGUI>();
+            dialogueCanvas.SetActive(isActive);
+        }
+    }
+
+
+
     public bool Interact(GameObject sceletObject)
     {
         npc = sceletObject.GetComponent<NPC>();

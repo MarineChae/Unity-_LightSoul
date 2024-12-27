@@ -6,11 +6,11 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/PolygonDungeon/Scenes/StartScene.unity
-    guid: 2bbf6fb563eedc0468e922a431b00ae9
+    path: Assets/Resources/Scene/StartScene.unity
+    guid: 57ed73d7659974b4a88d3d5251290437
   - enabled: 1
-    path: Assets/PolygonDungeon/Scenes/MainScene.unity
-    guid: 7dd3b3b67a8b56d4e8640fa6891eaf3b
+    path: Assets/Resources/Scene/MainScene.unity
+    guid: 03619606bd8bee94cacdc08196c6a71c
   - enabled: 1
     path: Assets/Resources/Scene/LoadingScene.unity
     guid: 67990f4d00fe3894bbd05d9eb240da42

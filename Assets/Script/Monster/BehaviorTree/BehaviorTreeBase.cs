@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 public enum WaitContext
 {
     Patrol,   
@@ -18,12 +19,12 @@ public class BehaviorTreeBase : MonoBehaviour
     protected Vector3 lastSeenPosition;
     private float waitTime = 0;
     private bool isRun = true;
-
     private void Start()
     {
         rangeChecker = monster.monsterRangeChecker;
         agent = monster.GetComponent<NavMeshAgent>();
     }
+
     private void Update()
     {
         if(isRun)
@@ -35,7 +36,7 @@ public class BehaviorTreeBase : MonoBehaviour
 
     public void RunTree()
     {
-        if (isRun)
+        if (isRun && rangeChecker != null)
             rootNode.Tick();
     }
 
@@ -83,7 +84,7 @@ public class BehaviorTreeBase : MonoBehaviour
     }
     protected ReturnCode InRange(float range)
     {
-        if (rangeChecker.Target == null) return
+        if (rangeChecker == null || rangeChecker.Target == null) return
                 ReturnCode.FAILURE;
 
         float dist = Vector3.Magnitude(monster.transform.position - rangeChecker.Target.transform.position);
