@@ -39,7 +39,7 @@
       "attackSpeed": 1.0,
       "attackRange": 2.0,
       "moveSpeed": 1.0,
-      "meleeDamage": 35.0,
+      "meleeDamage": 20.0,
       "skillDamage": 70.0,
       "behaviorTreeName": "SkeletonBehavior"
     },
@@ -50,7 +50,7 @@
       "attackSpeed": 1.0,
       "attackRange": 2.0,
       "moveSpeed": 2.0,
-      "meleeDamage": 20.0,
+      "meleeDamage": 10.0,
       "skillDamage": 70.0,
       "behaviorTreeName": "WereWolfBehavior"
     },
@@ -61,7 +61,7 @@
       "attackSpeed": 1.0,
       "attackRange": 2.0,
       "moveSpeed": 2.0,
-      "meleeDamage": 20.0,
+      "meleeDamage": 10.0,
       "skillDamage": 70.0,
       "behaviorTreeName": "WereWolfBehavior"
     }

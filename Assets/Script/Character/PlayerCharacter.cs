@@ -24,6 +24,7 @@ public class PlayerCharacter : Entity, IUpdatable
     private int layerMask;
     private bool isHit = false;
     private bool isRoll = false;
+    private bool isDrink = false;
     private Coroutine runCoroutine;
     private Move playerMove;
     public override float MaxHP => baseHp;
@@ -105,7 +106,7 @@ public class PlayerCharacter : Entity, IUpdatable
 
     private void Roll()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll)
+        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll &&!isDrink)
         {
             animator.SetTrigger("Roll");
             IsRoll = true;
@@ -184,9 +185,11 @@ public class PlayerCharacter : Entity, IUpdatable
     }
     public void OnPotion(InputAction.CallbackContext value)
     {
-        if (value.performed)
+        if (value.started && !isDrink)
         {
-            animator.SetTrigger("Drink");
+            animator.SetLayerWeight(1, 1);
+            StartCoroutine(DrinkPotion());
+            //animator.SetTrigger("Drink");
             EventManager.Instance.PotionTriggerAction("USE");
         }
     }
@@ -220,5 +223,28 @@ public class PlayerCharacter : Entity, IUpdatable
             yield return new WaitForSeconds(0.1f);
         }
     }
-
+    IEnumerator DrinkPotion()
+    {
+        float time =1.0f;
+        isDrink = true;
+        animator.SetBool("Drink", isDrink);
+        while (true)
+        {
+           if(animator.GetCurrentAnimatorStateInfo(1).normalizedTime > 0.5f)
+            {
+                if(time>=0.0f)
+                {
+                    time -= Time.deltaTime;
+                }
+                else
+                {
+                    isDrink=false;
+                    animator.SetBool("Drink", isDrink);
+                    yield break;
+                }
+                animator.SetLayerWeight(1, time);
+            }
+            yield return new WaitForSeconds(Time.deltaTime);
+        }
+    }
 }
