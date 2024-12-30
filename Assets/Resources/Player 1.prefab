@@ -227,6 +227,17 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 380836666090075061}
   m_SourcePrefab: {fileID: 100100000, guid: 381816b13535a9d4a835da0e5bbef78d, type: 3}
+--- !u!114 &820491230191643165 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8488825853253309568, guid: 381816b13535a9d4a835da0e5bbef78d, type: 3}
+  m_PrefabInstance: {fileID: 9127853400786321053}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8215167861726673173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1592626820077831837 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7545363266311714816, guid: 381816b13535a9d4a835da0e5bbef78d, type: 3}
@@ -326,7 +337,19 @@ MonoBehaviour:
     m_ActionId: 2683a8e8-c1ad-4285-a052-78a07e81a4bd
     m_ActionName: Player/Guard[/Mouse/rightButton]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 40bb597d-d385-4158-b4af-66e24d12f032
     m_ActionName: UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]
   - m_PersistentCalls:
@@ -365,6 +388,30 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: f3c12ba3-aa97-48b5-ab12-3697e3caafac
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 723177b1-59c6-4be3-ad9d-cb8545e8f9b2
+    m_ActionName: Player/Potion[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0abf2b36-8daf-4cad-9dfe-3b1b5d8a6739
+    m_ActionName: Player/Run[/Keyboard/leftShift]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 820491230191643165}
+        m_TargetAssemblyTypeName: PlayerCharacter, Assembly-CSharp
+        m_MethodName: OnInteraction
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 7fa5e641-a9af-4bd7-b15d-ed608f7276c3
+    m_ActionName: Player/New action
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -382,4 +429,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rotSpeed: 5
+  moveSpeed: 5
   followCamera: {fileID: 1469046358679026591}

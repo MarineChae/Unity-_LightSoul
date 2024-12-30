@@ -39,6 +39,8 @@ public class Move : MonoBehaviour
 
     }
 
+    public bool IsMove { get => isMove; set => isMove = value; }
+
     void Start()
     {
         character = GetComponent<PlayerCharacter>();
@@ -50,15 +52,14 @@ public class Move : MonoBehaviour
     private void FixedUpdate()
     {
         followCamera.CamTarget.position = playerRigidbody.position + followCamera.OffSet;
-        if(CanMove)
+        IsMove = moveInput.magnitude != 0;
+        animator.SetBool("Walk", IsMove);
+        if (CanMove)
         {
-            isMove = moveInput.magnitude != 0;
-            animator.SetBool("Walk", isMove);
- 
             Vector3 lookForward = new Vector3(followCamera.CamTarget.forward.x, 0.0f, followCamera.CamTarget.forward.z).normalized;
             Vector3 lookRight = new Vector3(followCamera.CamTarget.right.x, 0.0f, followCamera.CamTarget.right.z).normalized;
             Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
-            if (isMove && !character.IsRoll)
+            if (IsMove && !character.IsRoll)
             {
                 var look = Quaternion.LookRotation(moveDirection);
                 playerRigidbody.rotation = Quaternion.Slerp(playerRigidbody.rotation, look, Time.fixedDeltaTime * rotSpeed);
@@ -122,14 +123,13 @@ public class Move : MonoBehaviour
     }
     public void OnMove(InputAction.CallbackContext value)
     {
-        if (canMove)
-        {
-            Vector2 input = value.ReadValue<Vector2>();
-            if (input != null)
-            {
-                moveInput = new Vector2(input.x, input.y);
-            }
-        }
+
+       Vector2 input = value.ReadValue<Vector2>();
+       if (input != null)
+       {
+           moveInput = new Vector2(input.x, input.y);
+       }
+
     }
 
     public void OnLook(InputAction.CallbackContext value)

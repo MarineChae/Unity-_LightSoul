@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 878183768175504908}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: ChestPrefab
-  m_TagString: Untagged
+  m_TagString: Chest
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 162154783336683481}
   - component: {fileID: 892787113532773951}
   - component: {fileID: 5215008759278321435}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Slot (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 7842912617159519586}
   - component: {fileID: 8323992821299315903}
   - component: {fileID: 760823385471861528}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: ChestInvectory
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -251,7 +251,7 @@ GameObject:
   - component: {fileID: 7329682795325328932}
   - component: {fileID: 3588682928023367242}
   - component: {fileID: 2870430068344857472}
-  m_Layer: 5
+  m_Layer: 11
   m_Name: Back (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,9 +340,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: Chest
       objectReference: {fileID: 0}
+    - target: {fileID: 144976, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 144976, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+      propertyPath: m_TagString
+      value: Chest
+      objectReference: {fileID: 0}
     - target: {fileID: 167976, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
       propertyPath: m_Name
       value: ChestTop
+      objectReference: {fileID: 0}
+    - target: {fileID: 167976, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+      propertyPath: m_Layer
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 167976, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+      propertyPath: m_TagString
+      value: Chest
       objectReference: {fileID: 0}
     - target: {fileID: 461604, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
       propertyPath: m_LocalRotation.w
@@ -412,7 +428,9 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 64647107281793232, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
+    - {fileID: 64215821431392800, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 493996, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
@@ -424,7 +442,7 @@ PrefabInstance:
       addedObject: {fileID: 1382661125480855317}
     - targetCorrespondingSourceObject: {fileID: 144976, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 9158378792595273603}
+      addedObject: {fileID: 8306482992544043267}
   m_SourcePrefab: {fileID: 100100000, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}
 --- !u!1 &517270152751359442 stripped
 GameObject:
@@ -445,8 +463,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemList: 
   inventoryUI: {fileID: 0}
---- !u!135 &9158378792595273603
-SphereCollider:
+--- !u!65 &8306482992544043267
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -460,12 +478,12 @@ SphereCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 1.1
-  m_Center: {x: 0.0012313128, y: 0.20658672, z: -0.00075149536}
+  m_Size: {x: 1.2738128, y: 1.38, z: 0.72447777}
+  m_Center: {x: 0.0012313128, y: 0.49, z: -0.00075149536}
 --- !u!4 &517270152751716910 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 493996, guid: 045cc9e875b3f1f48b4774837b97b949, type: 3}

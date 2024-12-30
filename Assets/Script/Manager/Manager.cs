@@ -40,6 +40,8 @@ public class Manager : MonoBehaviour
         UI.transform.SetParent(transform);
         UI.AddComponent<UIManager>();
 
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
 

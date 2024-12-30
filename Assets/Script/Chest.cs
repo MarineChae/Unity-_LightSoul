@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Chest : MonoBehaviour ,IUpdatable
+public class Chest : MonoBehaviour 
 {
 
     private Transform character;
@@ -17,15 +17,7 @@ public class Chest : MonoBehaviour ,IUpdatable
     [SerializeField]
     private InventoryController inventoryUI;
 
-    private void OnEnable()
-    {
-        UpdateManager.OnSubscribe(this, true, false, false);
-    }
 
-    private void OnDisable()
-    {
-        UpdateManager.UnSubscribe(this, true, false, false);
-    }
     private void Start()
     {
         Init();
@@ -51,51 +43,42 @@ public class Chest : MonoBehaviour ,IUpdatable
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
-        if (character != null)
-        {
-            if (character.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
-            {
-                isRotate = true;
-                isOpen = true;
-                canvas.gameObject.SetActive(true);
-                inventoryUI.ChangeInventoryState(true);
-            }
-            else if(character.CompareTag("Player") && Input.GetKeyDown(KeyCode.Escape))
-            {
-                canvas.gameObject.SetActive(false);
-                Cursor.visible = false;
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-            if (isRotate)
-            {
-                cehstTop.transform.rotation = Quaternion.Slerp(cehstTop.transform.rotation, targetRotation, Time.deltaTime * 2.0f);
-                if (Quaternion.Angle(cehstTop.transform.rotation, targetRotation) < 0.5f)
-                {
-                    isRotate = false;
-                }
+        //if (character != null)
+        //{
+        //    if (character.CompareTag("Player") && Input.GetKeyDown(KeyCode.F))
+        //    {
+        //        isRotate = true;
+        //        isOpen = true;
+        //        canvas.gameObject.SetActive(true);
+        //        inventoryUI.ChangeInventoryState(true);
+        //    }
+        //    else if(character.CompareTag("Player") && Input.GetKeyDown(KeyCode.Escape))
+        //    {
+        //        canvas.gameObject.SetActive(false);
+        //        Cursor.visible = false;
+        //        Cursor.lockState = CursorLockMode.Locked;
+        //    }
+        //    
+        //    
+        //    
 
+        //    
+        //}
+        if (isRotate)
+        {
+            cehstTop.transform.rotation = Quaternion.Slerp(cehstTop.transform.rotation, targetRotation, Time.deltaTime * 2.0f);
+            if (Quaternion.Angle(cehstTop.transform.rotation, targetRotation) < 0.5f)
+            {
+                isRotate = false;
             }
         }
-
-
     }
 
-    public void LateUpdateWork() { }
-
-
-    private void OnTriggerEnter(Collider other)
+    public void OpenChest()
     {
-        if(other.CompareTag("Player"))
-            character = other.transform;
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if(isOpen && other.CompareTag("Player"))
-        {
-            canvas.gameObject.SetActive(false);
-            inventoryUI.ChangeInventoryState(false);
-            character = null;
-        }
+        UIManager.Instance.AddCanvas(canvas);
+        canvas.gameObject.SetActive(true);
+        inventoryUI.ChangeInventoryState(true);
     }
 
 }

@@ -120,7 +120,7 @@ public class InvectoryGrid : MonoBehaviour
 
         item.WIDTH = 1; item.HEIGHT = 1;
 
-        rectTransform.localPosition = new Vector3(0,0,0);
+        rectTransform.localPosition = new Vector3(-10,0,0);
     }
     public Vector2 ComputePositionGrid(InventoryItem item, int posX, int posY)
     {

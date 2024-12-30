@@ -4,7 +4,7 @@
       "id": 100001,
       "name": "WolfFireBall",
       "skillDamage": 50.0,
-      "coolDown": 1.0,
+      "coolDown": 10.0,
       "remainCoolDown": 0.0,
       "skillType": 1
     },

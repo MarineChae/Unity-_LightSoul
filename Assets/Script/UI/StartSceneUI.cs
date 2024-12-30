@@ -8,6 +8,7 @@ public class StartSceneUI : MonoBehaviour
     public void NewGame()
     {
         LoadingSceneContoller.LoadScene("MainScene");
+        Cursor.lockState = CursorLockMode.Locked;
     }
     public void ContinueGame()
     {

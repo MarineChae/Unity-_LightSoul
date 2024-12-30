@@ -135,7 +135,10 @@ public class InventoryController : MonoBehaviour , IUpdatable
     {
         Cursor.visible = isOpen;
         if(isOpen)
+        {
+            UIManager.Instance.AddCanvas(inventoryUI);
             Cursor.lockState = CursorLockMode.None;
+        }     
         else
             Cursor.lockState = CursorLockMode.Locked;
         inventoryState = isOpen;

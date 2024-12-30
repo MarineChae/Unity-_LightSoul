@@ -10,15 +10,11 @@ public class GameManager : SingleTon<GameManager>
     protected override void Init()
     {
 
-
-
         GameObject pool = new GameObject("ObjectPool");
         pool.transform.SetParent(transform);
         pool.AddComponent<ObjectPool>().InitializePool(10, "prefabs/WayPoint");
         objectPool = pool.GetComponent<ObjectPool>();
 
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
     public IPoolingable GetPoolingObject()
     {

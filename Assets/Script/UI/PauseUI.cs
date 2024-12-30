@@ -35,7 +35,7 @@ public class PauseUI : MonoBehaviour
         exitButton.onClick.AddListener(UIManager.Instance.Exit);
 
         settingButton = transform.Find("Setting").GetComponent<Button>();
-
+        settingButton.onClick.AddListener(UIManager.Instance.Setting);
     }
 
 }

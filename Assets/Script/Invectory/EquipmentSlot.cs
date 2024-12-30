@@ -38,8 +38,8 @@ public class EquipmentSlot : MonoBehaviour
         RectTransform rectTransform = item.GetComponent<RectTransform>();
         rectTransform.SetParent(this.rectTransform);
         equippedItem = item;
-        Vector2 pos = new Vector2(tileWidth / 2, -tileHeight / 2);
-        rectTransform.localPosition = pos;
+        Vector2 pos = new Vector2(tileWidth / 4, -tileHeight / 4);
+        rectTransform.anchoredPosition = Vector2.zero;
         item.ItemData.slotType = slotType;
         character.EquipItem(item.ItemData);
         return overlapItem;

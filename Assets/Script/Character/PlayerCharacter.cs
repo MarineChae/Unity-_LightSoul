@@ -50,7 +50,7 @@ public class PlayerCharacter : Entity, IUpdatable
 
     void Start()
     {
-        layerMask = 1 << LayerMask.NameToLayer("NPC");//
+        layerMask = 1 << LayerMask.NameToLayer("Interactive");//
         InitStatus();
         itemDatas = new ItemData[(int)ITEMTYPE.END];
         equipItems = new EquipItem[(int)ITEMTYPE.END];
@@ -74,17 +74,25 @@ public class PlayerCharacter : Entity, IUpdatable
             animator.SetBool("EquipWeapon", true);
         }
         Roll();
-        if (Input.GetKeyDown(KeyCode.F))
+
+    }
+
+    private void PlayerInteraction()
+    {
+        if (Physics.Raycast(transform.position + transform.up, transform.forward, out RaycastHit hit, 1.5f, layerMask))
         {
-            if (Physics.Raycast(transform.position+transform.up, transform.forward, out RaycastHit hit, 1.5f, layerMask))
+            if(hit.transform.CompareTag("NPC"))
             {
                 bool isMove = DialogueManager.Instance.Interact(hit.collider.gameObject);
                 playerMove.CanMove = !isMove;
                 RotateToTarget(hit.transform);
-
+            }
+            if(hit.transform.CompareTag("Chest"))
+            {
+                var chset = hit.transform.GetComponent<Chest>();
+                chset.OpenChest();
             }
         }
-
     }
 
     private void RotateToTarget(Transform target)
@@ -197,7 +205,13 @@ public class PlayerCharacter : Entity, IUpdatable
             StartCoroutine("Recovery");
         }
     }
-
+    public void OnInteraction(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            PlayerInteraction();
+        }
+    }
     IEnumerator Run()
     {
         while (true)

@@ -1,4 +1,5 @@
 
+using System;
 using UnityEngine;
 
 
@@ -11,6 +12,7 @@ public class FollowCamera : MonoBehaviour, IUpdatable
 
     private Vector2 camLook;
     private bool isUIActive;
+    private float ditanceToTarget = 3.0f;
     public Transform CamTarget { get => camTarget; set => camTarget = value; }
     public Vector3 OffSet { get => offSet; }
     public Vector2 CamLook { get => camLook; set => camLook = value; }
@@ -36,8 +38,23 @@ public class FollowCamera : MonoBehaviour, IUpdatable
     public void UpdateWork()
     {
         if (!isUIActive)
+        {
+            CheckObstruct();
             CameraLook();
+        }
 
+
+    }
+
+    private void CheckObstruct()
+    {
+        Ray ray = new Ray(camTarget.position, transform.position - camTarget.position);
+        Debug.DrawRay(camTarget.position, transform.position- camTarget.position, Color.red);
+        if (Physics.Raycast(ray, out RaycastHit hit, ditanceToTarget))
+        {
+            transform.position = hit.point;
+            Debug.Log(hit.transform.name);
+        }
     }
 
     public void CameraLook()
