@@ -1,9 +1,8 @@
 using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.GraphicsBuffer;
+
 
 public class PlayerCharacter : Entity, IUpdatable
 {
@@ -106,7 +105,7 @@ public class PlayerCharacter : Entity, IUpdatable
 
     private void Roll()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll &&!isDrink)
+        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll &&!isDrink && !isHit)
         {
             animator.SetTrigger("Roll");
             IsRoll = true;
@@ -167,6 +166,7 @@ public class PlayerCharacter : Entity, IUpdatable
     public override void TakeDamage(float damage)
     {
         playerAttack.ShieldColliderDisable();
+        animator.ResetTrigger("Hit");
         animator.SetTrigger("Hit");
         if (playerAttack.IsGuard)
             HP -= damage * 0.2f;
@@ -177,6 +177,11 @@ public class PlayerCharacter : Entity, IUpdatable
     public void EndHit()
     {
         IsHit = false;
+        bool isRun = animator.GetBool("Run");
+        if (isRun)
+            playerMove.MoveSpeed = 5.0f;
+        else 
+            playerMove.MoveSpeed = 2.0f;
     }
     public override void UseStamina(float stamina)
     {
@@ -196,13 +201,15 @@ public class PlayerCharacter : Entity, IUpdatable
     public void OnRun(InputAction.CallbackContext value)
     {
         if (value.started)
-        { 
+        {
+            playerMove.MoveSpeed = 5.0f;
             animator.SetBool("Run",true);
             runCoroutine = StartCoroutine("Run");
             StopCoroutine("Recovery");
         }
         if(value.canceled)
         {
+            playerMove.MoveSpeed = 2.0f;
             animator.SetBool("Run", false);
             StopCoroutine(runCoroutine);
             StartCoroutine("Recovery");
@@ -219,7 +226,7 @@ public class PlayerCharacter : Entity, IUpdatable
     {
         while (true)
         {
-            UseStamina(1.0f);
+            UseStamina(0.5f);
             yield return new WaitForSeconds(0.1f);
         }
     }
@@ -246,5 +253,12 @@ public class PlayerCharacter : Entity, IUpdatable
             }
             yield return new WaitForSeconds(Time.deltaTime);
         }
+    }
+    public void PlayFootStepSound()
+    {
+        int value = UnityEngine.Random.Range(0, 8);
+        string sound = "Sound/Footstep_Dirt_0";
+        sound += value;
+        SoundManager.Instance.PlaySFXSound(sound);
     }
 }

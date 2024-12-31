@@ -534,7 +534,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.032640956
+      - time: 0.029637953
         functionName: StopMovement
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}

@@ -45,6 +45,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
             {
                 animator.SetTrigger("Attack");
             }
+
             AttackCount = 0;
         }
         GuardAndParring();
@@ -96,7 +97,11 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     public void ColliderEnable()
     {
         if (weapon != null)
+        {
+            SoundManager.Instance.PlaySFXSound("Sound/SWORD_09");
             Weapon.capsuleCollider.enabled = true;
+        }
+           
     }
     public void ColliderDisable()
     {
@@ -157,5 +162,5 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         }
            
     }
-
+    
 }

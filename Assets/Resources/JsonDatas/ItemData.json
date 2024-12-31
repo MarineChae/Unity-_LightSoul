@@ -21,7 +21,7 @@
       "mesh": "itemMeshs/SM_Wep_Shield_02",
       "itemType": 2,
       "slotType": 2,
-      "hitEffect": "Prefabs/Hit_25_orange_explosion",
+      "hitEffect": "Prefabs/Hit 5 red",
       "damage": 50
     },
     {
@@ -33,7 +33,7 @@
       "mesh": "itemMeshs/SM_Wep_Crystal_Ornate_Straightsword_01",
       "itemType": 1,
       "slotType": 1,
-      "hitEffect": "Prefabs/Hit_25_orange_explosion",
+      "hitEffect": "Prefabs/Hit 7 pink",
       "damage": 50
     },
     {

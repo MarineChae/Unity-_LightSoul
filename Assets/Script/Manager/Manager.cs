@@ -40,6 +40,10 @@ public class Manager : MonoBehaviour
         UI.transform.SetParent(transform);
         UI.AddComponent<UIManager>();
 
+        GameObject sound = new GameObject("SoundManager");
+        sound.transform.SetParent(transform);
+        sound.AddComponent<SoundManager>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

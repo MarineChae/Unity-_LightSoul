@@ -61,6 +61,8 @@ public class Weapon : MonoBehaviour
                 //피격이펙트
                 Vector3 dir = (other.transform.position + transform.position) * 0.5f;
                 var eff = Instantiate(hitPrefab, dir, Quaternion.identity);
+                //피격사운드
+                SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
                 //이펙트가 끝나면 destory하는 코루틴
                 StartCoroutine("EffectCoroutine", eff);
                 
@@ -71,11 +73,12 @@ public class Weapon : MonoBehaviour
             //플레이어의 방패와 몬스터의 공격이 맞닿으면 패링처리
             if (other.gameObject.CompareTag("MonsterWeapon") && !playerCharacter.IsHit)
             {
-                //디버그용./////
+                //hitEffect
                 Vector3 dir = (other.transform.position + transform.position) * 0.5f;
                 var eff = Instantiate(hitPrefab, dir, Quaternion.identity);
                 StartCoroutine("EffectCoroutine", eff);
-                Debug.Log("parring " + other.gameObject.name);
+                ///sound
+                SoundManager.Instance.PlaySFXSound("Sound/HammerImpact12");
                 ///////////////
                 var monster = other.GetComponentInParent<Monster>();
                 monster.IsParried = true;

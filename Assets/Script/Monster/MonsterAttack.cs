@@ -33,6 +33,7 @@ public class MonsterAttack : MonoBehaviour
             Vector3 dir = targetCharacter.transform.position + Vector3.up;
             var eff = Instantiate(hitEffectPrefab, dir, Quaternion.identity);
             StartCoroutine("EffectCoroutine", eff);
+            SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
         }
     }
     public void StopAttack()

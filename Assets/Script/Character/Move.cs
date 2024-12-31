@@ -106,21 +106,6 @@ public class Move : MonoBehaviour
 
     }
 
-    public void OnRun(InputAction.CallbackContext value)
-    {
-        if (canMove)
-        {
-            if (value.started)
-            {
-                moveSpeed = 5.0f;
-            }
-            if (value.canceled)
-            {
-                moveSpeed = 2.0f;
-            }
-        }
-
-    }
     public void OnMove(InputAction.CallbackContext value)
     {
 

@@ -64,14 +64,21 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.02586207
+      - time: 0
         functionName: StartStun
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.91810346
+      - time: 0
+        functionName: AttackEnd
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.91510046
         functionName: EndStun
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}

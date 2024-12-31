@@ -3,8 +3,8 @@
     {
       "id": 100001,
       "name": "WolfFireBall",
-      "skillDamage": 30.0,
-      "coolDown": 10.0,
+      "skillDamage": 10.0,
+      "coolDown": 15.0,
       "remainCoolDown": 0.0,
       "skillType": 1
     },
@@ -19,7 +19,7 @@
     {
       "id": 400001,
       "name": "SkeletonDoubleSwip",
-      "skillDamage": 40.0,
+      "skillDamage": 15.0,
       "coolDown": 10.0,
       "remainCoolDown": 0.0,
       "skillType": 2
@@ -27,7 +27,7 @@
     {
       "id": 400002,
       "name": "SkeletonJumpAttack",
-      "skillDamage": 60.0,
+      "skillDamage": 40.0,
       "coolDown": 15.0,
       "remainCoolDown": 0.0,
       "skillType": 0

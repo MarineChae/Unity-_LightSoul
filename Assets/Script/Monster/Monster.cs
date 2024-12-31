@@ -171,7 +171,6 @@ public class Monster : MonoBehaviour , IUpdatable
 
     public void Attack(ATTACK_TYPE type)
     {
-
         if (IsAttack)
             return;
         Animator.SetTrigger(type.ToString());
@@ -188,7 +187,7 @@ public class Monster : MonoBehaviour , IUpdatable
         else
             monsterAttack.AllowSkillAttack(monsterAttack.transform.position,
                                            monsterRangeChecker.Target.transform.position,
-                                           monsterData.skillDamage,
+                                           MonsterSkillDatas[currentAttackType].skillDamage,
                                            MonsterSkillDatas[currentAttackType].skillType);
 
 
