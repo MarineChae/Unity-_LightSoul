@@ -6,21 +6,18 @@ using UnityEngine;
 public class FollowCamera : MonoBehaviour, IUpdatable
 {
 
-    [SerializeField]  Transform camTarget;
-    [SerializeField]  Vector3 offSet;
+    [SerializeField]  private Transform camPos;
+    [SerializeField]  private Vector3 offSet;
     [SerializeField]  private float cameraSensitive;
-
+    [SerializeField]  private Transform camTarget;
     private Vector2 camLook;
     private bool isUIActive;
     private float ditanceToTarget = 3.0f;
-    public Transform CamTarget { get => camTarget; set => camTarget = value; }
+    public Transform CamPos { get => camPos; set => camPos = value; }
     public Vector3 OffSet { get => offSet; }
     public Vector2 CamLook { get => camLook; set => camLook = value; }
     public bool IsUIActive { get => isUIActive; set => isUIActive = value; }
-    private void Start()
-    {
-        
-    }
+
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -37,8 +34,10 @@ public class FollowCamera : MonoBehaviour, IUpdatable
     }
     public void UpdateWork()
     {
+        camPos.position = camTarget.position + OffSet;
         if (!isUIActive)
         {
+            
             CheckObstruct();
             CameraLook();
         }
@@ -48,19 +47,23 @@ public class FollowCamera : MonoBehaviour, IUpdatable
 
     private void CheckObstruct()
     {
-        Ray ray = new Ray(camTarget.position, transform.position - camTarget.position);
-        Debug.DrawRay(camTarget.position, transform.position- camTarget.position, Color.red);
+        Ray ray = new Ray(camPos.position, transform.position - camPos.position);
+        Debug.DrawRay(camPos.position, transform.position- camPos.position, Color.red);
         if (Physics.Raycast(ray, out RaycastHit hit, ditanceToTarget))
         {
             transform.position = hit.point;
             Debug.Log(hit.transform.name);
+        }
+        else
+        {
+            
         }
     }
 
     public void CameraLook()
     {
         Vector2 mouseDelta = new Vector2 (camLook.x, camLook.y)*Time.deltaTime * cameraSensitive;
-        Vector3 cameraAngle = CamTarget.rotation.eulerAngles;
+        Vector3 cameraAngle = camPos.rotation.eulerAngles;
         
         float x = cameraAngle.x - mouseDelta.y;
         if(x <180.0f)
@@ -71,7 +74,7 @@ public class FollowCamera : MonoBehaviour, IUpdatable
         {
             x = Mathf.Clamp(x, 320f, 361f);
         }
-        CamTarget.rotation = Quaternion.Euler(x, cameraAngle.y + mouseDelta.x, cameraAngle.z);
+        camPos.rotation = Quaternion.Euler(x, cameraAngle.y + mouseDelta.x, cameraAngle.z);
 
     }
 

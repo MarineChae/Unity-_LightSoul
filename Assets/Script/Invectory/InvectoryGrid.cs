@@ -83,12 +83,14 @@ public class InvectoryGrid : MonoBehaviour
         }
 
        
-        PlaceItem(item, posX, posY);
+        PlaceItem(item, posX, posY,true);
         return true;
     }
 
-    public void PlaceItem(InventoryItem item, int posX, int posY)
+    public void PlaceItem(InventoryItem item, int posX, int posY,bool playSound)
     {
+        if(playSound)
+            SoundManager.Instance.PlaySFXSound("Sound/Inventory_Open_00");
         if (item.ItemData.itemType == ITEMTYPE.POTION && itemSlotType == ITEMTYPE.NONE)
         {            /////ui에 포션 갯수정보 추가
             EventManager.Instance.PotionTriggerAction("GET");
@@ -119,7 +121,6 @@ public class InvectoryGrid : MonoBehaviour
         Vector2 position = ComputePositionGrid(item, 0, 0);
 
         item.WIDTH = 1; item.HEIGHT = 1;
-
         rectTransform.localPosition = new Vector3(-10,0,0);
     }
     public Vector2 ComputePositionGrid(InventoryItem item, int posX, int posY)
@@ -248,7 +249,7 @@ public class InvectoryGrid : MonoBehaviour
 
         if (posOnGrid == null) return ;
 
-        PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
+        PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y,false);
 
     }
 

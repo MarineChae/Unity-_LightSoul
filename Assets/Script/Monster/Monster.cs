@@ -24,7 +24,10 @@ public class Monster : MonoBehaviour , IUpdatable
     private bool isDummy = false;
     [SerializeField]
     private SerializedDictianary<ATTACK_TYPE,int> skillDic;
-
+    [SerializeField]
+    private AudioClip attackSound;
+    [SerializeField]
+    private bool isBoss;
     private Dictionary<ATTACK_TYPE,MonsterSkillData> monsterSkillDatas = new Dictionary<ATTACK_TYPE,MonsterSkillData>();
     private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
@@ -38,6 +41,7 @@ public class Monster : MonoBehaviour , IUpdatable
     private bool isStunned;
     private bool canRotate = true;
     private NavMeshPath path;
+
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -114,6 +118,8 @@ public class Monster : MonoBehaviour , IUpdatable
                 Animator.SetTrigger("Die");
                 StartCoroutine("Die");
                 EventManager.Instance.TriggerAction("KILL", monsterData.name);
+                if (isBoss)
+                    StartCoroutine("Ending");
             }
             else
             {
@@ -230,6 +236,10 @@ public class Monster : MonoBehaviour , IUpdatable
     {
         monsterAttack.StopAttack();
     }
+    public void PlayAttackSound()
+    {
+        SoundManager.Instance.PlaySFXSound(attackSound);
+    }
     internal void RotateToTarget(Transform target, bool immediately)
     {
         Vector3 directionToTarget = (target.position - transform.position).normalized;
@@ -252,10 +262,18 @@ public class Monster : MonoBehaviour , IUpdatable
             yield return new WaitForSeconds(Time.deltaTime);
             if (time >= 0.4f) break; ;
         }
+        yield return new WaitForSeconds(6.0f);
         Destroy(gameObject);
         yield return null;
     }
-
+    IEnumerator Ending()
+    {
+        yield return new WaitForSeconds(2f);
+        SoundManager.Instance.PlaySFXSound("Sound/Jingle_Win_00");
+        yield return new WaitForSeconds(5.0f);
+        LoadingSceneContoller.LoadScene("StartScene");
+        yield break;
+    }
     public int Hp { get => hp; set => hp = value; }
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
     public bool IsAttack { get => isAttack; set => isAttack = value; }

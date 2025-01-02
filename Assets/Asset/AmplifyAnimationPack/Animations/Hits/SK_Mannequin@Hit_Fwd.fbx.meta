@@ -513,31 +513,31 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.014836794
+      - time: 0
         functionName: ColliderDisable
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.020771513
+      - time: 0
         functionName: AttackEnd
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.026706232
-        functionName: ShieldColliderDisable
-        data: 
-        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.029637953
+      - time: 0
         functionName: StopMovement
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: e0f091dfa929a304d9ebd121fe88b540, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0
+        functionName: ShieldColliderDisable
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 557366f188ad75d4897791af53db2d86, type: 3}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0

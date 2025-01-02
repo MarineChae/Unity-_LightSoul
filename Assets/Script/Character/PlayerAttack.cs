@@ -15,6 +15,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     private float rightButtunholdThreshold = 0.1f;
     InputAction.CallbackContext testvalue;
     private Monster targetMonster;
+    private PlayerCharacter character;
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -28,9 +29,12 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
     {
         animator = GetComponent<Animator>();
         move = GetComponent<Move>();
+        character = GetComponent<PlayerCharacter>();
     }
     public void UpdateWork()
     {
+        if (character.IsDead)
+            return;
 
         if (Input.GetMouseButtonDown(0) && weapon != null && !IsGuard && !Cursor.visible)
         {

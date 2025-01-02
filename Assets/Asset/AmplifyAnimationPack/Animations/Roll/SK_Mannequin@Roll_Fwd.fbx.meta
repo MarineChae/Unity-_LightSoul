@@ -505,6 +505,13 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.26965228
+        functionName: PlayRollSound
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: b122855ae65ce45478fd2b1917113b11, type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.6337209
         functionName: RollEnd
         data: 

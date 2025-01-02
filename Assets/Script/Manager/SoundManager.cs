@@ -13,7 +13,7 @@ public enum Sound
 public class SoundManager : SingleTon<SoundManager>
 {
     private float masterVolumeSFX = 0.5f;
-    private float masterVolumeBGM = 0.2f;
+    private float masterVolumeBGM = 0.3f;
 
 
 
@@ -32,15 +32,22 @@ public class SoundManager : SingleTon<SoundManager>
 
         bgmPlayer.clip = Resources.Load<AudioClip>("Sound/20 - Heavy Combat - Imminent Ambush (loop)");
         SetBGMVolume(MasterVolumeBGM);
+
+    }
+
+    public void PlayBGM()
+    {
         bgmPlayer.loop = true;
         bgmPlayer.Play();
     }
-
     public void SetBGMVolume(float volume)
     {
         bgmPlayer.volume = volume;
     }
-
+    public void BGMStop()
+    {
+        bgmPlayer.Stop();
+    }
     public void PlaySFXSound(string soundName)
     {
         if(!audioClipDic.ContainsKey(soundName))
@@ -51,7 +58,12 @@ public class SoundManager : SingleTon<SoundManager>
         sfxPlayer.PlayOneShot(audioClipDic[soundName], MasterVolumeSFX);
 
     }
+    public void PlaySFXSound(AudioClip audioClip)
+    {
 
+        sfxPlayer.PlayOneShot(audioClip, MasterVolumeSFX);
+
+    }
 
 
 

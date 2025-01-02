@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerCharacter : Entity, IUpdatable
@@ -17,6 +19,7 @@ public class PlayerCharacter : Entity, IUpdatable
     private EquipItem equipItem;
     [SerializeField]
     private float baseHp = 100;
+    private CapsuleCollider capsuleCollider;
     private EquipItem[] equipItems;
     public Weapon[] equipWeapon;
     private PlayerAttack playerAttack;
@@ -26,6 +29,7 @@ public class PlayerCharacter : Entity, IUpdatable
     private bool isDrink = false;
     private Coroutine runCoroutine;
     private Move playerMove;
+    private bool isDead;
     public override float MaxHP => baseHp;
 
     public override float MaxStamina => 100;
@@ -35,6 +39,7 @@ public class PlayerCharacter : Entity, IUpdatable
     public bool IsRoll { get => isRoll; set => isRoll = value; }
     public PlayerAttack PlayerAttack { get => playerAttack;}
     public bool IsHit { get => isHit; set => isHit = value; }
+    public bool IsDead { get => isDead; set => isDead = value; }
 
     private float staminerConsumption = 30;
     private void OnEnable()
@@ -58,6 +63,7 @@ public class PlayerCharacter : Entity, IUpdatable
         animator = GetComponentInChildren<Animator>();
         playerAttack = GetComponent<PlayerAttack>();
         playerMove = GetComponent<Move>();
+        capsuleCollider = GetComponent<CapsuleCollider>();
     }
     public void FixedUpdateWork()
     {
@@ -65,6 +71,7 @@ public class PlayerCharacter : Entity, IUpdatable
     }
     public void UpdateWork()
     {
+        if (IsDead) return;
         if (itemDatas[(int)ITEMTYPE.WEAPON] == null)
         {
             animator.SetBool("EquipWeapon", false);
@@ -74,7 +81,10 @@ public class PlayerCharacter : Entity, IUpdatable
             animator.SetBool("EquipWeapon", true);
         }
         Roll();
-
+        if(HP <=0)
+        {
+            StartCoroutine("Die");
+        }
     }
 
     private void PlayerInteraction()
@@ -148,6 +158,7 @@ public class PlayerCharacter : Entity, IUpdatable
         equipItems[(int)itemData.slotType].transform.SetParent(socketTransform);
         equipItems[(int)itemData.slotType].transform.localPosition = Vector3.zero;
         equipItems[(int)itemData.slotType].transform.localRotation = Quaternion.identity;
+        SoundManager.Instance.PlaySFXSound("Sound/SWORD_05");
     }
 
     public void UnEquipItem(ItemData itemData)
@@ -194,7 +205,6 @@ public class PlayerCharacter : Entity, IUpdatable
         {
             animator.SetLayerWeight(1, 1);
             StartCoroutine(DrinkPotion());
-            //animator.SetTrigger("Drink");
             EventManager.Instance.PotionTriggerAction("USE");
         }
     }
@@ -254,11 +264,29 @@ public class PlayerCharacter : Entity, IUpdatable
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
+    public void DrinkSound()
+    {
+        SoundManager.Instance.PlaySFXSound("Sound/Drink");
+    }
     public void PlayFootStepSound()
     {
         int value = UnityEngine.Random.Range(0, 8);
         string sound = "Sound/Footstep_Dirt_0";
         sound += value;
         SoundManager.Instance.PlaySFXSound(sound);
+    }
+    public void PlayRollSound()
+    {
+        SoundManager.Instance.PlaySFXSound("Sound/Inventory_Open_01");
+    }
+    IEnumerator Die()
+    {
+        IsDead = true;
+        animator.SetTrigger("Die");
+        yield return new WaitForSeconds(1.0f);
+        SoundManager.Instance.PlaySFXSound("Sound/Jingle_Lose_00");
+        yield return new WaitForSeconds(5.0f);
+        LoadingSceneContoller.LoadScene("StartScene");
+        yield break ;
     }
 }

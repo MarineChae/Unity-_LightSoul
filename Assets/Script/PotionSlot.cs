@@ -31,6 +31,7 @@ public class PotionSlot : MonoBehaviour
                 QuestManager.Instance.OnUseItem("Potion");
                 UIManager.Instance.InventoryController.UsePotion();
                 character.HP = Mathf.Clamp(character.HP + 100 , 0,character.MaxHP);
+
                 PotionCount--;
             }
         }

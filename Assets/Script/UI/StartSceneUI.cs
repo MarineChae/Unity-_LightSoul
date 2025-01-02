@@ -9,6 +9,7 @@ public class StartSceneUI : MonoBehaviour
     {
         LoadingSceneContoller.LoadScene("MainScene");
         Cursor.lockState = CursorLockMode.Locked;
+        SoundManager.Instance.PlayBGM();
     }
     public void ContinueGame()
     {

@@ -27,7 +27,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void ValidateAttack()
     {
-        if (!monster.IsParried && targetCharacter != null)
+        if (!monster.IsParried && targetCharacter != null && !targetCharacter.IsDead)
         {
             targetCharacter.TakeDamage(attackDamage);
             Vector3 dir = targetCharacter.transform.position + Vector3.up;

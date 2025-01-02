@@ -8,7 +8,6 @@ using UnityEngine;
 public class QualityController : MonoBehaviour
 {
 
-    private TextMeshProUGUI text;
     private TMP_Dropdown dropdown;
     private string[] qualitys = new string[] {"Low","VeryLow","Medium","High","VeryHigh","Ultra"};
 

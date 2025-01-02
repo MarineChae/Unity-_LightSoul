@@ -338,6 +338,8 @@ MonoBehaviour:
   skillDic:
     keys: 0100000002000000
     values: 811a0600821a0600
+  attackSound: {fileID: 8300000, guid: d45ed8564a3c5574ea508d55c3c162b7, type: 3}
+  isBoss: 1
 --- !u!195 &7652648671794879329
 NavMeshAgent:
   m_ObjectHideFlags: 0

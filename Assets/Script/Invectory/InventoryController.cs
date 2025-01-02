@@ -144,6 +144,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
         inventoryState = isOpen;
         followCamera.IsUIActive = isOpen;
         inventoryUI.gameObject.SetActive(isOpen);
+        SoundManager.Instance.PlaySFXSound("Sound/Inventory_Open_01");
     }
 
     public void LateUpdateWork() { }
@@ -174,7 +175,7 @@ public class InventoryController : MonoBehaviour , IUpdatable
 
         if (posOnGrid == null)return false;
 
-        selectedItemGrid.PlaceItem(item, posOnGrid.Value.x,posOnGrid.Value.y);
+        selectedItemGrid.PlaceItem(item, posOnGrid.Value.x,posOnGrid.Value.y, true);
       
         return true;
     }
@@ -344,7 +345,8 @@ public class InventoryController : MonoBehaviour , IUpdatable
 
         inventoryState = false;
         inventoryUI.gameObject.SetActive(false);
-       
+
+        yield break;
     }
     public void UsePotion()
     {

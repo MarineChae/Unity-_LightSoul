@@ -51,13 +51,15 @@ public class Move : MonoBehaviour
 
     private void FixedUpdate()
     {
-        followCamera.CamTarget.position = playerRigidbody.position + followCamera.OffSet;
+        if(character.IsDead) return;
+
+
         IsMove = moveInput.magnitude != 0;
         animator.SetBool("Walk", IsMove);
         if (CanMove)
         {
-            Vector3 lookForward = new Vector3(followCamera.CamTarget.forward.x, 0.0f, followCamera.CamTarget.forward.z).normalized;
-            Vector3 lookRight = new Vector3(followCamera.CamTarget.right.x, 0.0f, followCamera.CamTarget.right.z).normalized;
+            Vector3 lookForward = new Vector3(followCamera.CamPos.forward.x, 0.0f, followCamera.CamPos.forward.z).normalized;
+            Vector3 lookRight = new Vector3(followCamera.CamPos.right.x, 0.0f, followCamera.CamPos.right.z).normalized;
             Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
             if (IsMove && !character.IsRoll)
             {
