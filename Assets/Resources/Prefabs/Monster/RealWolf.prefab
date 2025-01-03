@@ -126,6 +126,10 @@ PrefabInstance:
       value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: attackSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 252c02cf4a4c14d43a356cfb6a01a6f8, type: 3}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: attackCollider
       value: 
       objectReference: {fileID: 4709799347919321066}
@@ -138,9 +142,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 8a12971e393db4148bd2edaa4da11a67, type: 2}
     - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: skillSound.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: skillDic.keys.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: skillSound.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9a384d12c3766f74caf634a4f3c56e17, type: 3}
     - target: {fileID: 2876774374214808382, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: skillDic.values.Array.size
       value: 1

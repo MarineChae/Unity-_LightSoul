@@ -27,6 +27,8 @@ public class Monster : MonoBehaviour , IUpdatable
     [SerializeField]
     private AudioClip attackSound;
     [SerializeField]
+    private AudioClip[] skillSound;
+    [SerializeField]
     private bool isBoss;
     private Dictionary<ATTACK_TYPE,MonsterSkillData> monsterSkillDatas = new Dictionary<ATTACK_TYPE,MonsterSkillData>();
     private MonsterAttack monsterAttack;
@@ -239,6 +241,10 @@ public class Monster : MonoBehaviour , IUpdatable
     public void PlayAttackSound()
     {
         SoundManager.Instance.PlaySFXSound(attackSound);
+    }
+    public void PlaySkillSound(int num)
+    {
+        SoundManager.Instance.PlaySFXSound(skillSound[num]);
     }
     internal void RotateToTarget(Transform target, bool immediately)
     {

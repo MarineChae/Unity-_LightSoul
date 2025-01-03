@@ -110,13 +110,14 @@ public class Move : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext value)
     {
-
        Vector2 input = value.ReadValue<Vector2>();
        if (input != null)
        {
            moveInput = new Vector2(input.x, input.y);
-       }
 
+           animator.SetFloat("Horizontal", input.x);
+           animator.SetFloat("Vertical", input.y);
+        }
     }
 
     public void OnLook(InputAction.CallbackContext value)
@@ -132,13 +133,6 @@ public class Move : MonoBehaviour
     public void AllowMovement()
     {
         canMove = true;
-    }
-    public void RotateToTarget(Vector3 target)
-    {
-        Vector3 directionToTarget = (target - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-        transform.rotation = targetRotation;
-
     }
 
 }

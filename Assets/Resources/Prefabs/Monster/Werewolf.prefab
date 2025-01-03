@@ -293,6 +293,11 @@ MonoBehaviour:
   skillDic:
     keys: 01000000
     values: 21a10700
+  attackSound: {fileID: 8300000, guid: 2374195adb6554945b2601faad42fffb, type: 3}
+  skillSound:
+  - {fileID: 8300000, guid: d7b4f1ba03c4a8a4a8a8e8e090c97b84, type: 3}
+  - {fileID: 8300000, guid: 304d658b20d4f184f84a37d26032b341, type: 3}
+  isBoss: 0
 --- !u!54 &627681810849879701
 Rigidbody:
   m_ObjectHideFlags: 0

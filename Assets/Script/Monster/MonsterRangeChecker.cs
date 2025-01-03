@@ -16,7 +16,7 @@ public class MonsterRangeChecker : MonoBehaviour
     public Transform Target { get => target; set => target = value; }
     public HashSet<Transform> Targets { get => targets; set => targets = value; }
 
-    // Start is called before the first frame update
+
     void Start()
     {
         InvokeRepeating(nameof(UpdateNearPlayer), 0, updateTime);

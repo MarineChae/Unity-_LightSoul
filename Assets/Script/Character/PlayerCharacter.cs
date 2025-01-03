@@ -4,6 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI.Table;
 
 
 public class PlayerCharacter : Entity, IUpdatable
@@ -30,16 +31,15 @@ public class PlayerCharacter : Entity, IUpdatable
     private Coroutine runCoroutine;
     private Move playerMove;
     private bool isDead;
+    private LockOn lockOn;
+    private bool isLockOn=false;
+    
     public override float MaxHP => baseHp;
 
     public override float MaxStamina => 100;
 
     public override float StaminaRecovery => 1.5f;
 
-    public bool IsRoll { get => isRoll; set => isRoll = value; }
-    public PlayerAttack PlayerAttack { get => playerAttack;}
-    public bool IsHit { get => isHit; set => isHit = value; }
-    public bool IsDead { get => isDead; set => isDead = value; }
 
     private float staminerConsumption = 30;
     private void OnEnable()
@@ -64,6 +64,7 @@ public class PlayerCharacter : Entity, IUpdatable
         playerAttack = GetComponent<PlayerAttack>();
         playerMove = GetComponent<Move>();
         capsuleCollider = GetComponent<CapsuleCollider>();
+        lockOn = GetComponentInChildren<LockOn>();
     }
     public void FixedUpdateWork()
     {
@@ -84,6 +85,13 @@ public class PlayerCharacter : Entity, IUpdatable
         if(HP <=0)
         {
             StartCoroutine("Die");
+        }
+        if(IsLockOn)
+        {
+            var dir = lockOn.Target.position - transform.position;
+            dir.y = 0;
+            Camera.main.transform.rotation = Quaternion.LookRotation(dir);
+            RotateToTarget(lockOn.Target);
         }
     }
 
@@ -232,6 +240,26 @@ public class PlayerCharacter : Entity, IUpdatable
             PlayerInteraction();
         }
     }
+    public void OnLockOn(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            if(!IsLockOn)
+            {
+
+                animator.SetBool("LockOn", true);
+                IsLockOn=true;
+                Debug.Log("LOCK_ON_TARGET" + lockOn.Target.name);
+            }
+            else
+            {
+
+                animator.SetBool("LockOn", false);
+                IsLockOn = false;
+                Debug.Log("end");
+            }
+        }
+    }
     IEnumerator Run()
     {
         while (true)
@@ -289,4 +317,17 @@ public class PlayerCharacter : Entity, IUpdatable
         LoadingSceneContoller.LoadScene("StartScene");
         yield break ;
     }
+    public void RotateToTarget(Vector3 target)
+    {
+        Vector3 directionToTarget = (target - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        transform.rotation = targetRotation;
+
+    }
+
+    public bool IsRoll { get => isRoll; set => isRoll = value; }
+    public PlayerAttack PlayerAttack { get => playerAttack; }
+    public bool IsHit { get => isHit; set => isHit = value; }
+    public bool IsDead { get => isDead; set => isDead = value; }
+    public bool IsLockOn { get => isLockOn; set => isLockOn = value; }
 }

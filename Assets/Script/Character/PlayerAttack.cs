@@ -42,7 +42,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
             trailRenderer.enabled = true;
             if (targetMonster != null &&  targetMonster.IsStunned)
             {
-                move.RotateToTarget(targetMonster.transform.position);
+                character.RotateToTarget(targetMonster.transform.position);
                 animator.SetTrigger("StrongAttack");
             }
             else
