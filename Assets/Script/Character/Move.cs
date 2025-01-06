@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 
 public class Move : MonoBehaviour
@@ -14,12 +15,13 @@ public class Move : MonoBehaviour
     private PlayerCharacter character;
     private Vector2        moveInput;
     private Animator       animator;
-
+    private Vector3 moveDirection;
     private bool isMove;
     private bool canMove = true;
     private RaycastHit hit;
     private int stepLayer;
     private float maxSlopeAngle = 45.0f;
+
 
     public float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
     public bool CanMove
@@ -53,14 +55,19 @@ public class Move : MonoBehaviour
     {
         if(character.IsDead) return;
 
+        animator.SetFloat("Horizontal", moveInput.x, 0.2f, Time.deltaTime);
+        animator.SetFloat("Vertical", moveInput.y, 0.2f, Time.deltaTime);
 
         IsMove = moveInput.magnitude != 0;
         animator.SetBool("Walk", IsMove);
-        if (CanMove)
+        if (!character.IsRoll)
         {
             Vector3 lookForward = new Vector3(followCamera.CamPos.forward.x, 0.0f, followCamera.CamPos.forward.z).normalized;
             Vector3 lookRight = new Vector3(followCamera.CamPos.right.x, 0.0f, followCamera.CamPos.right.z).normalized;
-            Vector3 moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
+            moveDirection = lookForward * moveInput.y + lookRight * moveInput.x;
+        }
+        if (CanMove)
+        {
             if (IsMove && !character.IsRoll)
             {
                 var look = Quaternion.LookRotation(moveDirection);
@@ -70,7 +77,6 @@ public class Move : MonoBehaviour
             //경사로 판별
             bool onslope = false;
             Ray ray = new Ray(transform.position + Vector3.up, Vector3.down);
-            Debug.DrawRay(transform.position + Vector3.up, Vector3.down, Color.black);
             if (Physics.Raycast(ray, out hit, 1.5f, stepLayer))
             {
                 //upVector와 경사로의 normal값을 이용하여 각도판별
@@ -91,17 +97,18 @@ public class Move : MonoBehaviour
                 playerRigidbody.velocity = moveDirection * MoveSpeed + gravity;
             }
 
-            if (character.IsRoll) 
+            if (character.IsRoll)
             {
+                character.ForceRotatePlayer(moveDirection);
                 if (onslope)
                 {
                     Vector3 dir = Vector3.ProjectOnPlane(transform.forward, hit.normal).normalized;
                     Debug.Log(gravity);
-                    playerRigidbody.velocity = dir * 6.0f + gravity;
+                    playerRigidbody.velocity = dir * 4.0f + gravity;
                 }
                 else
                 {
-                    playerRigidbody.velocity = transform.forward * 6.0f + gravity;
+                    playerRigidbody.velocity = transform.forward * 4.0f + gravity;
                 }
             }
         }
@@ -115,8 +122,6 @@ public class Move : MonoBehaviour
        {
            moveInput = new Vector2(input.x, input.y);
 
-           animator.SetFloat("Horizontal", input.x);
-           animator.SetFloat("Vertical", input.y);
         }
     }
 

@@ -585,6 +585,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 566088183}
     - target: {fileID: 1719223495951815662, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
+      propertyPath: offSet.y
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1719223495951815662, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: camTarget
       value: 
       objectReference: {fileID: 1274119401}
@@ -606,11 +610,15 @@ PrefabInstance:
       objectReference: {fileID: 1920707214}
     - target: {fileID: 3221382552751645354, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.048
+      value: -0.032
+      objectReference: {fileID: 0}
+    - target: {fileID: 3221382552751645354, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.791
       objectReference: {fileID: 0}
     - target: {fileID: 3221382552751645354, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.929
+      value: 1.274
       objectReference: {fileID: 0}
     - target: {fileID: 4713846287012825538, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: highlighter

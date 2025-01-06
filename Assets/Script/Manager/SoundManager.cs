@@ -13,7 +13,7 @@ public enum Sound
 public class SoundManager : SingleTon<SoundManager>
 {
     private float masterVolumeSFX = 0.5f;
-    private float masterVolumeBGM = 0.3f;
+    private float masterVolumeBGM = 0.05f;
 
 
 
@@ -25,7 +25,7 @@ public class SoundManager : SingleTon<SoundManager>
     public float MasterVolumeSFX { get => masterVolumeSFX; set => masterVolumeSFX = value; }
     public float MasterVolumeBGM { get => masterVolumeBGM; set => masterVolumeBGM = value; }
 
-    private void Start()
+    private void Awake()
     {
         sfxPlayer = this.AddComponent<AudioSource>();
         bgmPlayer = this.AddComponent<AudioSource>();
@@ -34,7 +34,6 @@ public class SoundManager : SingleTon<SoundManager>
         SetBGMVolume(MasterVolumeBGM);
 
     }
-
     public void PlayBGM()
     {
         bgmPlayer.loop = true;

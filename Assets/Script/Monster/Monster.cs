@@ -43,6 +43,7 @@ public class Monster : MonoBehaviour , IUpdatable
     private bool isStunned;
     private bool canRotate = true;
     private NavMeshPath path;
+    private bool isDead = false;
 
     private void OnEnable()
     {
@@ -120,6 +121,7 @@ public class Monster : MonoBehaviour , IUpdatable
                 Animator.SetTrigger("Die");
                 StartCoroutine("Die");
                 EventManager.Instance.TriggerAction("KILL", monsterData.name);
+                isDead = true;
                 if (isBoss)
                     StartCoroutine("Ending");
             }
@@ -287,5 +289,6 @@ public class Monster : MonoBehaviour , IUpdatable
     public Animator Animator { get => animator;}
     public bool IsStunned { get => isStunned; set => isStunned = value; }
     public bool CanRotate { get => canRotate;}
+    public bool IsDead { get => isDead; set => isDead = value; }
     public Dictionary<ATTACK_TYPE, MonsterSkillData> MonsterSkillDatas { get => monsterSkillDatas; }
 }

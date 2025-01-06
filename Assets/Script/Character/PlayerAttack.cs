@@ -36,13 +36,24 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         if (character.IsDead)
             return;
 
+        Attack();
+        GuardAndParring();
+        if (targetMonster != null && targetMonster.Hp <= 0)
+            targetMonster = null;
+
+
+    }
+
+    private void Attack()
+    {
         if (Input.GetMouseButtonDown(0) && weapon != null && !IsGuard && !Cursor.visible)
         {
+
             move.StopMovement();
             trailRenderer.enabled = true;
-            if (targetMonster != null &&  targetMonster.IsStunned)
+            if (targetMonster != null && targetMonster.IsStunned)
             {
-                character.RotateToTarget(targetMonster.transform.position);
+                character.RotateToTarget(targetMonster.transform, true);
                 animator.SetTrigger("StrongAttack");
             }
             else
@@ -52,11 +63,6 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
 
             AttackCount = 0;
         }
-        GuardAndParring();
-        if (targetMonster != null && targetMonster.Hp <= 0)
-            targetMonster = null;
-
-
     }
 
     private void GuardAndParring()

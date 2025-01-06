@@ -53,7 +53,7 @@ public class PlayerCharacter : Entity, IUpdatable
     }
 
 
-    void Start()
+    void Awake()
     {
         layerMask = 1 << LayerMask.NameToLayer("Interactive");//
         InitStatus();
@@ -88,10 +88,19 @@ public class PlayerCharacter : Entity, IUpdatable
         }
         if(IsLockOn)
         {
-            var dir = lockOn.Target.position - transform.position;
-            dir.y = 0;
-            Camera.main.transform.rotation = Quaternion.LookRotation(dir);
-            RotateToTarget(lockOn.Target);
+            if(lockOn.Target.IsDead)
+            {
+                animator.SetBool("LockOn", false);
+                IsLockOn = false;
+                lockOn.RemoveTarget(lockOn.Target.transform);
+                lockOn.Target = null;
+            }
+            else
+            {
+                var dir = lockOn.Target.transform.position - transform.position;
+                dir.y = 0;
+                RotateToTarget(lockOn.Target.transform, false);
+            }
         }
     }
 
@@ -103,7 +112,7 @@ public class PlayerCharacter : Entity, IUpdatable
             {
                 bool isMove = DialogueManager.Instance.Interact(hit.collider.gameObject);
                 playerMove.CanMove = !isMove;
-                RotateToTarget(hit.transform);
+                RotateToTarget(hit.transform,false);
             }
             if(hit.transform.CompareTag("Chest"))
             {
@@ -113,17 +122,36 @@ public class PlayerCharacter : Entity, IUpdatable
         }
     }
 
-    private void RotateToTarget(Transform target)
+    public void RotateToTarget(Transform target,bool immediately)
     {
-        Vector3 directionToTarget = (target.position - transform.position).normalized;
-        directionToTarget.y = 0;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        if (!IsRoll)
+        {
+            if(immediately)
+            {
+                Vector3 directionToTarget = (target.position - transform.position).normalized;
+                directionToTarget.y = 0;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = targetRotation;
+            }
+            else
+            {
+                Vector3 directionToTarget = (target.position - transform.position).normalized;
+                directionToTarget.y = 0;
+                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+                transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,10.0f * Time.deltaTime);
+            }
+
+        }
+
+    }
+    public void ForceRotatePlayer(Vector3 direction)
+    {
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = targetRotation;
     }
-
     private void Roll()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll &&!isDrink && !isHit)
+        if (Input.GetKeyDown(KeyCode.Space) && Stamina >= staminerConsumption && !IsRoll &&!isDrink && !isHit && playerMove.IsMove)
         {
             animator.SetTrigger("Roll");
             IsRoll = true;
@@ -218,6 +246,18 @@ public class PlayerCharacter : Entity, IUpdatable
     }
     public void OnRun(InputAction.CallbackContext value)
     {
+        if (IsLockOn)
+        {
+            if (runCoroutine != null)
+            {
+                playerMove.MoveSpeed = 2.0f;
+                animator.SetBool("Run", false);
+                StopCoroutine(runCoroutine);
+                runCoroutine = null;
+                StartCoroutine("Recovery");
+            }
+            return;
+        } 
         if (value.started)
         {
             playerMove.MoveSpeed = 5.0f;
@@ -230,6 +270,7 @@ public class PlayerCharacter : Entity, IUpdatable
             playerMove.MoveSpeed = 2.0f;
             animator.SetBool("Run", false);
             StopCoroutine(runCoroutine);
+            runCoroutine = null;
             StartCoroutine("Recovery");
         }
     }
@@ -244,19 +285,18 @@ public class PlayerCharacter : Entity, IUpdatable
     {
         if (value.performed)
         {
+            if (lockOn.Target == null)
+                return;
+
             if(!IsLockOn)
             {
-
                 animator.SetBool("LockOn", true);
                 IsLockOn=true;
-                Debug.Log("LOCK_ON_TARGET" + lockOn.Target.name);
             }
             else
             {
-
                 animator.SetBool("LockOn", false);
                 IsLockOn = false;
-                Debug.Log("end");
             }
         }
     }
@@ -317,13 +357,7 @@ public class PlayerCharacter : Entity, IUpdatable
         LoadingSceneContoller.LoadScene("StartScene");
         yield break ;
     }
-    public void RotateToTarget(Vector3 target)
-    {
-        Vector3 directionToTarget = (target - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-        transform.rotation = targetRotation;
 
-    }
 
     public bool IsRoll { get => isRoll; set => isRoll = value; }
     public PlayerAttack PlayerAttack { get => playerAttack; }
