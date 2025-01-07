@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Net.NetworkInformation;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -33,7 +34,7 @@ public class PlayerCharacter : Entity, IUpdatable
     private bool isDead;
     private LockOn lockOn;
     private bool isLockOn=false;
-    
+    private LockOnUI lockOnUI;
     public override float MaxHP => baseHp;
 
     public override float MaxStamina => 100;
@@ -65,6 +66,7 @@ public class PlayerCharacter : Entity, IUpdatable
         playerMove = GetComponent<Move>();
         capsuleCollider = GetComponent<CapsuleCollider>();
         lockOn = GetComponentInChildren<LockOn>();
+        lockOnUI = FindObjectOfType<LockOnUI>();
     }
     public void FixedUpdateWork()
     {
@@ -94,12 +96,14 @@ public class PlayerCharacter : Entity, IUpdatable
                 IsLockOn = false;
                 lockOn.RemoveTarget(lockOn.Target.transform);
                 lockOn.Target = null;
+                lockOnUI.gameObject.SetActive(false);
             }
             else
             {
                 var dir = lockOn.Target.transform.position - transform.position;
                 dir.y = 0;
                 RotateToTarget(lockOn.Target.transform, false);
+                lockOnUI.transform.position = lockOn.Target.LockOnPosition;
             }
         }
     }
@@ -292,11 +296,13 @@ public class PlayerCharacter : Entity, IUpdatable
             {
                 animator.SetBool("LockOn", true);
                 IsLockOn=true;
+                lockOnUI.gameObject.SetActive(true);
             }
             else
             {
                 animator.SetBool("LockOn", false);
                 IsLockOn = false;
+                lockOnUI.gameObject.SetActive(false);
             }
         }
     }

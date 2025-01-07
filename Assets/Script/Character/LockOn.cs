@@ -71,6 +71,6 @@ public class LockOn : MonoBehaviour
     }
     public void RemoveTarget(Transform target)
     {
-        targets.Remove(target);
+        bool chk = targets.Remove(target);
     }
 }

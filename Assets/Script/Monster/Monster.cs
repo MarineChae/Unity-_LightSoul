@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,7 +12,7 @@ public enum ATTACK_TYPE
     Skill2,
 }
 
-public class Monster : MonoBehaviour , IUpdatable
+public class Monster : Entity, IUpdatable
 {
 
     public MonsterData monsterData;
@@ -23,17 +24,16 @@ public class Monster : MonoBehaviour , IUpdatable
     [SerializeField]
     private bool isDummy = false;
     [SerializeField]
-    private SerializedDictianary<ATTACK_TYPE,int> skillDic;
+    private SerializedDictianary<ATTACK_TYPE, int> skillDic;
     [SerializeField]
     private AudioClip attackSound;
     [SerializeField]
     private AudioClip[] skillSound;
     [SerializeField]
     private bool isBoss;
-    private Dictionary<ATTACK_TYPE,MonsterSkillData> monsterSkillDatas = new Dictionary<ATTACK_TYPE,MonsterSkillData>();
+    private Dictionary<ATTACK_TYPE, MonsterSkillData> monsterSkillDatas = new Dictionary<ATTACK_TYPE, MonsterSkillData>();
     private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
-    private int hp;
     private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
@@ -44,6 +44,9 @@ public class Monster : MonoBehaviour , IUpdatable
     private bool canRotate = true;
     private NavMeshPath path;
     private bool isDead = false;
+    private MonsterHpUI monsterHpUI;
+    private Collider monsterCollider;
+    private Vector3 lockOnPosition;
 
     private void OnEnable()
     {
@@ -63,22 +66,25 @@ public class Monster : MonoBehaviour , IUpdatable
     void Start()
     {
         InitMonsterData();
+        InitBehaviorTree();
         monsterRangeChecker = GetComponentInChildren<MonsterRangeChecker>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         navMeshAgent.speed = walkSpeed;
         animator = GetComponent<Animator>();
         monsterAttack = GetComponentInChildren<MonsterAttack>();
-        InitBehaviorTree();
+        monsterHpUI = GetComponentInChildren<MonsterHpUI>();
+        monsterCollider = GetComponent<Collider>();
+
     }
 
     private void InitMonsterData()
     {
         var jsonData = DataManager.Instance.dicMonsterDatas[monsterData.id];
         monsterData = jsonData;
-        Hp = monsterData.hp;
+        HP = monsterData.hp;
         walkSpeed = monsterData.moveSpeed;
 
-        for(int i = 0; i < skillDic.keys.Count; i++) 
+        for (int i = 0; i < skillDic.keys.Count; i++)
         {
             var original = DataManager.Instance.dicMonsterSkillDatas[skillDic.values[i]];
             string json = JsonConvert.SerializeObject(original);
@@ -87,7 +93,7 @@ public class Monster : MonoBehaviour , IUpdatable
             MonsterSkillDatas.Add(skillDic.keys[i], copy);
         }
 
-       
+
 
     }
 
@@ -109,10 +115,10 @@ public class Monster : MonoBehaviour , IUpdatable
     public void UpdateWork()
     {
 
-        if(behaviorTreeBase.GetRunState())
+        if (behaviorTreeBase.GetRunState())
         {
             behaviorTreeBase.RunTree();
-            if (Hp <= 0)
+            if (HP <= 0)
             {
                 GetComponent<CapsuleCollider>().enabled = false;
                 //navMeshAgent.enabled = false;
@@ -124,10 +130,11 @@ public class Monster : MonoBehaviour , IUpdatable
                 isDead = true;
                 if (isBoss)
                     StartCoroutine("Ending");
+                monsterHpUI.gameObject.SetActive(false);
             }
             else
             {
-                foreach(var skill in monsterSkillDatas)
+                foreach (var skill in monsterSkillDatas)
                 {
                     skill.Value.remainCoolDown += Time.deltaTime;
                 }
@@ -143,14 +150,15 @@ public class Monster : MonoBehaviour , IUpdatable
             }
             if (monsterRangeChecker.Target != null)
             {
-                RotateToTarget(monsterRangeChecker.Target.transform,false);
+                RotateToTarget(monsterRangeChecker.Target.transform, false);
             }
             navMeshAgent.velocity = navMeshAgent.desiredVelocity;
+            lockOnPosition = monsterCollider.bounds.center;
         }
     }
     public void LateUpdateWork()
     {
-   
+
     }
 
     public bool RandomPoint(out Vector3 result)
@@ -163,9 +171,9 @@ public class Monster : MonoBehaviour , IUpdatable
             {
                 //Sampling한 위치의 navmesh가 끊겼는지 갈 수 없는 곳인지 판단하기 위해 사용
                 //체크하지 않으면 네비메쉬가 끊겨있는 곳으로 계속해서 이동하려함 
-                if(NavMesh.CalculatePath(transform.position, hit.position,NavMesh.AllAreas, path))
+                if (NavMesh.CalculatePath(transform.position, hit.position, NavMesh.AllAreas, path))
                 {
-                    if(path.status == NavMeshPathStatus.PathComplete)
+                    if (path.status == NavMeshPathStatus.PathComplete)
                     {
                         result = hit.position;
                         return true;
@@ -174,7 +182,7 @@ public class Monster : MonoBehaviour , IUpdatable
                 }
             }
         }
-        
+
         result = transform.position;
         return true;
     }
@@ -192,7 +200,7 @@ public class Monster : MonoBehaviour , IUpdatable
     }
     public void AttackStart()
     {
-        if(ATTACK_TYPE.Melee == currentAttackType)
+        if (ATTACK_TYPE.Melee == currentAttackType)
             monsterAttack.AllowAttack(monsterData.meleeDamage);
         else
             monsterAttack.AllowSkillAttack(monsterAttack.transform.position,
@@ -263,7 +271,7 @@ public class Monster : MonoBehaviour , IUpdatable
         yield return new WaitForSeconds(1.0f);
         var mat = GetComponentInChildren<SkinnedMeshRenderer>().material = dissolveMaterial;
         float time = -1.0f;
-        while(true)
+        while (true)
         {
             time += Time.deltaTime;
             mat.SetFloat("_time", time);
@@ -282,13 +290,38 @@ public class Monster : MonoBehaviour , IUpdatable
         LoadingSceneContoller.LoadScene("StartScene");
         yield break;
     }
-    public int Hp { get => hp; set => hp = value; }
+
+    public override void TakeDamage(float damage)
+    {
+        if(damage > MaxHP * 0.2f)
+            Animator.SetTrigger("HardHit");
+        else
+            Animator.SetTrigger("Hit");
+
+        //피격사운드
+        SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
+
+        HP -= damage;
+    }
+
+    public override void UseStamina(float stamina)
+    {
+
+    }
+
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
     public bool IsAttack { get => isAttack; set => isAttack = value; }
     public bool IsParried { get => isParried; set => isParried = value; }
-    public Animator Animator { get => animator;}
+    public Animator Animator { get => animator; }
     public bool IsStunned { get => isStunned; set => isStunned = value; }
-    public bool CanRotate { get => canRotate;}
+    public bool CanRotate { get => canRotate; }
     public bool IsDead { get => isDead; set => isDead = value; }
+    public Vector3 LockOnPosition { get => lockOnPosition; set => lockOnPosition = value; }
     public Dictionary<ATTACK_TYPE, MonsterSkillData> MonsterSkillDatas { get => monsterSkillDatas; }
+
+    public override float MaxHP => monsterData.hp;
+
+    public override float MaxStamina => throw new System.NotImplementedException();
+
+    public override float StaminaRecovery => throw new System.NotImplementedException();
 }

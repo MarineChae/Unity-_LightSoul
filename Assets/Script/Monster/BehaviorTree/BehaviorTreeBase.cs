@@ -106,7 +106,7 @@ public class BehaviorTreeBase : MonoBehaviour
     protected ReturnCode ChasePlayer()
     {
    
-        if (rangeChecker.Target != null && monster.Hp > 0)
+        if (rangeChecker.Target != null && monster.HP > 0)
         {
             agent.SetDestination(rangeChecker.Target.position);
             return ReturnCode.SUCCESS;

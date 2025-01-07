@@ -30,7 +30,8 @@ public class UIManager : SingleTon<UIManager>
         potionSlot = FindObjectOfType<PotionSlot>();
         pauseUI = FindObjectOfType<PauseUI>();
         settingUI = FindObjectOfType<SettingUI>();
-        settingUI.gameObject.SetActive(false);
+        if(settingUI != null)
+            settingUI.gameObject.SetActive(false);
     }
 
     void Update()

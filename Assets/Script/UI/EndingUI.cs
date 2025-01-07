@@ -22,7 +22,7 @@ public class EndingUI : MonoBehaviour
         if (monster != null)
         {
 
-            if (monster.Hp <= 0)
+            if (monster.HP <= 0)
             {
                 end = true;
                 StartCoroutine("Die");

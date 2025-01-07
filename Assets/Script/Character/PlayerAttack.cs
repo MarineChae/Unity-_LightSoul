@@ -38,7 +38,7 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
 
         Attack();
         GuardAndParring();
-        if (targetMonster != null && targetMonster.Hp <= 0)
+        if (targetMonster != null && targetMonster.HP <= 0)
             targetMonster = null;
 
 

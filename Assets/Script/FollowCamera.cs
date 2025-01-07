@@ -49,7 +49,7 @@ public class FollowCamera : MonoBehaviour, IUpdatable
             CheckObstruct();
 
             if (player.IsLockOn)
-                TargetLook(lockOn.Target.transform);
+                TargetLook(lockOn.Target.LockOnPosition);
             else
                 CameraLook();
         }
@@ -57,9 +57,9 @@ public class FollowCamera : MonoBehaviour, IUpdatable
 
     }
 
-    private void TargetLook(Transform target)
+    private void TargetLook(Vector3 target)
     {
-        Vector3 direction = target.position - camPos.position;
+        Vector3 direction = target - camPos.position;
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         camPos.rotation = Quaternion.Slerp(camPos.rotation, targetRotation, cameraSensitive * Time.deltaTime);
     }
@@ -71,6 +71,10 @@ public class FollowCamera : MonoBehaviour, IUpdatable
         if (Physics.Raycast(ray, out RaycastHit hit, ditanceToTarget,ignoreLayer))
         {
             transform.position = hit.point;
+        }
+        else
+        {
+            //transform.position = camPos.position;
         }
     }
 

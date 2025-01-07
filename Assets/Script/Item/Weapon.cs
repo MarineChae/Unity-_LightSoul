@@ -45,27 +45,19 @@ public class Weapon : MonoBehaviour
             if (other.gameObject.CompareTag("Monster"))
             {
                 var monster = other.GetComponentInChildren<Monster>();
-                if(monster.IsStunned)
+                if (monster.IsStunned)
                 {
-                    monster.Hp -= itemData.damage * 3;
-                    monster.Animator.SetTrigger("HardHit");
+                    monster.TakeDamage(itemData.damage * 3);
                 }
                 else
                 {
-                    monster.Animator.SetTrigger("Hit");
-                    monster.Hp -= itemData.damage;
+                    monster.TakeDamage(itemData.damage);
                 }
+                HitEffect(other);
+
                 //몬스터가 뒤돌아보고 있는 경우 플레이어 쪽으로 회전시키게
-                if(monster.monsterRangeChecker.Target == null)
-                    monster.RotateToTarget(transform,true);
-                //피격이펙트
-                Vector3 dir = (other.transform.position + transform.position) * 0.5f;
-                var eff = Instantiate(hitPrefab, dir, Quaternion.identity);
-                //피격사운드
-                SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
-                //이펙트가 끝나면 destory하는 코루틴
-                StartCoroutine("EffectCoroutine", eff);
-                
+                if (monster.monsterRangeChecker.Target == null)
+                    monster.RotateToTarget(transform, true);
             }
         }
         else if (this.CompareTag("Shield"))
@@ -73,19 +65,25 @@ public class Weapon : MonoBehaviour
             //플레이어의 방패와 몬스터의 공격이 맞닿으면 패링처리
             if (other.gameObject.CompareTag("MonsterWeapon") && !playerCharacter.IsHit)
             {
-                //hitEffect
-                Vector3 dir = (other.transform.position + transform.position) * 0.5f;
-                var eff = Instantiate(hitPrefab, dir, Quaternion.identity);
-                StartCoroutine("EffectCoroutine", eff);
+                HitEffect(other);
                 ///sound
                 SoundManager.Instance.PlaySFXSound("Sound/HammerImpact12");
-                ///////////////
+
                 var monster = other.GetComponentInParent<Monster>();
                 monster.IsParried = true;
                 monster.Animator.SetTrigger("Stunned");
                 playerAttack.TargetMonster = monster;
             }
         }
+    }
+
+    private void HitEffect(Collider other)
+    {
+        //피격이펙트
+        Vector3 dir = (other.transform.position + transform.position) * 0.5f;
+        var eff = Instantiate(hitPrefab, dir, Quaternion.identity);
+        //이펙트가 끝나면 destory하는 코루틴
+        StartCoroutine("EffectCoroutine", eff);
     }
 
     private IEnumerator EffectCoroutine(GameObject effet)

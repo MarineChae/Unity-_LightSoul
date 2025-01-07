@@ -12,10 +12,8 @@ public enum Sound
 
 public class SoundManager : SingleTon<SoundManager>
 {
-    private float masterVolumeSFX = 0.5f;
+    private float masterVolumeSFX = 0.2f;
     private float masterVolumeBGM = 0.05f;
-
-
 
     Dictionary<string,AudioClip> audioClipDic = new Dictionary<string,AudioClip>();
 
