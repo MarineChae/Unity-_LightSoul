@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/// <summary>
+/// 매니저들을 한번에 관리하기위한 스크립트
+/// </summary>
 public class Manager : MonoBehaviour
 {
 

@@ -8,8 +8,6 @@ public class SkeletonBehavior : BehaviorTreeBase
         Debug.Log("Wolf");
         rootNode = new SelectNode();
 
-
-
         DecoratorNode inSkillRange = new DecoratorNode(() => InRange(4.0f));
         rootNode.childList.Add(inSkillRange);
         DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill1));
@@ -28,7 +26,7 @@ public class SkeletonBehavior : BehaviorTreeBase
         TaskNode skill2 = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill2));
         Skill2Sequence.childList.Add(skill2);
 
-        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.monsterData.attackRange));
+        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.MonsterData.attackRange));
         rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
         inRange.child = attackSequence;

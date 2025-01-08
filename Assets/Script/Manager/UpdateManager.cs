@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 업데이트 최적화를 위한 매니저 클래스
+/// </summary>
 public class UpdateManager : MonoBehaviour
 {
     private static Action updateWorks;

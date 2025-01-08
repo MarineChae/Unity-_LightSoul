@@ -10,16 +10,11 @@ public class LockOn : MonoBehaviour
     private readonly float viewRadius = 10.0f;
     private PlayerCharacter character;
 
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Awake()
     {
         character = GetComponentInParent<PlayerCharacter>();
     }
-    public Monster Target
-    {
-        get { return target; }
-        set { target = value; }
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Monster"))
@@ -34,7 +29,7 @@ public class LockOn : MonoBehaviour
             Vector3 dirToTarget = (other.transform.position - transform.position).normalized;
             if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
             {
-                UpdateNearPlayer();
+                UpdateNearMonster();
             }
 
         }
@@ -53,13 +48,16 @@ public class LockOn : MonoBehaviour
         }
 
     }
-    private void UpdateNearPlayer()
+    ///////////////////////////////Private Method///////////////////////////////////
+    
+    //플레이어 주변의 몬스터 갱신
+    private void UpdateNearMonster()
     {
         float closestDist = viewRadius * viewRadius;
 
         foreach (Transform targetMonster in targets)
-        {//fake null 확인
-
+        {
+            //fake null 확인
             float dist = (targetMonster.position - transform.position).sqrMagnitude;
 
             if (dist < closestDist)
@@ -69,8 +67,19 @@ public class LockOn : MonoBehaviour
             }
         }
     }
+
+    ///////////////////////////////Public Method///////////////////////////////////
     public void RemoveTarget(Transform target)
     {
-        bool chk = targets.Remove(target);
+        targets.Remove(target);
     }
+
+    /////////////////////////////// Property ///////////////////////////////////
+    public Monster Target
+    {
+        get { return target; }
+        set { target = value; }
+    }
+
+
 }

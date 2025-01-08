@@ -1,4 +1,5 @@
 using System;
+
 [Serializable]
 public class DialogueData
 {
@@ -7,7 +8,6 @@ public class DialogueData
 
 
 }
-
 
 [Serializable]
 public class DialogueDataArray

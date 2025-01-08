@@ -3,6 +3,10 @@ using UnityEngine.AI;
 using UnityEngine.EventSystems;
 
 
+/// <summary>
+/// Deprecated
+/// Change to ThridPersonView from TopView
+/// </summary>
 public class ClickMove : MonoBehaviour ,IUpdatable
 {
 

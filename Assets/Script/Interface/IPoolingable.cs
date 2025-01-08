@@ -2,7 +2,8 @@ using UnityEngine;
 
 public enum PoolingType
 {
-    WAYPOINT = 0
+    WAYPOINT = 0,
+    EFFECT = 1
 }
 
 public interface IPoolingable

@@ -18,7 +18,7 @@ public class WereWolfBehavior : BehaviorTreeBase
 
 
 
-        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.monsterData.attackRange));
+        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.MonsterData.attackRange));
         rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
         inRange.child = attackSequence;

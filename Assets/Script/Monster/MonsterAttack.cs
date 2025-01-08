@@ -27,7 +27,7 @@ public class MonsterAttack : MonoBehaviour
 
     public void ValidateAttack()
     {
-        if (!monster.IsParried && targetCharacter != null && !targetCharacter.IsDead)
+        if (!monster.IsStunned && targetCharacter != null && !targetCharacter.IsDead)
         {
             targetCharacter.TakeDamage(attackDamage);
             Vector3 dir = targetCharacter.transform.position + Vector3.up;
@@ -38,7 +38,7 @@ public class MonsterAttack : MonoBehaviour
     }
     public void StopAttack()
     {
-        monster.IsParried = false;
+        monster.IsStunned = false;
         attackCollider.enabled = false;
         targetCharacter = null;
     }

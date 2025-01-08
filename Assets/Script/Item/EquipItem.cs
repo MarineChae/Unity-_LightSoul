@@ -4,26 +4,25 @@ public class EquipItem : MonoBehaviour
 {
     [SerializeField]
     private Object itemPrefab;
-    private readonly ItemData itemData;
-    [SerializeField] 
+    [SerializeField]
     private GameObject itemPrefabGameObject;
+    public Weapon weaponData;
+    private readonly ItemData itemData;
     private bool isInit = false;
     private bool isWeapon = false;
-    public bool IsWeapon
-    {
-        get { return isWeapon; }
-        set { isWeapon = value; }
-    }
-    public Weapon weaponData;
 
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Start()
     {
         if (!isInit)
             Init(itemData);
 
-           
     }
 
+    /////////////////////////////// public Method///////////////////////////////////
+    
+    //아이템 초기화
     public void Init(ItemData data)
     {
         if (data == null) return;
@@ -34,7 +33,7 @@ public class EquipItem : MonoBehaviour
             gameObject.AddComponent<CapsuleCollider>();
             weaponData = gameObject.AddComponent<Weapon>();
             weaponData.InitCollider();
-            weaponData.hitPrefab = Resources.Load<GameObject>(data.hitEffect);
+            weaponData.HitPrefab = Resources.Load<GameObject>(data.hitEffect);
             var trail = Instantiate(itemPrefabGameObject);
             trail.transform.parent = transform;
             weaponData.ItemData = data;
@@ -45,7 +44,7 @@ public class EquipItem : MonoBehaviour
             gameObject.AddComponent<CapsuleCollider>().isTrigger = true;
             weaponData = gameObject.AddComponent<Weapon>();
             weaponData.InitCollider();
-            weaponData.hitPrefab = Resources.Load<GameObject>(data.hitEffect);
+            weaponData.HitPrefab = Resources.Load<GameObject>(data.hitEffect);
             weaponData.ItemData = data;
         }
     }
@@ -57,4 +56,10 @@ public class EquipItem : MonoBehaviour
        
     }
 
+    /////////////////////////////// Property ///////////////////////////////////
+    public bool IsWeapon
+    {
+        get { return isWeapon; }
+        set { isWeapon = value; }
+    }
 }

@@ -1,6 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 
+/// <summary>
+/// 몬스터 시야를 확인하기위한 디버깅용 스크립트
+/// </summary>
 #if DEBUG
 
 [CustomEditor(typeof(MonsterRangeChecker))]

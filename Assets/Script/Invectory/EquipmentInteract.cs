@@ -1,7 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-
+/// <summary>
+/// 아이템 장착을 위한 스크립트
+/// </summary>
 [RequireComponent(typeof(EquipmentSlot))]
 public class EquipmentInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -17,7 +19,6 @@ public class EquipmentInteract : MonoBehaviour, IPointerEnterHandler, IPointerEx
     {
         inventoryController.IsDropItem = false;
         inventoryController.SelctedEquipmentSlot = equipmentInventory;
-        Debug.Log("equipmentInventory");
     }
 
     public void OnPointerExit(PointerEventData eventData)

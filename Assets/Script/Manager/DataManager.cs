@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/// <summary>
+/// 각종 게임에 사용하는 데이터들을 json을 사용해 관리하는 매니저
+/// </summary>
 public class DataManager : SingleTon<DataManager>
 {
 

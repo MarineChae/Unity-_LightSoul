@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,14 +15,10 @@ public enum ATTACK_TYPE
 public class Monster : Entity, IUpdatable
 {
 
-    public MonsterData monsterData;
-    public MonsterRangeChecker monsterRangeChecker;
     [SerializeField]
     private float patrolRange;
     [SerializeField]
     private Material dissolveMaterial;
-    [SerializeField]
-    private bool isDummy = false;
     [SerializeField]
     private SerializedDictianary<ATTACK_TYPE, int> skillDic;
     [SerializeField]
@@ -31,22 +27,25 @@ public class Monster : Entity, IUpdatable
     private AudioClip[] skillSound;
     [SerializeField]
     private bool isBoss;
+    [SerializeField]
+    private MonsterData monsterData;
+    private MonsterRangeChecker monsterRangeChecker;
     private Dictionary<ATTACK_TYPE, MonsterSkillData> monsterSkillDatas = new Dictionary<ATTACK_TYPE, MonsterSkillData>();
     private MonsterAttack monsterAttack;
     private BehaviorTreeBase behaviorTreeBase;
-    private float walkSpeed;
     private NavMeshAgent navMeshAgent;
     private Animator animator;
-    private bool isAttack;
-    private ATTACK_TYPE currentAttackType;
-    private bool isParried;
-    private bool isStunned;
-    private bool canRotate = true;
     private NavMeshPath path;
-    private bool isDead = false;
     private MonsterHpUI monsterHpUI;
     private Collider monsterCollider;
     private Vector3 lockOnPosition;
+    private bool isAttack;
+    private bool isStunned;
+    private bool canRotate = true;
+    private bool isDead = false;
+    private ATTACK_TYPE currentAttackType;
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
 
     private void OnEnable()
     {
@@ -67,9 +66,9 @@ public class Monster : Entity, IUpdatable
     {
         InitMonsterData();
         InitBehaviorTree();
-        monsterRangeChecker = GetComponentInChildren<MonsterRangeChecker>();
+        MonsterRangeChecker = GetComponentInChildren<MonsterRangeChecker>();
         navMeshAgent = GetComponent<NavMeshAgent>();
-        navMeshAgent.speed = walkSpeed;
+        navMeshAgent.speed = MonsterData.moveSpeed;
         animator = GetComponent<Animator>();
         monsterAttack = GetComponentInChildren<MonsterAttack>();
         monsterHpUI = GetComponentInChildren<MonsterHpUI>();
@@ -77,36 +76,6 @@ public class Monster : Entity, IUpdatable
 
     }
 
-    private void InitMonsterData()
-    {
-        var jsonData = DataManager.Instance.dicMonsterDatas[monsterData.id];
-        monsterData = jsonData;
-        HP = monsterData.hp;
-        walkSpeed = monsterData.moveSpeed;
-
-        for (int i = 0; i < skillDic.keys.Count; i++)
-        {
-            var original = DataManager.Instance.dicMonsterSkillDatas[skillDic.values[i]];
-            string json = JsonConvert.SerializeObject(original);
-
-            MonsterSkillData copy = JsonConvert.DeserializeObject<MonsterSkillData>(json);
-            MonsterSkillDatas.Add(skillDic.keys[i], copy);
-        }
-
-
-
-    }
-
-    //behaviorTree 초기화
-    private void InitBehaviorTree()
-    {
-        var obj = new GameObject("BehaviorTree");
-        obj.transform.position = this.transform.position;
-        obj.transform.parent = this.transform;
-        DataManager.Instance.dicBehaviorFuncs[monsterData.behaviorTreeName](obj);
-        behaviorTreeBase = obj.GetComponent<BehaviorTreeBase>();
-        behaviorTreeBase.Monster = this;
-    }
 
     public void FixedUpdateWork()
     {
@@ -120,17 +89,7 @@ public class Monster : Entity, IUpdatable
             behaviorTreeBase.RunTree();
             if (HP <= 0)
             {
-                GetComponent<CapsuleCollider>().enabled = false;
-                //navMeshAgent.enabled = false;
-                behaviorTreeBase.ChangeTreeState();
-                navMeshAgent.ResetPath();
-                Animator.SetTrigger("Die");
-                StartCoroutine("Die");
-                EventManager.Instance.TriggerAction("KILL", monsterData.name);
-                isDead = true;
-                if (isBoss)
-                    StartCoroutine("Ending");
-                monsterHpUI.gameObject.SetActive(false);
+                MonsterDie();
             }
             else
             {
@@ -148,24 +107,87 @@ public class Monster : Entity, IUpdatable
                     Animator.SetBool("Walk", false);
                 }
             }
-            if (monsterRangeChecker.Target != null)
+            if (MonsterRangeChecker.Target != null)
             {
-                RotateToTarget(monsterRangeChecker.Target.transform, false);
+                RotateToTarget(MonsterRangeChecker.Target.transform, false);
             }
             navMeshAgent.velocity = navMeshAgent.desiredVelocity;
             lockOnPosition = monsterCollider.bounds.center;
         }
     }
+
+    private void MonsterDie()
+    {
+        GetComponent<CapsuleCollider>().enabled = false;
+        //navMeshAgent.enabled = false;
+        behaviorTreeBase.ChangeTreeState();
+        navMeshAgent.ResetPath();
+        Animator.SetTrigger("Die");
+        StartCoroutine("Die");
+        EventManager.Instance.TriggerAction("KILL", MonsterData.name);
+        isDead = true;
+        if (isBoss)
+            StartCoroutine("Ending");
+        monsterHpUI.gameObject.SetActive(false);
+    }
+
     public void LateUpdateWork()
     {
 
     }
 
+    /////////////////////////////// Override Method///////////////////////////////////
+    public override void TakeDamage(float damage)
+    {
+        if (damage > MaxHP * 0.2f)
+            Animator.SetTrigger("HardHit");
+        else
+            Animator.SetTrigger("Hit");
+
+        //피격사운드
+        SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
+
+        HP -= damage;
+    }
+
+    public override void UseStamina(float stamina)
+    {
+        throw new NotImplementedException();
+    }
+    /////////////////////////////// Private Method///////////////////////////////////
+    private void InitMonsterData()
+    {
+        var jsonData = DataManager.Instance.dicMonsterDatas[MonsterData.id];
+        MonsterData = jsonData;
+        HP = MonsterData.hp;
+        for (int i = 0; i < skillDic.keys.Count; i++)
+        {
+            var original = DataManager.Instance.dicMonsterSkillDatas[skillDic.values[i]];
+            string json = JsonConvert.SerializeObject(original);
+
+            MonsterSkillData copy = JsonConvert.DeserializeObject<MonsterSkillData>(json);
+            MonsterSkillDatas.Add(skillDic.keys[i], copy);
+        }
+
+    }
+
+    //behaviorTree 초기화
+    private void InitBehaviorTree()
+    {
+        var obj = new GameObject("BehaviorTree");
+        obj.transform.position = this.transform.position;
+        obj.transform.parent = this.transform;
+        DataManager.Instance.dicBehaviorFuncs[MonsterData.behaviorTreeName](obj);
+        behaviorTreeBase = obj.GetComponent<BehaviorTreeBase>();
+        behaviorTreeBase.Monster = this;
+    }
+
+    /////////////////////////////// Public Method///////////////////////////////////
     public bool RandomPoint(out Vector3 result)
     {
         for (int i = 0; i < 20; i++)
         {
-            Vector3 randomPoint = transform.position + Random.insideUnitSphere * patrolRange;
+            Vector3 randomPoint = transform.position + UnityEngine.Random.insideUnitSphere * patrolRange;
             NavMeshHit hit;
             if (NavMesh.SamplePosition(randomPoint, out hit, patrolRange, NavMesh.AllAreas))
             {
@@ -201,15 +223,27 @@ public class Monster : Entity, IUpdatable
     public void AttackStart()
     {
         if (ATTACK_TYPE.Melee == currentAttackType)
-            monsterAttack.AllowAttack(monsterData.meleeDamage);
+            monsterAttack.AllowAttack(MonsterData.meleeDamage);
         else
             monsterAttack.AllowSkillAttack(monsterAttack.transform.position,
-                                           monsterRangeChecker.Target.transform.position,
+                                           MonsterRangeChecker.Target.transform.position,
                                            MonsterSkillDatas[currentAttackType].skillDamage,
                                            MonsterSkillDatas[currentAttackType].skillType);
 
 
     }
+    public void RotateToTarget(Transform target, bool immediately)
+    {
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        // 부드럽게 회전
+        if (immediately)
+            transform.rotation = targetRotation;
+        else
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5.0f);
+    }
+
+    /////////////////////////////// Animator Event /////////////////////////////////
     public void ResetHit()
     {
         animator.ResetTrigger("Hit");
@@ -229,7 +263,7 @@ public class Monster : Entity, IUpdatable
     }
     public void MoveStart()
     {
-        navMeshAgent.speed = monsterData.moveSpeed;
+        navMeshAgent.speed = MonsterData.moveSpeed;
     }
     public void StartStun()
     {
@@ -256,16 +290,8 @@ public class Monster : Entity, IUpdatable
     {
         SoundManager.Instance.PlaySFXSound(skillSound[num]);
     }
-    internal void RotateToTarget(Transform target, bool immediately)
-    {
-        Vector3 directionToTarget = (target.position - transform.position).normalized;
-        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-        // 부드럽게 회전
-        if (immediately)
-            transform.rotation = targetRotation;
-        else
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5.0f);
-    }
+
+    /////////////////////////////// Coroutine //////////////////////////
     IEnumerator Die()
     {
         yield return new WaitForSeconds(1.0f);
@@ -291,37 +317,18 @@ public class Monster : Entity, IUpdatable
         yield break;
     }
 
-    public override void TakeDamage(float damage)
-    {
-        if(damage > MaxHP * 0.2f)
-            Animator.SetTrigger("HardHit");
-        else
-            Animator.SetTrigger("Hit");
-
-        //피격사운드
-        SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
-
-        HP -= damage;
-    }
-
-    public override void UseStamina(float stamina)
-    {
-
-    }
-
+    /////////////////////////////// Property /////////////////////////////////
     public float PatrolRange { get => patrolRange; set => patrolRange = value; }
     public bool IsAttack { get => isAttack; set => isAttack = value; }
-    public bool IsParried { get => isParried; set => isParried = value; }
     public Animator Animator { get => animator; }
     public bool IsStunned { get => isStunned; set => isStunned = value; }
     public bool CanRotate { get => canRotate; }
     public bool IsDead { get => isDead; set => isDead = value; }
     public Vector3 LockOnPosition { get => lockOnPosition; set => lockOnPosition = value; }
     public Dictionary<ATTACK_TYPE, MonsterSkillData> MonsterSkillDatas { get => monsterSkillDatas; }
-
-    public override float MaxHP => monsterData.hp;
-
+    public override float MaxHP => MonsterData.hp;
     public override float MaxStamina => throw new System.NotImplementedException();
-
     public override float StaminaRecovery => throw new System.NotImplementedException();
+    public MonsterData MonsterData { get => monsterData; set => monsterData = value; }
+    public MonsterRangeChecker MonsterRangeChecker { get => monsterRangeChecker; set => monsterRangeChecker = value; }
 }

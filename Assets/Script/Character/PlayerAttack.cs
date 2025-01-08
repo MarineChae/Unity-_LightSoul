@@ -4,18 +4,20 @@ using UnityEngine.InputSystem;
 public class PlayerAttack : MonoBehaviour , IUpdatable
 {
     private Animator animator;
-    private int acttackCount = Animator.StringToHash("AttackCount");
     private Weapon weapon;
     private Weapon shield;
-    private bool isGuard;
     private TrailRenderer trailRenderer;
     private Move move;
+    private Monster targetMonster;
+    private PlayerCharacter character;
+    private InputAction.CallbackContext inputContition;
+    private bool isGuard;
+    private int acttackCount = Animator.StringToHash("AttackCount");
     private bool guardTrigger;
     private float rightButtunHoldTime = 0.0f;
     private float rightButtunholdThreshold = 0.1f;
-    InputAction.CallbackContext testvalue;
-    private Monster targetMonster;
-    private PlayerCharacter character;
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -40,10 +42,18 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         GuardAndParring();
         if (targetMonster != null && targetMonster.HP <= 0)
             targetMonster = null;
-
+    }
+    public void FixedUpdateWork()
+    {
 
     }
 
+    public void LateUpdateWork()
+    {
+
+    }
+
+    /////////////////////////////// Private Method ///////////////////////////////////
     private void Attack()
     {
         if (Input.GetMouseButtonDown(0) && weapon != null && !IsGuard && !Cursor.visible)
@@ -65,9 +75,10 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         }
     }
 
+    //마우스 입력이 가드인지 패링인지 확인
     private void GuardAndParring()
     {
-        if (testvalue.performed)
+        if (inputContition.performed)
         {
             rightButtunHoldTime += Time.deltaTime;
             Debug.Log(rightButtunHoldTime);
@@ -95,39 +106,55 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         animator.SetBool("Guard", IsGuard);
     }
 
-    public void FixedUpdateWork()
-    {
-
-    }
-
-    public void LateUpdateWork()
-    {
-
-    }
+    /////////////////////////////// Animator Event /////////////////////////////////
     public void ColliderEnable()
     {
         if (weapon != null)
         {
             SoundManager.Instance.PlaySFXSound("Sound/SWORD_09");
-            Weapon.capsuleCollider.enabled = true;
+            Weapon.CapsuleCollider.enabled = true;
         }
            
     }
     public void ColliderDisable()
     {
         if(weapon != null)
-         Weapon.capsuleCollider.enabled = false;
+         Weapon.CapsuleCollider.enabled = false;
     }
     public void ShieldColliderEnable()
     {
         if (Shield != null)
-            Shield.capsuleCollider.enabled = true;
+            Shield.CapsuleCollider.enabled = true;
     }
     public void ShieldColliderDisable()
     {
         if(Shield!=null)
-             Shield.capsuleCollider.enabled = false;
+             Shield.CapsuleCollider.enabled = false;
     }
+    public void AttackEnd()
+    {
+        move.AllowMovement();
+        if (trailRenderer != null)
+            trailRenderer.enabled = false;
+    }
+
+    /////////////////////////////// Input System Event //////////////////////////
+    public void OnGuard(InputAction.CallbackContext value)
+    {
+        if (value.performed)
+        {
+            inputContition = value;
+        }
+
+        if (value.canceled)
+        {
+            inputContition = value;
+            guardTrigger = true;
+        }
+
+    }
+
+    /////////////////////////////// Property /////////////////////////////////
     public int AttackCount
     {
         get => animator.GetInteger(acttackCount);
@@ -144,33 +171,8 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
             } 
     }
 
-    public Weapon Shield
-    {  
-       get => shield; 
-       set => shield = value; 
-    }
+    public Weapon Shield{ get => shield;  set => shield = value;  }
     public Monster TargetMonster { get => targetMonster; set => targetMonster = value; }
     public bool IsGuard { get => isGuard; set => isGuard = value; }
 
-    public void AttackEnd()
-    {
-        move.AllowMovement();
-        if(trailRenderer != null)
-        trailRenderer.enabled = false;
-    }
-    public void OnGuard(InputAction.CallbackContext value)
-    {
-        if (value.performed)
-        {
-            testvalue = value;
-        }
-
-        if (value.canceled)
-        {
-            testvalue = value;
-            guardTrigger = true;
-        }
-           
-    }
-    
 }

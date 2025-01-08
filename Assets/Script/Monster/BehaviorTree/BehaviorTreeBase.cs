@@ -6,11 +6,13 @@ public enum WaitContext
     Patrol,   
     AfterAttack 
 }
+/// <summary>
+/// 몬스터의 행동을 결정하는 행동트리
+/// </summary>
 public class BehaviorTreeBase : MonoBehaviour
 {
     //트리의 루트 노드는 항상 브런치노드에서 파생 되어야함
     protected BranchNode rootNode;
-    protected float cooldown;
     protected Animator animator;
     protected Monster monster;
     protected NavMeshAgent agent;
@@ -19,21 +21,15 @@ public class BehaviorTreeBase : MonoBehaviour
     protected Vector3 lastSeenPosition;
     private float waitTime = 0;
     private bool isRun = true;
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Start()
     {
-        rangeChecker = monster.monsterRangeChecker;
+        rangeChecker = monster.MonsterRangeChecker;
         agent = monster.GetComponent<NavMeshAgent>();
     }
 
-    private void Update()
-    {
-        if(isRun)
-        {
-            cooldown += Time.deltaTime;
-        }
-    }
-    public Monster Monster { get => monster; set => monster = value; }
-
+    /////////////////////////////// Public Method///////////////////////////////////
     public void RunTree()
     {
         if (isRun && rangeChecker != null)
@@ -49,7 +45,7 @@ public class BehaviorTreeBase : MonoBehaviour
     {
         return isRun;
     }
-
+    /////////////////////////////// Override Method///////////////////////////////////
     virtual public ReturnCode Wait(float waitingTime, WaitContext context)
     {
         if (context == WaitContext.Patrol && rangeChecker.Target != null)
@@ -69,6 +65,7 @@ public class BehaviorTreeBase : MonoBehaviour
             return ReturnCode.RUNNING;
         }
     }
+    /////////////////////////////// Protected Method///////////////////////////////////
     protected ReturnCode CoolDown(ATTACK_TYPE skillType)
     {
         var skillData = monster.MonsterSkillDatas[skillType];
@@ -113,7 +110,6 @@ public class BehaviorTreeBase : MonoBehaviour
         }
         return ReturnCode.FAILURE;
     }
-
     protected ReturnCode SetPatrolPosition()
     {
         monster.RandomPoint(out destination);
@@ -134,5 +130,7 @@ public class BehaviorTreeBase : MonoBehaviour
         }
     }
 
+    /////////////////////////////// Property /////////////////////////////////
+    public Monster Monster { get => monster; set => monster = value; }
 
 }

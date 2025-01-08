@@ -642,7 +642,7 @@ PrefabInstance:
       objectReference: {fileID: 926769752}
     - target: {fileID: 5380683242770321036, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.69
+      value: -20.51
       objectReference: {fileID: 0}
     - target: {fileID: 5380683242770321036, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: m_LocalPosition.y
@@ -650,7 +650,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5380683242770321036, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -39.27
+      value: -38.77
       objectReference: {fileID: 0}
     - target: {fileID: 5380683242770321036, guid: ac3ab613623d98a49a88455cfef54b83, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1826,8 +1826,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrolRange: 0
+  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
+  skillDic:
+    keys: 
+    values: 
+  attackSound: {fileID: 0}
+  skillSound: []
+  isBoss: 0
   monsterData:
-    id: 300
+    id: 0
     name: 
     hp: 0
     attackSpeed: 0
@@ -1836,16 +1844,6 @@ MonoBehaviour:
     meleeDamage: 0
     skillDamage: 0
     behaviorTreeName: 
-  monsterRangeChecker: {fileID: 0}
-  patrolRange: 0
-  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
-  isDummy: 1
-  skillDic:
-    keys: 
-    values: 
-  attackSound: {fileID: 0}
-  skillSound: []
-  isBoss: 0
 --- !u!114 &1502996177 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8863878739514473461, guid: 42a9cf5eb6a88f646964d0f11aeeae18, type: 3}
@@ -2317,8 +2315,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrolRange: 10
+  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
+  skillDic:
+    keys: 01000000
+    values: a1860100
+  attackSound: {fileID: 0}
+  skillSound: []
+  isBoss: 0
   monsterData:
-    id: 600
+    id: 0
     name: 
     hp: 0
     attackSpeed: 0
@@ -2327,16 +2333,6 @@ MonoBehaviour:
     meleeDamage: 0
     skillDamage: 0
     behaviorTreeName: 
-  monsterRangeChecker: {fileID: 0}
-  patrolRange: 10
-  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
-  isDummy: 0
-  skillDic:
-    keys: 01000000
-    values: a1860100
-  attackSound: {fileID: 0}
-  skillSound: []
-  isBoss: 0
 --- !u!4 &1731042382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3319832262098260677, guid: 5aa274becdffa9c46b69f1cf98445a50, type: 3}
@@ -3215,8 +3211,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrolRange: 0
+  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
+  skillDic:
+    keys: 
+    values: 
+  attackSound: {fileID: 0}
+  skillSound: []
+  isBoss: 0
   monsterData:
-    id: 300
+    id: 0
     name: 
     hp: 0
     attackSpeed: 0
@@ -3225,16 +3229,6 @@ MonoBehaviour:
     meleeDamage: 0
     skillDamage: 0
     behaviorTreeName: 
-  monsterRangeChecker: {fileID: 0}
-  patrolRange: 0
-  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
-  isDummy: 1
-  skillDic:
-    keys: 
-    values: 
-  attackSound: {fileID: 0}
-  skillSound: []
-  isBoss: 0
 --- !u!1001 &439415459627457008
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3903,7 +3897,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7117822918005659704, guid: b1c8e7fe30289ab489080be038db2584, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.17
+      value: -17.68
       objectReference: {fileID: 0}
     - target: {fileID: 7117822918005659704, guid: b1c8e7fe30289ab489080be038db2584, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3911,7 +3905,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7117822918005659704, guid: b1c8e7fe30289ab489080be038db2584, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -21.49
+      value: -31.46
       objectReference: {fileID: 0}
     - target: {fileID: 7117822918005659704, guid: b1c8e7fe30289ab489080be038db2584, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4509,7 +4503,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 48544747989759152, guid: 02abcf5d760a7884bbadac8186fd7d4c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.77
+      value: 0.9
       objectReference: {fileID: 0}
     - target: {fileID: 48544747989759152, guid: 02abcf5d760a7884bbadac8186fd7d4c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4517,7 +4511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 48544747989759152, guid: 02abcf5d760a7884bbadac8186fd7d4c, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -35.01
+      value: -9.7
       objectReference: {fileID: 0}
     - target: {fileID: 48544747989759152, guid: 02abcf5d760a7884bbadac8186fd7d4c, type: 3}
       propertyPath: m_LocalRotation.w

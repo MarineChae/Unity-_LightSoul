@@ -25,24 +25,25 @@ public class PlayerCharacter : Entity, IUpdatable
     private EquipItem[] equipItems;
     public Weapon[] equipWeapon;
     private PlayerAttack playerAttack;
+    private Coroutine runCoroutine;
+    private Move playerMove;
+    private LockOnUI lockOnUI;
+    private LockOn lockOn;
     private int layerMask;
     private bool isHit = false;
     private bool isRoll = false;
     private bool isDrink = false;
-    private Coroutine runCoroutine;
-    private Move playerMove;
     private bool isDead;
-    private LockOn lockOn;
     private bool isLockOn=false;
-    private LockOnUI lockOnUI;
+    private float staminerConsumption = 30;
+    /////////////////////////////// Override Variable //////////////////////////
     public override float MaxHP => baseHp;
 
     public override float MaxStamina => 100;
 
     public override float StaminaRecovery => 1.5f;
 
-
-    private float staminerConsumption = 30;
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -52,7 +53,6 @@ public class PlayerCharacter : Entity, IUpdatable
     {
         UpdateManager.UnSubscribe(this, true, true, false);
     }
-
 
     void Awake()
     {
@@ -68,10 +68,10 @@ public class PlayerCharacter : Entity, IUpdatable
         lockOn = GetComponentInChildren<LockOn>();
         lockOnUI = FindObjectOfType<LockOnUI>();
     }
-    public void FixedUpdateWork()
-    {
-        
-    }
+
+    public void FixedUpdateWork() { }
+    public void LateUpdateWork() { }
+
     public void UpdateWork()
     {
         if (IsDead) return;
@@ -107,7 +107,9 @@ public class PlayerCharacter : Entity, IUpdatable
             }
         }
     }
-
+    ///////////////////////////////Private Method///////////////////////////////////
+    
+    //NPC와 상자의 상호작용을 위한 메서드
     private void PlayerInteraction()
     {
         if (Physics.Raycast(transform.position + transform.up, transform.forward, out RaycastHit hit, 1.5f, layerMask))
@@ -126,29 +128,33 @@ public class PlayerCharacter : Entity, IUpdatable
         }
     }
 
+    //타겟으로 플레이어를 Rotate 하기위한 메서드
     public void RotateToTarget(Transform target,bool immediately)
     {
         if (!IsRoll)
         {
             if(immediately)
             {
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
-                directionToTarget.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                transform.rotation = targetRotation;
+                transform.rotation = DirectionToTarget(target);
             }
             else
             {
-                Vector3 directionToTarget = (target.position - transform.position).normalized;
-                directionToTarget.y = 0;
-                Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-                transform.rotation = Quaternion.Slerp(transform.rotation,targetRotation,10.0f * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, DirectionToTarget(target), 10.0f * Time.deltaTime);
             }
 
         }
 
     }
-    public void ForceRotatePlayer(Vector3 direction)
+    //타겟으로의 방향을 구하는 메서드
+    private Quaternion DirectionToTarget(Transform target)
+    {
+        Vector3 directionToTarget = (target.position - transform.position).normalized;
+        directionToTarget.y = 0;
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+        return targetRotation;
+    }
+    //구를때 방향을 강제로 변환해주는 메서드
+    public void ForceRotatePlayerOnRoll(Vector3 direction)
     {
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = targetRotation;
@@ -162,15 +168,7 @@ public class PlayerCharacter : Entity, IUpdatable
             UseStamina(staminerConsumption);
         }
     }
-
-    void RollEnd()
-    {
-        IsRoll=false;
-    }
-
-
-    public void LateUpdateWork() { }
-
+    //아이템 장착을 위한 메서드
     public void EquipItem(ItemData itemData)
     {
         itemDatas[(int)itemData.slotType] = itemData;
@@ -225,20 +223,35 @@ public class PlayerCharacter : Entity, IUpdatable
             HP -= damage;
         IsHit = true;
     }
-    public void EndHit()
-    {
-        IsHit = false;
-        bool isRun = animator.GetBool("Run");
-        if (isRun)
-            playerMove.MoveSpeed = 5.0f;
-        else 
-            playerMove.MoveSpeed = 2.0f;
-    }
+
     public override void UseStamina(float stamina)
     {
         Stamina -= stamina;
-
     }
+    private void AllowRun()
+    {
+        playerMove.MoveSpeed = 5.0f;
+        animator.SetBool("Run", true);
+        runCoroutine = StartCoroutine("Run");
+        StopCoroutine("Recovery");
+    }
+
+    private void CancleRun()
+    {
+        playerMove.MoveSpeed = 2.0f;
+        animator.SetBool("Run", false);
+        StopCoroutine(runCoroutine);
+        runCoroutine = null;
+        StartCoroutine("Recovery");
+    }
+    private void ToggleTargetLock(bool lockOn)
+    {
+        animator.SetBool("LockOn", lockOn);
+        IsLockOn = lockOn;
+        lockOnUI.gameObject.SetActive(lockOn);
+    }
+
+    /////////////////////////////// Input System Event //////////////////////////
     public void OnPotion(InputAction.CallbackContext value)
     {
         if (value.started && !isDrink)
@@ -248,36 +261,28 @@ public class PlayerCharacter : Entity, IUpdatable
             EventManager.Instance.PotionTriggerAction("USE");
         }
     }
+
     public void OnRun(InputAction.CallbackContext value)
     {
         if (IsLockOn)
         {
             if (runCoroutine != null)
             {
-                playerMove.MoveSpeed = 2.0f;
-                animator.SetBool("Run", false);
-                StopCoroutine(runCoroutine);
-                runCoroutine = null;
-                StartCoroutine("Recovery");
+                CancleRun();
             }
             return;
         } 
         if (value.started)
         {
-            playerMove.MoveSpeed = 5.0f;
-            animator.SetBool("Run",true);
-            runCoroutine = StartCoroutine("Run");
-            StopCoroutine("Recovery");
+            AllowRun();
         }
-        if(value.canceled)
+        if (value.canceled)
         {
-            playerMove.MoveSpeed = 2.0f;
-            animator.SetBool("Run", false);
-            StopCoroutine(runCoroutine);
-            runCoroutine = null;
-            StartCoroutine("Recovery");
+            CancleRun();
         }
     }
+
+
     public void OnInteraction(InputAction.CallbackContext value)
     {
         if (value.performed)
@@ -294,18 +299,16 @@ public class PlayerCharacter : Entity, IUpdatable
 
             if(!IsLockOn)
             {
-                animator.SetBool("LockOn", true);
-                IsLockOn=true;
-                lockOnUI.gameObject.SetActive(true);
+                ToggleTargetLock(!IsLockOn);
             }
             else
             {
-                animator.SetBool("LockOn", false);
-                IsLockOn = false;
-                lockOnUI.gameObject.SetActive(false);
+                ToggleTargetLock(!IsLockOn);
             }
         }
     }
+
+    /////////////////////////////// Coroutine //////////////////////////
     IEnumerator Run()
     {
         while (true)
@@ -338,6 +341,34 @@ public class PlayerCharacter : Entity, IUpdatable
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
+    IEnumerator Die()
+    {
+        IsDead = true;
+        animator.SetTrigger("Die");
+        yield return new WaitForSeconds(1.0f);
+        SoundManager.Instance.PlaySFXSound("Sound/Jingle_Lose_00");
+        yield return new WaitForSeconds(5.0f);
+        LoadingSceneContoller.LoadScene("StartScene");
+        yield break;
+    }
+
+
+    /////////////////////////////// Animator Event /////////////////////////////////
+
+    public void EndHit()
+    {
+        IsHit = false;
+        bool isRun = animator.GetBool("Run");
+        if (isRun)
+            playerMove.MoveSpeed = 5.0f;
+        else
+            playerMove.MoveSpeed = 2.0f;
+    }
+    void RollEnd()
+    {
+        IsRoll = false;
+    }
+
     public void DrinkSound()
     {
         SoundManager.Instance.PlaySFXSound("Sound/Drink");
@@ -353,18 +384,8 @@ public class PlayerCharacter : Entity, IUpdatable
     {
         SoundManager.Instance.PlaySFXSound("Sound/Inventory_Open_01");
     }
-    IEnumerator Die()
-    {
-        IsDead = true;
-        animator.SetTrigger("Die");
-        yield return new WaitForSeconds(1.0f);
-        SoundManager.Instance.PlaySFXSound("Sound/Jingle_Lose_00");
-        yield return new WaitForSeconds(5.0f);
-        LoadingSceneContoller.LoadScene("StartScene");
-        yield break ;
-    }
 
-
+    /////////////////////////////// Property /////////////////////////////////
     public bool IsRoll { get => isRoll; set => isRoll = value; }
     public PlayerAttack PlayerAttack { get => playerAttack; }
     public bool IsHit { get => isHit; set => isHit = value; }

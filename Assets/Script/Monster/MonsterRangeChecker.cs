@@ -9,30 +9,15 @@ public class MonsterRangeChecker : MonoBehaviour
     [SerializeField]
     [Range(0, 360)]
     private float viewAngle;
-    private float updateTime = 1.0f;
     private Transform target;
     private HashSet<Transform> targets = new HashSet<Transform>();
+    private readonly float updateTime = 1.0f;
 
-    public Transform Target { get => target; set => target = value; }
-    public HashSet<Transform> Targets { get => targets; set => targets = value; }
-
-
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     void Start()
     {
         InvokeRepeating(nameof(UpdateNearPlayer), 0, updateTime);
     }
-
-    public Vector3 DirectionFromAngle(float angleDegree, bool angleIsGlobal)
-    {
-        if (!angleIsGlobal)
-        {
-            angleDegree += transform.eulerAngles.y;
-        }
-
-        return new Vector3(Mathf.Cos((-angleDegree + 90) * Mathf.Deg2Rad), 0, Mathf.Sin((-angleDegree + 90) * Mathf.Deg2Rad));
-    }
-
-
     private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -51,6 +36,7 @@ public class MonsterRangeChecker : MonoBehaviour
             targets.Remove(other.transform);
         }
     }
+    /////////////////////////////// Private Method///////////////////////////////////
     private void UpdateNearPlayer()
     {
         float closestDist = viewRadius * viewRadius;
@@ -67,7 +53,19 @@ public class MonsterRangeChecker : MonoBehaviour
             }
         }
     }
+    /////////////////////////////// Public Method///////////////////////////////////
+    public Vector3 DirectionFromAngle(float angleDegree, bool angleIsGlobal)
+    {
+        if (!angleIsGlobal)
+        {
+            angleDegree += transform.eulerAngles.y;
+        }
 
+        return new Vector3(Mathf.Cos((-angleDegree + 90) * Mathf.Deg2Rad), 0, Mathf.Sin((-angleDegree + 90) * Mathf.Deg2Rad));
+    }
+    /////////////////////////////// Property /////////////////////////////////
+    public Transform Target { get => target; set => target = value; }
+    public HashSet<Transform> Targets { get => targets; set => targets = value; }
     public float ViewRadius { get => viewRadius; set => viewRadius = value; }
     public float ViewAngle { get => viewAngle; set => viewAngle = value; }
 }

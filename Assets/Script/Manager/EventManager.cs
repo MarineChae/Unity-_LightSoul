@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 게임내에서 발생하는 이벤트를 관리하기위한 매니저
+/// </summary>
 public class EventManager : SingleTon<EventManager>
 {
 

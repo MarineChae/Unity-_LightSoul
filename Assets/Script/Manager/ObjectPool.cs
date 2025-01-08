@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 오브젝트풀링을 위한 스크립트
+/// </summary>
 public class ObjectPool : MonoBehaviour 
 {
 

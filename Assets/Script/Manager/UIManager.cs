@@ -10,10 +10,8 @@ public class UIManager : SingleTon<UIManager>
     private PotionSlot potionSlot;
     private PauseUI pauseUI;
     private SettingUI settingUI;
-    public InventoryController InventoryController { get => inventoryController; }
-    public PotionSlot PotionSlot { get => potionSlot;}
 
-
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -51,6 +49,8 @@ public class UIManager : SingleTon<UIManager>
             }
         }
     }
+
+    /////////////////////////////// Public Method///////////////////////////////////
     public void Pause()
     {
         Time.timeScale = Time.timeScale <= 0 ? 1 : 0;
@@ -82,5 +82,10 @@ public class UIManager : SingleTon<UIManager>
     {
         activateCanvases.Add(canvas);
     }
+
+    /////////////////////////////// Property /////////////////////////////////
+    
+    public InventoryController InventoryController { get => inventoryController; }
+    public PotionSlot PotionSlot { get => potionSlot; }
 
 }

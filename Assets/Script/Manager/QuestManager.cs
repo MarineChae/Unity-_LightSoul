@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// 퀘스트를 관리하기 위한 매니저 클래스
+/// </summary>
 public class QuestManager : SingleTon<QuestManager>
 {
 
@@ -38,8 +41,6 @@ public class QuestManager : SingleTon<QuestManager>
             if (quest.Value.questType == "USE" && quest.Value.questTarget == targetName && quest.Value.isAccept)
             {
                 quest.Value.isCleared = true;
-                Debug.Log("USE");
-
             }
         }
     }
@@ -54,9 +55,7 @@ public class QuestManager : SingleTon<QuestManager>
                 if (quest.Value.count >= quest.Value.currentCount)
                 {
                     quest.Value.isCleared = true;
-                    Debug.Log("KILL");
                 }
-
             }
         }
     }
@@ -67,7 +66,6 @@ public class QuestManager : SingleTon<QuestManager>
             if(quest.Value.questType == "EQUIP" && quest.Value.questTarget == targetName && quest.Value.isAccept)
             {
                 quest.Value.isCleared = true;
-                Debug.Log("EQUIP");
             }
         }
     }

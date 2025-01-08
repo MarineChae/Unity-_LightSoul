@@ -1,6 +1,10 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Deprecated
+/// Change to ThridPersonView from TopView
+/// </summary>
 public class DropItem : MonoBehaviour
 {
     InventoryItem inventoryItem;

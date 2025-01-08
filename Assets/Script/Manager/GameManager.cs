@@ -1,12 +1,12 @@
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngine.SceneManagement;
 
 
+/// <summary>
+/// 오브젝트 풀링을 위한 매니저 
+/// </summary>
 public class GameManager : SingleTon<GameManager>
 {
     private ObjectPool objectPool;
-
     protected override void Init()
     {
 

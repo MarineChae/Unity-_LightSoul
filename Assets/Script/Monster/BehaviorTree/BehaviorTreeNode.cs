@@ -1,4 +1,3 @@
-//behaviortree를 사용하기위해서 이 이넘값을 리턴해야만 사용가능
 using System;
 using System.Collections.Generic;
 using UnityEngine;

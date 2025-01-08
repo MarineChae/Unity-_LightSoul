@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +8,9 @@ public enum Sound
     Effect,
     MaxCount,  
 }
-
+/// <summary>
+/// 사운드 관리를 위한 매니저 클래스
+/// </summary>
 public class SoundManager : SingleTon<SoundManager>
 {
     private float masterVolumeSFX = 0.2f;
@@ -20,9 +21,8 @@ public class SoundManager : SingleTon<SoundManager>
     AudioSource sfxPlayer;
     AudioSource bgmPlayer;
 
-    public float MasterVolumeSFX { get => masterVolumeSFX; set => masterVolumeSFX = value; }
-    public float MasterVolumeBGM { get => masterVolumeBGM; set => masterVolumeBGM = value; }
 
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Awake()
     {
         sfxPlayer = this.AddComponent<AudioSource>();
@@ -32,6 +32,8 @@ public class SoundManager : SingleTon<SoundManager>
         SetBGMVolume(MasterVolumeBGM);
 
     }
+
+    /////////////////////////////// Public  Method///////////////////////////////////
     public void PlayBGM()
     {
         bgmPlayer.loop = true;
@@ -53,17 +55,14 @@ public class SoundManager : SingleTon<SoundManager>
             audioClipDic.Add(soundName, clip);
         }
         sfxPlayer.PlayOneShot(audioClipDic[soundName], MasterVolumeSFX);
-
     }
     public void PlaySFXSound(AudioClip audioClip)
     {
-
         sfxPlayer.PlayOneShot(audioClip, MasterVolumeSFX);
-
     }
 
-
-
-
+    /////////////////////////////// Property /////////////////////////////////
+    public float MasterVolumeSFX { get => masterVolumeSFX; set => masterVolumeSFX = value; }
+    public float MasterVolumeBGM { get => masterVolumeBGM; set => masterVolumeBGM = value; }
 
 }

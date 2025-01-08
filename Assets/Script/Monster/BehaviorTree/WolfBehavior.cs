@@ -17,7 +17,7 @@ public class WolfBehavior : BehaviorTreeBase
         TaskNode skill = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill1));
         SkillSequence.childList.Add(skill);
 
-        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.monsterData.attackRange));
+        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.MonsterData.attackRange));
         rootNode.childList.Add(inRange);
         SequenceNode attackSequence = new SequenceNode();
         inRange.child = attackSequence;

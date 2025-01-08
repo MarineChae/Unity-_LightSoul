@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// 인벤토리의 grid를 확인하기위한 메서드
+/// </summary>
 [RequireComponent(typeof(InvectoryGrid))]
 public class GridInteract : MonoBehaviour, IPointerEnterHandler , IPointerExitHandler
 {
@@ -16,7 +19,6 @@ public class GridInteract : MonoBehaviour, IPointerEnterHandler , IPointerExitHa
     {
         inventoryController.IsDropItem = false;
         inventoryController.SelectedItemGrid = inventoryGrid;
-        Debug.Log(inventoryGrid.name);
     }
 
     public void OnPointerExit(PointerEventData eventData)
