@@ -74,7 +74,7 @@ public class InvectoryGrid : MonoBehaviour
         return tileGridPosition;
     }
 
-    //아이템을 해당하는 위치에 넣기위해 확인 후 넣는함수
+    //아이템을 해당하는 위치에 넣기위해 확인 후 넣는 메서드
     public bool PlaceItemWithCheck(InventoryItem item , int posX, int posY, ref InventoryItem overlapItem)
     {
 

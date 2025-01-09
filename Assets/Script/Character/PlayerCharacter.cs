@@ -84,13 +84,21 @@ public class PlayerCharacter : Entity, IUpdatable
             animator.SetBool("EquipWeapon", true);
         }
         Roll();
-        if(HP <=0)
+        if (HP <= 0)
         {
             StartCoroutine("Die");
         }
-        if(IsLockOn)
+        LockOn();
+    }
+
+
+    ///////////////////////////////Private Method///////////////////////////////////
+
+    private void LockOn()
+    {
+        if (IsLockOn)
         {
-            if(lockOn.Target.IsDead)
+            if (lockOn.Target.IsDead)
             {
                 animator.SetBool("LockOn", false);
                 IsLockOn = false;
@@ -107,8 +115,6 @@ public class PlayerCharacter : Entity, IUpdatable
             }
         }
     }
-    ///////////////////////////////Private Method///////////////////////////////////
-    
     //NPC와 상자의 상호작용을 위한 메서드
     private void PlayerInteraction()
     {
