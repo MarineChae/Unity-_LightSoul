@@ -526,3 +526,603 @@ private void LockOn()
 </details>
 
 ![Alt text](image/LockOn.gif)
+
+## Parring System
+
+* 방패를 이용한 Parring System을 구현하여 성공 시 강한 공격을 할 수 있도록 구현하였습니다.
+
+<details>
+  
+<summary> PlayerAttack 코드샘플</summary>
+  
+```cs
+
+//마우스 입력이 가드인지 패링인지 확인
+private void GuardAndParring()
+{
+    if (inputContition.performed)
+    {
+        rightButtunHoldTime += Time.deltaTime;
+    }
+    if (guardTrigger)
+    {
+        //마우스 입력이 단발성인 경우 패링모션
+        if (!IsGuard)
+            animator.SetTrigger("Parring");
+        else
+            ChangeGuardState();
+        guardTrigger = false;
+        rightButtunHoldTime = 0.0f;
+    }
+    //홀드상태면 가드
+    if (!IsGuard && rightButtunholdThreshold <= rightButtunHoldTime)
+    {
+        ChangeGuardState();
+    }
+}
+
+```
+
+</details>
+
+<details>
+  
+<summary> Weapon 코드샘플</summary>
+  
+```cs
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (this.CompareTag("Weapon"))
+        {
+            if (other.gameObject.CompareTag("Monster"))
+            {
+                var monster = other.GetComponentInChildren<Monster>();
+                if (monster.IsStunned)
+                {
+                    monster.TakeDamage(itemData.damage * 3);
+                }
+                else
+                {
+                    monster.TakeDamage(itemData.damage);
+                }
+                HitEffect(other);
+
+                //몬스터가 뒤돌아보고 있는 경우 플레이어 쪽으로 회전시키게
+                if (monster.MonsterRangeChecker.Target == null)
+                    monster.RotateToTarget(transform, true);
+            }
+        }
+        else if (this.CompareTag("Shield"))
+        {
+            //플레이어의 방패와 몬스터의 공격이 맞닿으면 패링처리
+            if (other.gameObject.CompareTag("MonsterWeapon") && !playerCharacter.IsHit)
+            {
+                HitEffect(other);
+                ///sound
+                SoundManager.Instance.PlaySFXSound("Sound/HammerImpact12");
+                var monster = other.GetComponentInParent<Monster>();
+                monster.IsStunned = true;
+                monster.Animator.SetTrigger("Stunned");
+                playerAttack.TargetMonster = monster;
+            }
+        }
+    }
+
+```
+
+</details>
+
+![Alt text](image/Parring.gif)
+
+## QuestSystem
+
+* Dialogue, Event, Quest 매니저를 이용하여 간단한 퀘스트 시스템을 구현하였습니다.
+  
+<details>
+<summary> DialogueManager 코드샘플</summary>
+  
+```cs
+
+ //dataManager에서 메세지를 가져오기위한 메서드 
+ //퀘스트가 있는 npc와 없는 npc를 구분하기 위함
+ private bool GetMessage()
+ {
+     if (npc.HasQuest)
+     {
+         DataManager.Instance.dicQuestDatas[npc.QuestList[npc.QuestIndex]].isAccept = true;
+         return FindMessage(npc.QuestList[npc.QuestIndex]);
+     }
+     else
+     {
+         return FindMessage(npc.DialogueBase);
+     }
+
+ }
+ private bool FindMessage(int id)
+ {
+     if (DataManager.Instance.dicDialogueDatas[id].dialogueList.Length <= currentIndex)
+     {
+         currentIndex = 0;
+         return false;
+     }
+     dialogueText.text = DataManager.Instance.dicDialogueDatas[id].dialogueList[currentIndex++];
+
+     return true;
+ }
+
+ //플레이어와 상호작용하는 npc의 dialouge를 가져오기위한 메서드
+ public bool Interact(GameObject sceletObject)
+ {
+     npc = sceletObject.GetComponent<NPC>();
+     bool ret = GetMessage();
+     dialogueCanvas.SetActive(ret);
+     return ret;
+ }
+
+```
+
+</details>
+
+<details>
+<summary> EventManager 코드샘플</summary>
+  
+```cs
+
+public class EventManager : SingleTon<EventManager>
+{
+
+    public event Action<string, string> onActionTriggerd;
+    public event Action<string> onPotionTriggerd;
+
+    public void TriggerAction(string actiontype,string targetName)
+    {
+        onActionTriggerd?.Invoke(actiontype, targetName);
+    }
+    public void PotionTriggerAction(string actiontype)
+    {
+        onPotionTriggerd?.Invoke(actiontype);
+    }
+
+}
+
+```
+
+</details>
+
+<details>
+<summary>  Quest Manager 코드샘플</summary>
+  
+```cs
+
+public class QuestManager : SingleTon<QuestManager>
+{
+
+    private void OnEnable()
+    {
+        EventManager.Instance.onActionTriggerd += OnActionTriggered;
+    }
+    private void OnDisable()
+    {
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.onActionTriggerd -= OnActionTriggered;
+        }
+    }
+    public void OnActionTriggered(string actionType, string targetName)
+    {
+        if (actionType == "KILL")
+        {
+            OnMonsterKilled(targetName);
+        }
+        else if(actionType =="EQUIP")
+        {
+            OnEquipItem(targetName);
+        }
+        else if (actionType =="USE")
+        {
+            OnUseItem(targetName);
+        }
+    }
+
+    public void OnUseItem(string targetName)
+    {
+        foreach (var quest in DataManager.Instance.dicQuestDatas)
+        {
+            if (quest.Value.questType == "USE" && quest.Value.questTarget == targetName && quest.Value.isAccept)
+            {
+                quest.Value.isCleared = true;
+            }
+        }
+    }
+
+    private void OnMonsterKilled(string targetName)
+    {
+        foreach (var quest in DataManager.Instance.dicQuestDatas)
+        {
+            if (quest.Value.questType == "KILL" && quest.Value.questTarget == targetName && quest.Value.isAccept)
+            {
+                quest.Value.currentCount++;
+                if (quest.Value.count >= quest.Value.currentCount)
+                {
+                    quest.Value.isCleared = true;
+                }
+            }
+        }
+    }
+    private void OnEquipItem(string targetName)
+    {
+        foreach (var quest in DataManager.Instance.dicQuestDatas)
+        {
+            if(quest.Value.questType == "EQUIP" && quest.Value.questTarget == targetName && quest.Value.isAccept)
+            {
+                quest.Value.isCleared = true;
+            }
+        }
+    }
+}
+
+
+```
+</details>
+
+
+<details>
+<summary> 이벤트 호출 예시 </summary>
+  
+```cs
+
+ EventManager.Instance.TriggerAction("KILL", MonsterData.name);
+ EventManager.Instance.PotionTriggerAction("USE");
+EventManager.Instance.TriggerAction("EQUIP", "Weapon");
+
+```
+
+</details>  
+
+![Alt text](image/Quest.gif)
+
+## 몬스터 BehaviorTree
+
+* 베이스 행동트리를 제작하여 각각의 몬스터가 개별의 트리를 가질 수 있도록 구현 하였습니다.
+
+<details>
+<summary> BehaviorTreeBase 코드샘플</summary>
+
+```cs
+
+public enum ReturnCode { FAILURE, SUCCESS, RUNNING };
+
+//노드는 따로 스크립트로 만들 필요가 없기 때문에 기본클래스로 생성
+public class BaseNode
+{
+    public virtual ReturnCode Tick()
+    {
+        return ReturnCode.SUCCESS;
+    }
+    public virtual void ResetChild() { }
+}
+//분기를 나눌 수 있는 노드는 이 노드를 파생하여 사용해야한다
+public class BranchNode : BaseNode
+{
+    public List<BaseNode> childList;
+    public int currentChild;
+
+    public override ReturnCode Tick()
+    {
+        return ReturnCode.SUCCESS;
+    }
+    public BranchNode()
+    {
+        childList = new List<BaseNode>();
+    }
+    public override void ResetChild()
+    {
+        currentChild = 0;
+    }
+}
+
+//셀렉트 노드는 한곳에서 성공했다면 그자리에서 실행 종료
+//실패한 경우 다음 노드실행을 반복한다
+public class SelectNode : BranchNode
+{
+    public override ReturnCode Tick()
+    {
+        int icur = currentChild;
+        int iListSize = childList.Count;
+
+        for (int iSize = icur; iSize < iListSize; ++iSize)
+        {
+            ReturnCode State = childList[iSize].Tick();
+
+            currentChild = iSize;
+
+            //이번 틱에서 액션이 성공했고 끝나지 않았다면 
+            //다음 틱에서 이어서 실행하기위함
+            if (State == ReturnCode.RUNNING)
+            {
+                return ReturnCode.RUNNING;
+            }
+            //셀렉터의 자식이 성공적으로 끝났다면 다음 틱에서 셀렉터의 첫 번째 부터 시작
+            else if (State == ReturnCode.SUCCESS)
+            {
+                ResetChild();
+                return ReturnCode.SUCCESS;
+            }
+        }
+        ResetChild();
+        return ReturnCode.FAILURE;
+    }
+}
+
+//시퀀스 노드는 시퀀스의 자식노드를 전부 실행
+//자식이 실패한경우 이 노드는 전부 실패처리
+public class SequenceNode : BranchNode
+{
+    public override ReturnCode Tick()
+    {
+        int icur = currentChild;
+        int iListSize = childList.Count;
+        for (int iSize = icur; iSize < iListSize; ++iSize)
+        {
+            ReturnCode State = childList[iSize].Tick();
+            currentChild = iSize;
+            //이번 틱에서 액션이 성공했고 끝나지 않았다면 
+            //다음 틱에서 이어서 실행하기위함
+            if (State == ReturnCode.RUNNING)
+            {
+                return ReturnCode.RUNNING;
+            }
+            //시퀀스 자식의 컨디션체크가 실패 한 경우 시퀀스를 실패처리
+            //다음에 시퀀스에 들어오면 0번 자식부터 실행하기 위함
+            else if (State == ReturnCode.FAILURE)
+            {
+                ResetChild();
+                return ReturnCode.FAILURE;
+            }
+        }
+        ResetChild();
+        return ReturnCode.SUCCESS;
+    }
+}
+
+//실제 액션을 처리하는 노드
+public class TaskNode : BaseNode
+{
+
+    [SerializeField]
+    public Func<ReturnCode> action;
+    public override ReturnCode Tick()
+    {
+        return action();
+    }
+    public TaskNode(Func<ReturnCode> action)
+    {
+        this.action = action;
+    }
+}
+//노드가 실행 될 수 있는지 확인하는 함수, 컨디션확인
+public class DecoratorNode : BaseNode
+{
+    public Func<ReturnCode> condition;
+    public BaseNode child;
+
+    public override ReturnCode Tick()
+    {
+        if (condition() == ReturnCode.FAILURE)
+        {
+            child.ResetChild();
+            return ReturnCode.FAILURE;
+        }
+        else
+        {
+            return child.Tick();
+        }
+  
+    }
+    public DecoratorNode(Func<ReturnCode> condition)
+    {
+        this.condition = condition;
+    }
+}
+
+
+```
+
+</details>
+
+<details>
+<summary> BehaviorTreeBase 코드샘플</summary>
+
+```cs
+
+public class BehaviorTreeBase : MonoBehaviour
+{
+    //트리의 루트 노드는 항상 브런치노드에서 파생 되어야함
+    protected BranchNode rootNode;
+    protected Animator animator;
+    protected Monster monster;
+    protected NavMeshAgent agent;
+    protected MonsterRangeChecker rangeChecker;
+    protected Vector3 destination;
+    protected Vector3 lastSeenPosition;
+    private float waitTime = 0;
+    private bool isRun = true;
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
+    private void Start()
+    {
+        rangeChecker = monster.MonsterRangeChecker;
+        agent = monster.GetComponent<NavMeshAgent>();
+    }
+
+    /////////////////////////////// Public Method///////////////////////////////////
+    public void RunTree()
+    {
+        if (isRun && rangeChecker != null)
+            rootNode.Tick();
+    }
+
+    public void ChangeTreeState()
+    {
+        rootNode.currentChild = 0;
+        isRun = !isRun;
+    }
+    public bool GetRunState()
+    {
+        return isRun;
+    }
+    /////////////////////////////// Override Method///////////////////////////////////
+    virtual public ReturnCode Wait(float waitingTime, WaitContext context)
+    {
+        if (context == WaitContext.Patrol && rangeChecker.Target != null)
+        {
+            waitTime = 0;
+            return ReturnCode.FAILURE;
+        }
+
+        if (waitTime >= waitingTime)
+        {
+            waitTime = 0;
+            return ReturnCode.SUCCESS;
+        }
+        else
+        {
+            waitTime += Time.deltaTime;
+            return ReturnCode.RUNNING;
+        }
+    }
+    /////////////////////////////// Protected Method///////////////////////////////////
+    protected ReturnCode CoolDown(ATTACK_TYPE skillType)
+    {
+        var skillData = monster.MonsterSkillDatas[skillType];
+        if (skillData.remainCoolDown >= skillData.coolDown)
+        {
+            skillData.remainCoolDown = 0;
+            return ReturnCode.SUCCESS;
+        }
+        else
+        {
+            return ReturnCode.FAILURE;
+        }
+    }
+    protected ReturnCode InRange(float range)
+    {
+        if (rangeChecker == null || rangeChecker.Target == null) return
+                ReturnCode.FAILURE;
+
+        float dist = Vector3.Magnitude(monster.transform.position - rangeChecker.Target.transform.position);
+        if (dist <= range)
+        {
+
+            return ReturnCode.SUCCESS;
+        }
+
+        return ReturnCode.FAILURE;
+    }
+
+    protected ReturnCode AttackPlayer(ATTACK_TYPE type)
+    {
+        monster.Attack(type);
+        return ReturnCode.SUCCESS;
+    }
+
+    protected ReturnCode ChasePlayer()
+    {
+   
+        if (rangeChecker.Target != null && monster.HP > 0)
+        {
+            agent.SetDestination(rangeChecker.Target.position);
+            return ReturnCode.SUCCESS;
+        }
+        return ReturnCode.FAILURE;
+    }
+    protected ReturnCode SetPatrolPosition()
+    {
+        monster.RandomPoint(out destination);
+        agent.SetDestination(destination);
+        return ReturnCode.SUCCESS;
+    }
+    protected ReturnCode Patrol()
+    {
+        float dist = Vector3.SqrMagnitude(destination - monster.transform.position);
+        if (dist < 1 || rangeChecker.Target != null)
+        {
+            return ReturnCode.SUCCESS;
+        }
+        else
+        {
+
+            return ReturnCode.RUNNING;
+        }
+    }
+
+    /////////////////////////////// Property /////////////////////////////////
+    public Monster Monster { get => monster; set => monster = value; }
+
+}
+
+
+```
+
+</details>
+
+<details>
+<summary> Skeleton 코드샘플</summary>
+  
+```cs
+
+public class SkeletonBehavior : BehaviorTreeBase
+{
+    private void Awake()
+    {
+        rootNode = new SelectNode();
+
+        DecoratorNode inSkillRange = new DecoratorNode(() => InRange(4.0f));
+        rootNode.childList.Add(inSkillRange);
+        DecoratorNode skillCoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill1));
+        inSkillRange.child = skillCoolDown;
+        SequenceNode SkillSequence = new SequenceNode();
+        skillCoolDown.child = SkillSequence;
+        TaskNode skill = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill1));
+        SkillSequence.childList.Add(skill);
+
+        DecoratorNode inSkill2Range = new DecoratorNode(() => InRange(8.0f));
+        rootNode.childList.Add(inSkill2Range);
+        DecoratorNode skill2CoolDown = new DecoratorNode(() => CoolDown(ATTACK_TYPE.Skill2));
+        inSkill2Range.child = skill2CoolDown;
+        SequenceNode Skill2Sequence = new SequenceNode();
+        skill2CoolDown.child = Skill2Sequence;
+        TaskNode skill2 = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Skill2));
+        Skill2Sequence.childList.Add(skill2);
+
+        DecoratorNode inRange = new DecoratorNode(() => InRange(monster.MonsterData.attackRange));
+        rootNode.childList.Add(inRange);
+        SequenceNode attackSequence = new SequenceNode();
+        inRange.child = attackSequence;
+        TaskNode attack = new TaskNode(() => AttackPlayer(ATTACK_TYPE.Melee));
+        attackSequence.childList.Add(attack);
+        TaskNode attackWait = new TaskNode(() => Wait(2.0f, WaitContext.AfterAttack));
+        attackSequence.childList.Add(attackWait);
+
+        SequenceNode chaseSequence = new SequenceNode();
+        rootNode.childList.Add(chaseSequence);
+        TaskNode chase = new TaskNode(ChasePlayer);
+        chaseSequence.childList.Add(chase);
+
+        SequenceNode patrolSequence = new SequenceNode();
+        rootNode.childList.Add(patrolSequence);
+        TaskNode findPatrolPos = new TaskNode(SetPatrolPosition);
+        patrolSequence.childList.Add(findPatrolPos);
+        TaskNode patrol = new TaskNode(Patrol);
+        patrolSequence.childList.Add(patrol);
+        TaskNode patrolWait = new TaskNode(() => Wait(5.0f, WaitContext.Patrol));
+        patrolSequence.childList.Add(patrolWait);
+    }
+}
+
+```
+</details>
+
+![Alt text](image/Skeleton.gif)
+
