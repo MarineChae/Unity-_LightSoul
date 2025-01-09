@@ -81,7 +81,6 @@ public class PlayerAttack : MonoBehaviour , IUpdatable
         if (inputContition.performed)
         {
             rightButtunHoldTime += Time.deltaTime;
-            Debug.Log(rightButtunHoldTime);
         }
         if (guardTrigger)
         {
