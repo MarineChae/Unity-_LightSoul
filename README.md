@@ -12,7 +12,7 @@
 * Shift - 달리기
 
 ## InvetorySystem
-
+* 그리드 인벤토리를 아이템을 정리하여 배치 할 수 있도록 구현하였습니다.
 <details>
 <summary> Inventory Grid 코드샘플</summary>
   
@@ -369,3 +369,154 @@
 ```
 
 </details>
+![Alt text](image/Inventory.gif)
+
+##LockOn System
+
+*카메라가 가장 가까운 몬스터를 바라보게 LockOn을 구현하였습니다.
+
+<details>
+<summary> LockOn Script 코드샘플</summary>
+  
+```cs
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            targets.Add(other.transform);
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            Vector3 dirToTarget = (other.transform.position - transform.position).normalized;
+            if (Vector3.Angle(transform.forward, dirToTarget) < viewAngle / 2)
+            {
+                UpdateNearMonster();
+            }
+
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Monster"))
+        {
+            if (other.transform.Equals(target.transform))
+            {
+                character.IsLockOn=false;
+                target = null;
+            }
+               
+            targets.Remove(other.transform);
+        }
+
+    }
+
+    //플레이어 주변의 몬스터 갱신
+    private void UpdateNearMonster()
+    {
+        float closestDist = viewRadius * viewRadius;
+
+        foreach (Transform targetMonster in targets)
+        {
+            if (targetMonster == null) continue;
+            //fake null 확인
+            float dist = (targetMonster.position - transform.position).sqrMagnitude;
+
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                target = targetMonster.GetComponent<Monster>();
+            }
+        }
+    }
+    public void RemoveTarget(Transform target)
+    {
+        targets.Remove(target);
+    }
+}
+```
+
+</details>
+
+<details>
+<summary> PlayerCharacter Script 코드샘플</summary>
+  
+```cs
+private void LockOn()
+{
+    if (IsLockOn)
+    {
+        if (lockOn.Target.IsDead)
+        {
+            animator.SetBool("LockOn", false);
+            IsLockOn = false;
+            lockOn.RemoveTarget(lockOn.Target.transform);
+            lockOn.Target = null;
+            lockOnUI.gameObject.SetActive(false);
+        }
+        else
+        {
+            var dir = lockOn.Target.transform.position - transform.position;
+            dir.y = 0;
+            RotateToTarget(lockOn.Target.transform, false);
+            lockOnUI.transform.position = lockOn.Target.LockOnPosition;
+        }
+    }
+}
+
+ public void OnLockOn(InputAction.CallbackContext value)
+ {
+     if (value.performed)
+     {
+         if (lockOn.Target == null)
+             return;
+
+         if(!IsLockOn)
+         {
+             ToggleTargetLock(!IsLockOn);
+         }
+         else
+         {
+             ToggleTargetLock(!IsLockOn);
+         }
+     }
+ }
+
+```
+
+</details>
+
+<details>
+<summary> FollowCamera Script 코드샘플</summary>
+  
+```cs
+
+    public void UpdateWork()
+    {
+
+        if (!isUIActive)
+        {
+            CheckObstruct();
+
+            if (player.IsLockOn)
+                TargetLook(lockOn.Target.LockOnPosition);
+            else
+                CameraLook();
+        }
+    }
+    public void LateUpdateWork() { }
+
+    //Lockon 되었을 때 타겟을 향해 카메라를 고정하는 메서드
+    private void TargetLook(Vector3 target)
+    {
+        Vector3 direction = target - camPos.position;
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        camPos.rotation = Quaternion.Slerp(camPos.rotation, targetRotation, cameraSensitive * Time.deltaTime);
+    }
+
+```
+
+</details>
+![Alt text](image/LockOn.gif)
