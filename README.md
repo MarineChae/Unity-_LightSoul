@@ -526,3 +526,89 @@ private void LockOn()
 </details>
 
 ![Alt text](image/LockOn.gif)
+
+## Parring System
+
+* 방패를 이용한 Parring System을 구현하여 성공 시 강한 공격을 할 수 있도록 구현하였습니다.
+
+  <details>
+<summary> PlayerAttack 코드샘플</summary>
+  
+```cs
+
+//마우스 입력이 가드인지 패링인지 확인
+private void GuardAndParring()
+{
+    if (inputContition.performed)
+    {
+        rightButtunHoldTime += Time.deltaTime;
+    }
+    if (guardTrigger)
+    {
+        //마우스 입력이 단발성인 경우 패링모션
+        if (!IsGuard)
+            animator.SetTrigger("Parring");
+        else
+            ChangeGuardState();
+        guardTrigger = false;
+        rightButtunHoldTime = 0.0f;
+    }
+    //홀드상태면 가드
+    if (!IsGuard && rightButtunholdThreshold <= rightButtunHoldTime)
+    {
+        ChangeGuardState();
+    }
+}
+
+```
+
+</details>
+
+<details>
+<summary> Inventory Grid 코드샘플</summary>
+  
+```cs
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (this.CompareTag("Weapon"))
+        {
+            if (other.gameObject.CompareTag("Monster"))
+            {
+                var monster = other.GetComponentInChildren<Monster>();
+                if (monster.IsStunned)
+                {
+                    monster.TakeDamage(itemData.damage * 3);
+                }
+                else
+                {
+                    monster.TakeDamage(itemData.damage);
+                }
+                HitEffect(other);
+
+                //몬스터가 뒤돌아보고 있는 경우 플레이어 쪽으로 회전시키게
+                if (monster.MonsterRangeChecker.Target == null)
+                    monster.RotateToTarget(transform, true);
+            }
+        }
+        else if (this.CompareTag("Shield"))
+        {
+            //플레이어의 방패와 몬스터의 공격이 맞닿으면 패링처리
+            if (other.gameObject.CompareTag("MonsterWeapon") && !playerCharacter.IsHit)
+            {
+                HitEffect(other);
+                ///sound
+                SoundManager.Instance.PlaySFXSound("Sound/HammerImpact12");
+                var monster = other.GetComponentInParent<Monster>();
+                monster.IsStunned = true;
+                monster.Animator.SetTrigger("Stunned");
+                playerAttack.TargetMonster = monster;
+            }
+        }
+    }
+
+```
+
+</details>
+
+![Alt text](image/Parring.gif)
