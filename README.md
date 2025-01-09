@@ -1124,5 +1124,5 @@ public class SkeletonBehavior : BehaviorTreeBase
 ```
 </details>
 
-
+![Alt text](image/Skeleton.gif)
 
