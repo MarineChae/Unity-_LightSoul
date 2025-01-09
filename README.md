@@ -532,6 +532,7 @@ private void LockOn()
 * 방패를 이용한 Parring System을 구현하여 성공 시 강한 공격을 할 수 있도록 구현하였습니다.
 
   <details>
+  
 <summary> PlayerAttack 코드샘플</summary>
   
 ```cs
@@ -565,7 +566,8 @@ private void GuardAndParring()
 </details>
 
 <details>
-<summary> Inventory Grid 코드샘플</summary>
+  
+<summary> Weapon 코드샘플</summary>
   
 ```cs
 
