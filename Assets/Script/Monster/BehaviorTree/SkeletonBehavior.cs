@@ -5,7 +5,6 @@ public class SkeletonBehavior : BehaviorTreeBase
 
     private void Awake()
     {
-        Debug.Log("Wolf");
         rootNode = new SelectNode();
 
         DecoratorNode inSkillRange = new DecoratorNode(() => InRange(4.0f));
@@ -49,14 +48,6 @@ public class SkeletonBehavior : BehaviorTreeBase
         TaskNode patrolWait = new TaskNode(() => Wait(5.0f, WaitContext.Patrol));
         patrolSequence.childList.Add(patrolWait);
 
-
-
     }
-
-
-
-
-
-
 
 }

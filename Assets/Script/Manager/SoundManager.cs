@@ -30,7 +30,6 @@ public class SoundManager : SingleTon<SoundManager>
 
         bgmPlayer.clip = Resources.Load<AudioClip>("Sound/20 - Heavy Combat - Imminent Ambush (loop)");
         SetBGMVolume(MasterVolumeBGM);
-
     }
 
     /////////////////////////////// Public  Method///////////////////////////////////

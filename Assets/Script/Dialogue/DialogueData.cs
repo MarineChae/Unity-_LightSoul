@@ -5,8 +5,6 @@ public class DialogueData
 {
     public int dialogueID;
     public string[] dialogueList;
-
-
 }
 
 [Serializable]

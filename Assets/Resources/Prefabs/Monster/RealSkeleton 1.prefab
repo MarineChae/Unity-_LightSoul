@@ -77,8 +77,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d38f56e2116cb0747b15266536a1aca1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewRadius: 10
-  viewAngle: 157
+  viewRadius: 20
+  viewAngle: 360
 --- !u!135 &2106624911283139937
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -98,7 +98,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 10
+  m_Radius: 20
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4140939524328106585
 GameObject:
@@ -324,6 +324,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f44d7d8ffa7832499441b7f10cf3686, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  patrolRange: 10
+  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
+  skillDic:
+    keys: 0100000002000000
+    values: 811a0600821a0600
+  attackSound: {fileID: 8300000, guid: d45ed8564a3c5574ea508d55c3c162b7, type: 3}
+  skillSound: []
+  isBoss: 1
   monsterData:
     id: 400
     name: 
@@ -334,16 +342,6 @@ MonoBehaviour:
     meleeDamage: 0
     skillDamage: 0
     behaviorTreeName: 
-  monsterRangeChecker: {fileID: 0}
-  patrolRange: 10
-  dissolveMaterial: {fileID: 2100000, guid: 1356c4e8f18c7c2468e3b808555a213b, type: 2}
-  isDummy: 0
-  skillDic:
-    keys: 0100000002000000
-    values: 811a0600821a0600
-  attackSound: {fileID: 8300000, guid: d45ed8564a3c5574ea508d55c3c162b7, type: 3}
-  skillSound: []
-  isBoss: 1
 --- !u!195 &7652648671794879329
 NavMeshAgent:
   m_ObjectHideFlags: 0

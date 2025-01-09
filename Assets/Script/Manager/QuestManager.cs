@@ -19,7 +19,6 @@ public class QuestManager : SingleTon<QuestManager>
     }
     public void OnActionTriggered(string actionType, string targetName)
     {
-        //Kill event가 발생한 경우s
         if (actionType == "KILL")
         {
             OnMonsterKilled(targetName);

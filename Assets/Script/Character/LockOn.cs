@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class LockOn : MonoBehaviour
 {
-    private readonly float viewAngle = 180;
     private Monster target;
     private HashSet<Transform> targets = new HashSet<Transform>();
-    private readonly float viewRadius = 10.0f;
     private PlayerCharacter character;
+    private readonly float viewRadius = 10.0f;
+    private readonly float viewAngle = 180;
 
     /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Awake()

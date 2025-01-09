@@ -70,11 +70,9 @@ public class InventoryController : MonoBehaviour , IUpdatable
     public void UpdateWork()
     {
 
-
         if (Input.GetKeyDown(KeyCode.E))
         {
             ChangeInventoryState(!inventoryState);
-           
         }
 
         if (!inventoryState) return;

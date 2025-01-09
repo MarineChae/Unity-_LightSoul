@@ -6,7 +6,6 @@ using UnityEngine;
 /// </summary>
 public class Manager : MonoBehaviour
 {
-
     static Manager instance;
     private void Awake()
     {
@@ -49,11 +48,5 @@ public class Manager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
-
-
-
-
-
-
 
 }

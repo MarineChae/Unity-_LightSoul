@@ -39,11 +39,18 @@ public class Monster : Entity, IUpdatable
     private MonsterHpUI monsterHpUI;
     private Collider monsterCollider;
     private Vector3 lockOnPosition;
+    private Vector3 lastPosition;
     private bool isAttack;
     private bool isStunned;
     private bool canRotate = true;
     private bool isDead = false;
     private ATTACK_TYPE currentAttackType;
+    private float checkTimer;
+    private float stuckTimer;
+    private readonly float checkInterval = 2.0f;
+    private readonly float stuckThreshold = 0.5f;
+    private readonly float maxStuckTime = 5f; 
+
 
     /////////////////////////////// Life Cycle ///////////////////////////////////
 
@@ -86,6 +93,13 @@ public class Monster : Entity, IUpdatable
 
         if (behaviorTreeBase.GetRunState())
         {
+            checkTimer += Time.deltaTime;
+            if (checkTimer >= checkInterval)
+            {
+                checkTimer = 0f;
+                CheckIfStuck();
+            }
+
             behaviorTreeBase.RunTree();
             if (HP <= 0)
             {
@@ -114,21 +128,6 @@ public class Monster : Entity, IUpdatable
             navMeshAgent.velocity = navMeshAgent.desiredVelocity;
             lockOnPosition = monsterCollider.bounds.center;
         }
-    }
-
-    private void MonsterDie()
-    {
-        GetComponent<CapsuleCollider>().enabled = false;
-        //navMeshAgent.enabled = false;
-        behaviorTreeBase.ChangeTreeState();
-        navMeshAgent.ResetPath();
-        Animator.SetTrigger("Die");
-        StartCoroutine("Die");
-        EventManager.Instance.TriggerAction("KILL", MonsterData.name);
-        isDead = true;
-        if (isBoss)
-            StartCoroutine("Ending");
-        monsterHpUI.gameObject.SetActive(false);
     }
 
     public void LateUpdateWork()
@@ -180,6 +179,48 @@ public class Monster : Entity, IUpdatable
         DataManager.Instance.dicBehaviorFuncs[MonsterData.behaviorTreeName](obj);
         behaviorTreeBase = obj.GetComponent<BehaviorTreeBase>();
         behaviorTreeBase.Monster = this;
+    }
+    //몬스터가 좁은곳을 향해 갈때 정체되는 현상을 없애기 위해
+    private void CheckIfStuck()
+    {
+        float distanceMoved = Vector3.Distance(navMeshAgent.transform.position, lastPosition);
+        // 에이전트가 거의 움직이지 않았다면, 정체로 간주
+        if (distanceMoved < stuckThreshold)
+        {
+            stuckTimer += checkInterval;
+            if (stuckTimer >= maxStuckTime)
+            {
+                RecalculatePath();
+                stuckTimer = 0f;
+            }
+        }
+        else
+        {
+            stuckTimer = 0f; // 움직임이 감지되면 타이머 초기화
+        }
+
+        lastPosition = navMeshAgent.transform.position; // 현재 위치 저장
+    }
+
+    private void RecalculatePath()
+    {
+        RandomPoint(out Vector3 target);
+        navMeshAgent.SetDestination(target);
+    }
+
+    private void MonsterDie()
+    {
+        GetComponent<CapsuleCollider>().enabled = false;
+        //navMeshAgent.enabled = false;
+        behaviorTreeBase.ChangeTreeState();
+        navMeshAgent.ResetPath();
+        Animator.SetTrigger("Die");
+        StartCoroutine("Die");
+        EventManager.Instance.TriggerAction("KILL", MonsterData.name);
+        isDead = true;
+        if (isBoss)
+            StartCoroutine("Ending");
+        monsterHpUI.gameObject.SetActive(false);
     }
 
     /////////////////////////////// Public Method///////////////////////////////////

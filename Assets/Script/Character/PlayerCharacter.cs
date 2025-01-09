@@ -93,7 +93,8 @@ public class PlayerCharacter : Entity, IUpdatable
 
 
     ///////////////////////////////Private Method///////////////////////////////////
-
+    
+    //LockOn을 위한 메서드
     private void LockOn()
     {
         if (IsLockOn)

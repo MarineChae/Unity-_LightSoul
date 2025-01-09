@@ -7,30 +7,22 @@ public enum ReturnCode { FAILURE, SUCCESS, RUNNING };
 //노드는 따로 스크립트로 만들 필요가 없기 때문에 기본클래스로 생성
 public class BaseNode
 {
-
     public virtual ReturnCode Tick()
     {
         return ReturnCode.SUCCESS;
     }
-
-    public virtual void ResetChild()
-    {
-       
-    }
+    public virtual void ResetChild() { }
 }
 //분기를 나눌 수 있는 노드는 이 노드를 파생하여 사용해야한다
 public class BranchNode : BaseNode
 {
-
-    public int currentChild;
     public List<BaseNode> childList;
-
+    public int currentChild;
 
     public override ReturnCode Tick()
     {
         return ReturnCode.SUCCESS;
     }
-
     public BranchNode()
     {
         childList = new List<BaseNode>();
@@ -45,10 +37,8 @@ public class BranchNode : BaseNode
 //실패한 경우 다음 노드실행을 반복한다
 public class SelectNode : BranchNode
 {
-
     public override ReturnCode Tick()
     {
-
         int icur = currentChild;
         int iListSize = childList.Count;
 
@@ -70,13 +60,10 @@ public class SelectNode : BranchNode
                 ResetChild();
                 return ReturnCode.SUCCESS;
             }
-
         }
-
         ResetChild();
         return ReturnCode.FAILURE;
     }
-
 }
 
 //시퀀스 노드는 시퀀스의 자식노드를 전부 실행
@@ -87,11 +74,9 @@ public class SequenceNode : BranchNode
     {
         int icur = currentChild;
         int iListSize = childList.Count;
-
         for (int iSize = icur; iSize < iListSize; ++iSize)
         {
             ReturnCode State = childList[iSize].Tick();
-
             currentChild = iSize;
             //이번 틱에서 액션이 성공했고 끝나지 않았다면 
             //다음 틱에서 이어서 실행하기위함
@@ -106,17 +91,10 @@ public class SequenceNode : BranchNode
                 ResetChild();
                 return ReturnCode.FAILURE;
             }
-
         }
         ResetChild();
         return ReturnCode.SUCCESS;
     }
-
-
-
-
-
-
 }
 
 //실제 액션을 처리하는 노드
@@ -125,9 +103,6 @@ public class TaskNode : BaseNode
 
     [SerializeField]
     public Func<ReturnCode> action;
-
-
-
     public override ReturnCode Tick()
     {
         return action();
@@ -156,10 +131,8 @@ public class DecoratorNode : BaseNode
         }
   
     }
-
     public DecoratorNode(Func<ReturnCode> condition)
     {
         this.condition = condition;
     }
-
 }

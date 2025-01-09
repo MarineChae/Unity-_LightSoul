@@ -368,6 +368,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7356092409992888780, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
+      propertyPath: m_Radius
+      value: 1.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 7356092409992888780, guid: 09f9fe42e4181f649bac767ce3bc841e, type: 3}
       propertyPath: m_AngularSpeed
       value: 10000
       objectReference: {fileID: 0}
