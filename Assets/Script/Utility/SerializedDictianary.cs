@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// 인스펙터에서 dictianary를 사용할 수 있도록 만들어진 스크립트
+/// </summary>
+
 [Serializable]
 public class SerializedDictianary<TKey, TValue>
 {

@@ -42,13 +42,13 @@ public class UIManager : SingleTon<UIManager>
             }
             else
             {
-                activateCanvases[0].gameObject.SetActive(false);
-                activateCanvases.Remove(activateCanvases[0]);
+                RemoveCanvas();
                 if (activateCanvases.Count <= 0)
                     Cursor.lockState = CursorLockMode.Locked;
             }
         }
     }
+
 
     /////////////////////////////// Public Method///////////////////////////////////
     public void Pause()
@@ -83,8 +83,14 @@ public class UIManager : SingleTon<UIManager>
         activateCanvases.Add(canvas);
     }
 
+    public void RemoveCanvas()
+    {
+        activateCanvases[0].gameObject.SetActive(false);
+        activateCanvases.Remove(activateCanvases[0]);
+
+    }
     /////////////////////////////// Property /////////////////////////////////
-    
+
     public InventoryController InventoryController { get => inventoryController; }
     public PotionSlot PotionSlot { get => potionSlot; }
 

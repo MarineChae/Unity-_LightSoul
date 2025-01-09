@@ -1,7 +1,7 @@
 using System;
 
 
-///// Quest type == {KILL , EQUIP,COLLECTION , ECT....}
+
 [Serializable]
 public class QuestData 
 {

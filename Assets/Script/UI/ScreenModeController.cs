@@ -8,10 +8,17 @@ public class ScreenModeController : MonoBehaviour
     private TextMeshProUGUI text;
     private TMP_Dropdown dropdown;
     private string[] screenMode = new string[] { "FullScreen", "Window"};
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Awake()
     {
-
         dropdown = GetComponent<TMP_Dropdown>();
+        InitScreenMode();
+    }
+
+    /////////////////////////////// Private Method///////////////////////////////////
+    private void InitScreenMode()
+    {
         dropdown.ClearOptions();
 
         List<TMP_Dropdown.OptionData> optionList = new List<TMP_Dropdown.OptionData>();
@@ -25,7 +32,7 @@ public class ScreenModeController : MonoBehaviour
         dropdown.onValueChanged.AddListener(OnDropdownEvent);
     }
 
-    public void OnDropdownEvent(int index)
+    private void OnDropdownEvent(int index)
     {
         if(index == 0)
             Screen.SetResolution(Screen.width, Screen.height, true);

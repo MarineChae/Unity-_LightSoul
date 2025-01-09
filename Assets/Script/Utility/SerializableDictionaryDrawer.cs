@@ -1,7 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 
-
+/// <summary>
+/// 인스펙터에서 dictionary를 사용하게 할 수 있도록 하는 스크립트
+/// </summary>
 #if DEBUG
 
 [CustomPropertyDrawer(typeof(SerializedDictianary<,>), true)]

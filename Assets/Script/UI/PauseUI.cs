@@ -9,10 +9,7 @@ public class PauseUI : MonoBehaviour
     private Button exitButton;
     private Button settingButton;
 
-    private void Start()
-    {
-        gameObject.SetActive(false);
-    }
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void OnEnable()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -22,7 +19,12 @@ public class PauseUI : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+    private void Start()
+    {
+        gameObject.SetActive(false);
+    }
 
+    /////////////////////////////// Private Method///////////////////////////////////
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         resumeButton = transform.Find("Resume").GetComponent<Button>();

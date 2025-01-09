@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class EndingUI : MonoBehaviour
+public class EndingUI : MonoBehaviour ,IUpdatable
 {
     [SerializeField]
     PlayerCharacter player;
@@ -11,17 +11,27 @@ public class EndingUI : MonoBehaviour
     Monster monster;
     private TMP_Text text;
     private bool end;
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
+    private void OnEnable()
+    {
+        UpdateManager.OnSubscribe(this, true, false, false);
+    }
+
+    private void OnDisable()
+    {
+        UpdateManager.UnSubscribe(this, true, false, false);
+    }
     private void Awake()
     {
         text = GetComponentInChildren<TMP_Text>();
         text.alpha = 0;
     }
-    private void Update()
+    public void UpdateWork()
     {
         if (end) return;
         if (monster != null)
         {
-
             if (monster.HP <= 0)
             {
                 end = true;
@@ -30,16 +40,19 @@ public class EndingUI : MonoBehaviour
         }
         else
         {
-
             if (player.HP <= 0)
             {
                 end = true;
                 StartCoroutine("Die");
             }
         }
-
     }
+    public void FixedUpdateWork() { }
 
+    public void LateUpdateWork() { }
+
+    /////////////////////////////// Coroutine //////////////////////////
+    
     IEnumerator Die()
     {
         SoundManager.Instance.BGMStop();

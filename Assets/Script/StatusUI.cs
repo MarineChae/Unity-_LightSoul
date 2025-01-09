@@ -12,6 +12,7 @@ public class StatusUI : MonoBehaviour, IUpdatable
     private Slider sliderStamina;
 
 
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, false, false);
@@ -21,19 +22,11 @@ public class StatusUI : MonoBehaviour, IUpdatable
     {
         UpdateManager.UnSubscribe(this, true, false, false);
     }
-    public void FixedUpdateWork()
-    {
-        
-    }
-
-    public void LateUpdateWork()
-    {
-   
-    }
-
+    public void FixedUpdateWork() { }
     public void UpdateWork()
     {
        if(sliderHP != null) { sliderHP.value = Utility.Percent(entity.HP,entity.MaxHP); };
        if(sliderStamina != null) { sliderStamina.value = Utility.Percent(entity.Stamina,entity.MaxStamina); };
     }
+    public void LateUpdateWork() { }
 }

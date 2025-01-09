@@ -7,6 +7,7 @@ public class MonsterHpUI : MonoBehaviour, IUpdatable
     [SerializeField]
     private Slider sliderHP;
 
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void OnEnable()
     {
         UpdateManager.OnSubscribe(this, true, true, false);
@@ -25,15 +26,11 @@ public class MonsterHpUI : MonoBehaviour, IUpdatable
     {
         transform.LookAt(Camera.main.transform);
     }
-
-    public void LateUpdateWork()
-    {
-
-    }
-
     public void UpdateWork()
     {
-
         if (sliderHP != null) { sliderHP.value = Utility.Percent(entity.HP, entity.MaxHP); };
     }
+    public void LateUpdateWork() { }
+
+
 }

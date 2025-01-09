@@ -4,27 +4,46 @@ using UnityEngine;
 
 public class MonsterAttack : MonoBehaviour
 {
-    private Monster monster;
-    private PlayerCharacter targetCharacter;
-    private Collider attackCollider;
     [SerializeField]
     private float attackDamage;
     [SerializeField]
     private ProjectileObject projectile;
     [SerializeField]
     private GameObject hitEffectPrefab;
+    private Monster monster;
+    private PlayerCharacter targetCharacter;
+    private Collider attackCollider;
+
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     private void Awake()
     {
         monster = GetComponentInParent<Monster>();
         attackCollider = GetComponent<Collider>();
         attackCollider.enabled = false;
     }
-    internal void AllowAttack(float damage)
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            targetCharacter = other.GetComponentInChildren<PlayerCharacter>();
+            ValidateAttack();
+        }
+    }
+
+    /////////////////////////////// Public Method///////////////////////////////////
+    public void AllowAttack(float damage)
     {
         attackDamage = damage;
         attackCollider.enabled = true;
     }
-
+    public void StopAttack()
+    {
+        monster.IsStunned = false;
+        attackCollider.enabled = false;
+        targetCharacter = null;
+    }
+    //플레이어가 패링을 성공한경우 데미지 처리
     public void ValidateAttack()
     {
         if (!monster.IsStunned && targetCharacter != null && !targetCharacter.IsDead)
@@ -36,13 +55,7 @@ public class MonsterAttack : MonoBehaviour
             SoundManager.Instance.PlaySFXSound("Sound/BowWater1");
         }
     }
-    public void StopAttack()
-    {
-        monster.IsStunned = false;
-        attackCollider.enabled = false;
-        targetCharacter = null;
-    }
-    internal void AllowSkillAttack(Vector3 positon, Vector3 destination, float damage, SKILL_TYPE type)
+    public void AllowSkillAttack(Vector3 positon, Vector3 destination, float damage, SKILL_TYPE type)
     {
         attackDamage = damage;
         if (SKILL_TYPE.RUSH == type || SKILL_TYPE.NONE == type)
@@ -60,22 +73,8 @@ public class MonsterAttack : MonoBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.CompareTag("Player"))
-        {
-            targetCharacter = other.GetComponentInChildren<PlayerCharacter>();
-            ValidateAttack();
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-
-
-        }
-    }
+    /////////////////////////////// Coroutine //////////////////////////
+    
     private IEnumerator EffectCoroutine(GameObject effet)
     {
         yield return new WaitForSeconds(0.5f);

@@ -1,6 +1,9 @@
 using UnityEngine;
 
-
+/// <summary>
+/// Deprecated
+/// Change to ThridPersonView from TopView
+/// </summary>
 public class WayPoint : MonoBehaviour, IUpdatable , IPoolingable
 {
 

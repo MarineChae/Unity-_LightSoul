@@ -11,17 +11,21 @@ public class ResolutionController : MonoBehaviour
 {
     [SerializeField]
     private Toggle screenMode;
-    private TextMeshProUGUI text;
     private TMP_Dropdown dropdown;
-    private string[] resolution = new string[] { "Low", "Middle", "High" };
     private List<Resolution> resolutions = new List<Resolution>();
     private int optimalResolutionIndex = 0;
     private bool currentScreenMode = true;
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
     void Awake()
     {
         dropdown = GetComponent<TMP_Dropdown>();
+        InitResolutions();
+    }
+    /////////////////////////////// Private Method///////////////////////////////////
+    private void InitResolutions()
+    {
         dropdown.ClearOptions();
-
         resolutions.Add(new Resolution { width = 1280, height = 720 });
         resolutions.Add(new Resolution { width = 1280, height = 800 });
         resolutions.Add(new Resolution { width = 1440, height = 900 });
@@ -60,12 +64,13 @@ public class ResolutionController : MonoBehaviour
         screenMode.isOn = true;
         screenMode.onValueChanged.AddListener(onToggleEvent);
     }
-    public void OnDropdownEvent(int index)
+
+    private void OnDropdownEvent(int index)
     {
         Screen.SetResolution(resolutions[index].width, resolutions[index].height, currentScreenMode);
     }
 
-    public void onToggleEvent(bool trigger)
+    private void onToggleEvent(bool trigger)
     {
         currentScreenMode = trigger;
         Screen.SetResolution(Screen.width, Screen.height, trigger);

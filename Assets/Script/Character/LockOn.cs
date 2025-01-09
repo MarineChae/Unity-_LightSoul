@@ -57,6 +57,7 @@ public class LockOn : MonoBehaviour
 
         foreach (Transform targetMonster in targets)
         {
+            if (targetMonster == null) continue;
             //fake null »Æ¿Œ
             float dist = (targetMonster.position - transform.position).sqrMagnitude;
 

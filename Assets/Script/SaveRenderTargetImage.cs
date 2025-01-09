@@ -1,10 +1,20 @@
 using System.IO;
 using UnityEngine;
 
+/// <summary>
+/// 아이템 이미지 추출을 위한 스크립트
+/// </summary>
 public class SaveRenderTargetImage : MonoBehaviour
 {
 
     public RenderTexture RenderTexture;
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.E))
+        {
+            SaveRenderTexture();
+        }
+    }
 
     void SaveRenderTexture()
     {
@@ -22,12 +32,5 @@ public class SaveRenderTargetImage : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyUp(KeyCode.E))
-        {
-            SaveRenderTexture();
-        }
-    }
 
 }

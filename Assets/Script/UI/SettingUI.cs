@@ -12,8 +12,17 @@ public class SettingUI : MonoBehaviour
     private Slider sliderBGMSound;
     [SerializeField]
     private Slider sliderSFXSound;
+    [SerializeField]
+    private Button exitButton;
     public ResolutionController ResolutionController { get => resolutionController; }
     public QualityController QualityController { get => qualityController;  }
+
+    /////////////////////////////// Life Cycle ///////////////////////////////////
+
+    private void Awake()
+    {
+        exitButton.onClick.AddListener(ExitButton);
+    }
     private void Start()
     {
         sliderBGMSound.value = SoundManager.Instance.MasterVolumeBGM;
@@ -32,5 +41,10 @@ public class SettingUI : MonoBehaviour
         }
     }
 
+    /////////////////////////////// Private Method///////////////////////////////////
+    private void ExitButton()
+    {
+        UIManager.Instance.RemoveCanvas();
+    }
 
 }
