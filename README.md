@@ -2,7 +2,7 @@
 
 * 개발환경 : Unity , C#
 
-* DownloadLink : 
+* DownloadLink : http://naver.me/FoEJoodh
 ## 조작법
 
 * W,A,S,D - 이동
@@ -1125,4 +1125,119 @@ public class SkeletonBehavior : BehaviorTreeBase
 </details>
 
 ![Alt text](image/Skeleton.gif)
+
+## DataManager
+* Json을 사용하여 각종 데이터를 관리하는 매니저를 구현하여 전역에서 사용 할 수 있도록 하였습니다.
+
+<details>
+<summary> DataManager 코드샘플</summary>
+  
+```cs
+public class DataManager : SingleTon<DataManager>
+{
+    public Dictionary<int, ItemData> dicItemDatas = new Dictionary<int, ItemData>();
+    public Dictionary<int, MonsterData> dicMonsterDatas = new Dictionary<int, MonsterData>();
+    public Dictionary<int, MonsterSkillData> dicMonsterSkillDatas = new Dictionary<int, MonsterSkillData>();
+    public Dictionary<int, DialogueData> dicDialogueDatas = new Dictionary<int, DialogueData>();
+    public Dictionary<int, QuestData> dicQuestDatas = new Dictionary<int, QuestData>();
+    public Dictionary<string, Action<GameObject>> dicBehaviorFuncs = new Dictionary<string, Action<GameObject>>();
+
+    void Awake()
+    {
+        LoadItemData();
+        LoadMonsterData();
+        LoadDialogueData();
+        LoadQuestData();
+    }
+    private void LoadBehaviorTree(string treeName)
+    {
+        Type componentType = Type.GetType(treeName);
+        if (componentType != null)
+        {
+            if(!dicBehaviorFuncs.ContainsKey(treeName))
+                dicBehaviorFuncs.Add(treeName, obj => obj.AddComponent(componentType));
+        }
+    }
+    private void LoadQuestData()
+    {
+        var loadedJson = Resources.Load<TextAsset>("JsonDatas/QuestData").text;
+        var data = JsonUtility.FromJson<QuestDataArray>(loadedJson);
+        foreach (var questData in data.QuestDatas)
+        {
+            dicQuestDatas.Add(questData.questIndex, questData);
+        }
+    }
+    private void LoadDialogueData()
+    {
+        var loadedJson = Resources.Load<TextAsset>("JsonDatas/DialogueData").text;
+        var data = JsonUtility.FromJson<DialogueDataArray>(loadedJson);
+        foreach (var dialogueData in data.DialogueDatas)
+        {
+            dicDialogueDatas.Add(dialogueData.dialogueID, dialogueData);
+        }
+    }
+    private void LoadMonsterData()
+    {
+        LoadMonsterSkillData();
+
+        var loadedJson = Resources.Load<TextAsset>("JsonDatas/MonsterData").text;
+        var data = JsonUtility.FromJson<MonsterDataArray>(loadedJson);
+        foreach (var monsterData in data.MonsterDatas)
+        {
+            dicMonsterDatas.Add(monsterData.id, monsterData);
+            LoadBehaviorTree(monsterData.behaviorTreeName);
+        }
+    }
+    private void LoadMonsterSkillData()
+    {
+        var loadedJson = Resources.Load<TextAsset>("JsonDatas/MonsterSkillData").text;
+        var data = JsonUtility.FromJson<MonsterSkillDataArray>(loadedJson);
+        foreach (var monsterSkillData in data.MonsterSkillDatas)
+        {
+            dicMonsterSkillDatas.Add(monsterSkillData.id, monsterSkillData);
+        }
+    }
+    private void LoadItemData()
+    {
+        var loadedJson = Resources.Load<TextAsset>("JsonDatas/ItemData").text;
+        var data = JsonUtility.FromJson<ItemDataArray>(loadedJson);
+
+        foreach (var itemData in data.ItemDatas)
+        {
+            dicItemDatas.Add(itemData.id, itemData);
+        }
+    }
+}
+
+```
+
+</details>
+
+<details>
+<summary> Json Data 사용예시</summary>
+  
+```cs
+
+[Serializable]
+public class MonsterData
+{
+    public int id = 0;
+    public string name = "";
+    public int hp;
+    public float attackSpeed;
+    public float attackRange;
+    public float moveSpeed;
+    public float meleeDamage;
+    public float skillDamage;
+    public string behaviorTreeName;
+}
+[Serializable]
+public class MonsterDataArray
+{
+    public MonsterData[] MonsterDatas;
+}
+
+```
+
+</details>
 
