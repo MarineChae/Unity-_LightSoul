@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ProjectileObject : MonoBehaviour
+public class ProjectileObject : MonoBehaviour ,IUpdatable
 {
     [SerializeField]
     private GameObject effect;
@@ -14,6 +14,14 @@ public class ProjectileObject : MonoBehaviour
 
 
     /////////////////////////////// Life Cycle ///////////////////////////////////
+    private void OnEnable()
+    {
+        UpdateManager.OnSubscribe(this, false, true, false);
+    }
+    private void OnDisable()
+    {
+        UpdateManager.UnSubscribe(this, false, true, false);
+    }
     private void Awake()
     {
         body = GetComponent<Rigidbody>();
@@ -22,10 +30,14 @@ public class ProjectileObject : MonoBehaviour
     {
         Init();
     }
-    void FixedUpdate()
+    public void FixedUpdateWork() 
     {
         body.Move(body.position + direction * Time.fixedDeltaTime * projectileSpeed, Quaternion.identity);
     }
+    public void UpdateWork() { }
+
+    public void LateUpdateWork() { }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))

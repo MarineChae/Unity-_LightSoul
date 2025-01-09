@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Chest : MonoBehaviour 
+public class Chest : MonoBehaviour ,IUpdatable
 {
     [SerializeField]
     private int[] itemList;
@@ -14,16 +14,24 @@ public class Chest : MonoBehaviour
     private bool isRotate;
 
     /////////////////////////////// Life Cycle ///////////////////////////////////
+    
+    private void OnEnable()
+    {
+        UpdateManager.OnSubscribe(this, true, false, false);
+    }
+    private void OnDisable()
+    {
+        UpdateManager.UnSubscribe(this, true, false, false);
+    }
     private void Start()
     {
         Init();
         var grid = canvas.GetComponentInChildren<InvectoryGrid>();
-        foreach(var num in itemList)
+        foreach (var num in itemList)
         {
             grid.InsertItem(num);
         }
     }
-
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
@@ -36,6 +44,8 @@ public class Chest : MonoBehaviour
             }
         }
     }
+    public void LateUpdateWork() { }
+
     /////////////////////////////// Private Method///////////////////////////////////
     private void Init()
     {

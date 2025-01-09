@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SettingUI : MonoBehaviour
+public class SettingUI : MonoBehaviour ,IUpdatable
 {
 
     [SerializeField]
@@ -18,7 +18,14 @@ public class SettingUI : MonoBehaviour
     public QualityController QualityController { get => qualityController;  }
 
     /////////////////////////////// Life Cycle ///////////////////////////////////
-
+    private void OnEnable()
+    {
+        UpdateManager.OnSubscribe(this, true, false, false);
+    }
+    private void OnDisable()
+    {
+        UpdateManager.UnSubscribe(this, true, false, false);
+    }
     private void Awake()
     {
         exitButton.onClick.AddListener(ExitButton);
@@ -28,7 +35,9 @@ public class SettingUI : MonoBehaviour
         sliderBGMSound.value = SoundManager.Instance.MasterVolumeBGM;
         sliderSFXSound.value = SoundManager.Instance.MasterVolumeSFX;
     }
-    private void Update()
+
+    public void FixedUpdateWork() { }
+    public void UpdateWork()
     {
         if (sliderBGMSound != null)
         {
@@ -40,6 +49,8 @@ public class SettingUI : MonoBehaviour
             SoundManager.Instance.MasterVolumeSFX = sliderSFXSound.value;
         }
     }
+    public void LateUpdateWork() { }
+
 
     /////////////////////////////// Private Method///////////////////////////////////
     private void ExitButton()
