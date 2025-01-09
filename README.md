@@ -222,6 +222,7 @@
 </details>
 
  <details>
+   
 <summary> Inventory Controller 코드샘플</summary>
   
 ```cs
@@ -369,6 +370,7 @@
 ```
 
 </details>
+
 ![Alt text](image/Inventory.gif)
 
 ##LockOn System
@@ -441,9 +443,11 @@
 </details>
 
 <details>
+  
 <summary> PlayerCharacter Script 코드샘플</summary>
   
 ```cs
+
 private void LockOn()
 {
     if (IsLockOn)
@@ -489,6 +493,7 @@ private void LockOn()
 </details>
 
 <details>
+  
 <summary> FollowCamera Script 코드샘플</summary>
   
 ```cs
@@ -519,4 +524,5 @@ private void LockOn()
 ```
 
 </details>
+
 ![Alt text](image/LockOn.gif)
