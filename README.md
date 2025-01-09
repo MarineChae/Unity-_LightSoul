@@ -373,9 +373,9 @@
 
 ![Alt text](image/Inventory.gif)
 
-##LockOn System
+## LockOn System
 
-*카메라가 가장 가까운 몬스터를 바라보게 LockOn을 구현하였습니다.
+* 카메라가 가장 가까운 몬스터를 바라보게 LockOn을 구현하였습니다.
 
 <details>
 <summary> LockOn Script 코드샘플</summary>
