@@ -1,7 +1,7 @@
 # LightSoul
 
 * 개발환경 : Unity , C#
-
+* Youtube : https://youtu.be/9szqsTgBHCc
 * DownloadLink : http://naver.me/5sso0IQc
 ## 조작법
 
