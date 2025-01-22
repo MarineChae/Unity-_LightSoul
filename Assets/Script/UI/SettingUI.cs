@@ -29,13 +29,9 @@ public class SettingUI : MonoBehaviour ,IUpdatable
     private void Awake()
     {
         exitButton.onClick.AddListener(ExitButton);
-    }
-    private void Start()
-    {
         sliderBGMSound.value = SoundManager.Instance.MasterVolumeBGM;
         sliderSFXSound.value = SoundManager.Instance.MasterVolumeSFX;
     }
-
     public void FixedUpdateWork() { }
     public void UpdateWork()
     {
