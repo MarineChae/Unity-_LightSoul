@@ -1,8 +1,8 @@
 # LightSoul
 
 * 개발환경 : Unity , C#
-
-* DownloadLink : http://naver.me/FoEJoodh
+* Youtube : https://youtu.be/9szqsTgBHCc
+* DownloadLink : http://naver.me/5sso0IQc
 ## 조작법
 
 * W,A,S,D - 이동
